@@ -266,7 +266,7 @@ const ProductOrderDetail = () => {
                               <Button variant="contained" color="error" onClick={() => console.log('Stop Production clicked')}>
                               Stop Production
                             </Button>
-                              <Button variant="contained" color="error" onClick={() => console.log('Stop Production clicked')}>
+                              <Button variant="contained" color="error" onClick={() => console.log('DownTime clicked')}>
                                 DownTime
                               </Button>
                             </Box>
