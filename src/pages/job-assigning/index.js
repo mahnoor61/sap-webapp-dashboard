@@ -12,7 +12,9 @@ import {AuthGuard} from "../../guard/authGuard";
 import UserLayout from "../../layouts/UserLayout";
 import ArticleIcon from "@mui/icons-material/Article";
 import Head from "next/head";
+
 // import AllJob from "../../views/Operator/AllOperator";
+
 import AddJob from "../../views/Job Assigning/AddJob";
 import AllJobs from "../../views/Job Assigning/AllJobs";
 

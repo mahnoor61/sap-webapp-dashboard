@@ -99,6 +99,7 @@ const AllJobs = () => {
   const paginatedJob = PaginationHelper(filteredJob, page, rowsPerPage);
   const totalCount = filteredJob.length;
 
+  console.log("paginatedJob", paginatedJob)
 
 
   return (
@@ -127,7 +128,7 @@ const AllJobs = () => {
                   InputProps={{
                     endAdornment: (
                       <Button variant="text" disabled={true} sx={{
-                        background:'transparent !important'
+                        background: 'transparent !important'
                       }}>
                         <SearchIcon sx={{ml: 1.5, color: 'rgba(71, 85, 105, 1)'}}/>
                       </Button>
@@ -137,10 +138,10 @@ const AllJobs = () => {
               </TableCell>
             </TableRow>
             <TableRow sx={{justifyContent: 'space-between', alignItems: 'left'}}>
-              <TableCell >Production Orders</TableCell>
-              <TableCell >Machine</TableCell>
-              <TableCell >Route</TableCell>
-              <TableCell >User Name</TableCell>
+              <TableCell>Production Orders</TableCell>
+              <TableCell>Machine</TableCell>
+              <TableCell>Route</TableCell>
+              <TableCell>User Name</TableCell>
               <TableCell sx={{textAlign: 'left'}}>Action</TableCell>
             </TableRow>
           </TableHead>
@@ -158,51 +159,15 @@ const AllJobs = () => {
                       {data.productionOrderNo}
                     </TableCell>
                     {/*<TableCell component="th" scope="row">*/}
-                      <TableCell component="th" scope="row">
-                        {data.machine && data.machine.length > 0 ? (
-                          data.machine.map((m, index) => (
-                            <span key={index}>
-        {m.code}
-                              {index < data.machine.length - 1 ? ', ' : ''}
-      </span>
-                          ))
-                        ) : (
-                          'No Machines'
-                        )}
-                      </TableCell>
-
-                      {/*{data.machine.code}*/}
-                    {/*</TableCell>*/}
-                    {/*<TableCell component="th" scope="row">*/}
-                    {/*  {data.route.code}*/}
-                    {/*</TableCell>*/}
                     <TableCell component="th" scope="row">
-                      {data.route && data.route.length > 0 ? (
-                        data.route.map((r, index) => (
-                          <span key={index}>
-        {r.code}
-                            {index < data.route.length - 1 ? ', ' : ''}
-      </span>
-                        ))
-                      ) : (
-                        'No Routes'
-                      )}
+                      {data.machine.code}
+                  </TableCell>
+                    <TableCell component="th" scope="row">
+                      {data.route.code}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {data.user && data.user.length > 0 ? (
-                        data.user.map((u, index) => (
-                          <span key={index}>
-        {u.userName}
-                            {index < data.user.length - 1 ? ', ' : ''}
-      </span>
-                        ))
-                      ) : (
-                        'No Users'
-                      )}
+                      {data.user.userName}
                     </TableCell>
-                    {/*<TableCell component="th" scope="row">*/}
-                    {/*  {data.user?.userName}*/}
-                    {/*</TableCell>*/}
                     <TableCell component="th" scope="row" sx={{textAlign: 'left'}}>
                       <IconButton>
                         <DeleteIcon

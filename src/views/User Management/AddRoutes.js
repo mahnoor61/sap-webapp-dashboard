@@ -78,7 +78,7 @@ const AddRoute = () => {
             <TextField
               fullWidth
               sx={{mb: 5}}
-              label='Roure'
+              label='Route'
               name="routeCode"
               type="text"
               error={Boolean(formik.touched.routeCode && formik.errors.routeCode)}

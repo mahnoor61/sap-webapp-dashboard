@@ -35,41 +35,9 @@ const AllOperatorData = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loadingComplete, setLoadingComplete] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
   const auth = useSelector(state => state.auth);
   const token = auth.token;
 
-  // const handleDeleteConfirm = () => {
-  //   if (itemToDelete) {
-  //     destroyJob(itemToDelete);
-  //     setItemToDelete(null);
-  //     setDialogOpen(false);
-  //   }
-  // };
-
-  let response;
-
-
-
-  // const destroyJob = async (id) => {
-  //   try {
-  //     response = await axios.delete(`${BASE_URL}/api/ap/admin/destroy/job/${id}`, {
-  //       headers: {
-  //         "x-access-token": token
-  //       }
-  //     });
-  //     toast.success('Job deleted successfully');
-  //     const updated = jobs.filter((row) => row._id !== id);
-  //     setJobs(updated);
-  //   } catch (error) {
-  //     console.log('error in delete job', error);
-  //     toast.error(error.response.data.msg);
-  //   }
-  // };
-// if(auth.user.role === 'admin'){
-//
-// }
   // for operator to show its assign data
 
   const getAllowedProductionOrders = async () => {
@@ -90,9 +58,9 @@ const AllOperatorData = () => {
   const getAllProductionList = async () => {
     const localData = localStorage.getItem('productionLists');
     if (localData) {
-        const parsedData = JSON.parse(localData);
-        setProdctionLists(parsedData);
-        setLoadingComplete(false);
+      const parsedData = JSON.parse(localData);
+      setProdctionLists(parsedData);
+      setLoadingComplete(false);
     }
 
     // Fetch fresh data in background and update localStorage
@@ -115,23 +83,6 @@ const AllOperatorData = () => {
     }
   };
 
-
-  // const getAllProductionList = async () => {
-  //   try {
-  //     const response = await axios.get(`${BASE_URL}/api/ap/admin/odbc/operator/data`, {
-  //       headers: {
-  //         "x-access-token": token
-  //       }
-  //     });
-  //     setProdctionLists(response.data.data);
-  //     setLoadingComplete(false)
-  //
-  //   } catch (error) {
-  //     console.log('error in get all production list', error);
-  //     toast.error(error);
-  //   }
-  // };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -149,54 +100,49 @@ const AllOperatorData = () => {
   }, []);
 
 
-  const filteredProductionList = FilterHelper(prodctionLists, searchQuery, ['user.userName', 'machine.code'])
+  // const filteredProductionList = FilterHelper(prodctionLists, searchQuery, ['user.userName', 'machine.code'])
 
-  // const paginatedProductionList = PaginationHelper(filteredProductionList, page, rowsPerPage);
-  // const totalCount = filteredProductionList.length;
-
-
-  const roleBasedProductionList = auth?.user?.role === 'operator'
-    ? filteredProductionList.filter(item => allowedOrders.includes(item.docNum))
-    : filteredProductionList;
-
+  const roleBasedProductionList = auth?.user?.role === 'operator' ? FilterHelper(allowedOrders, searchQuery, ['productionOrderNo', 'status']) : FilterHelper(prodctionLists, searchQuery, ['productionOrderNo'])
   const paginatedProductionList = PaginationHelper(roleBasedProductionList, page, rowsPerPage);
   const totalCount = roleBasedProductionList.length;
+
+  console.log("allowedOrders", allowedOrders)
 
   return (
     <>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHead>
-            {/*<TableRow sx={{width: '100%'}}>*/}
-            {/*  <TableCell align="center" colSpan={5}>*/}
-            {/*    <TextField*/}
-            {/*      variant="filled"*/}
-            {/*      placeholder="Search through username and machine"*/}
-            {/*      sx={{*/}
-            {/*        '&::placeholder': {*/}
-            {/*          color: 'rgba(71, 85, 105, 1)',*/}
-            {/*        },*/}
-            {/*        height: '55px',*/}
-            {/*        width: '100%',*/}
-            {/*        flex: '1 0 0',*/}
-            {/*        gap: '10px',*/}
-            {/*        alignSelf: 'stretch',*/}
-            {/*        flexGrow: '3',*/}
-            {/*        borderRadius: 1*/}
-            {/*      }}*/}
-            {/*      onChange={event => setSearchQuery(event.target.value)}*/}
-            {/*      InputProps={{*/}
-            {/*        endAdornment: (*/}
-            {/*          <Button variant="text" disabled={true} sx={{*/}
-            {/*            background:'transparent !important'*/}
-            {/*          }}>*/}
-            {/*            <SearchIcon sx={{ml: 1.5, color: 'rgba(71, 85, 105, 1)'}}/>*/}
-            {/*          </Button>*/}
-            {/*        ),*/}
-            {/*      }}*/}
-            {/*    />*/}
-            {/*  </TableCell>*/}
-            {/*</TableRow>*/}
+            <TableRow sx={{width: '100%'}}>
+              <TableCell align="center" colSpan={10}>
+                <TextField
+                  variant="filled"
+                  placeholder="Search through production order no"
+                  sx={{
+                    '&::placeholder': {
+                      color: 'rgba(71, 85, 105, 1)',
+                    },
+                    height: '55px',
+                    width: '100%',
+                    flex: '1 0 0',
+                    gap: '10px',
+                    alignSelf: 'stretch',
+                    flexGrow: '3',
+                    borderRadius: 1
+                  }}
+                  onChange={event => setSearchQuery(event.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <Button variant="text" disabled={true} sx={{
+                        background: 'transparent !important'
+                      }}>
+                        <SearchIcon sx={{ml: 1.5, color: 'rgba(71, 85, 105, 1)'}}/>
+                      </Button>
+                    ),
+                  }}
+                />
+              </TableCell>
+            </TableRow>
             <TableRow sx={{justifyContent: 'space-between', alignItems: 'left'}}>
               <TableCell>#</TableCell>
               <TableCell>Production Orders</TableCell>
@@ -217,9 +163,9 @@ const AllOperatorData = () => {
                   <CircularProgress/>
                 </TableCell>
               </TableRow> :
-              (roleBasedProductionList && roleBasedProductionList.length > 0 ? (
+              (paginatedProductionList && paginatedProductionList.length > 0 ? (
                 paginatedProductionList.map((data, index) => (
-                  <NextLink href={`/operator/productionDetailed?order=${data.docNum}`}>
+                  <NextLink href={`/operator/productionDetailed?order=${data._id}`}>
                     <TableRow key={data._id} sx={{
                       // transition: 'transform 0.2s ease-in-out',
                       '&:hover': {
@@ -233,53 +179,31 @@ const AllOperatorData = () => {
                         {page * rowsPerPage + index + 1} {/* Actual Serial Number */}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.docNum}
+                        {data.productionOrderNo}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.itemCode}
+                        {data.productionOrderDataId.itemCode}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.prodName}
+                        {data.productionOrderDataId.prodName}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.ComponentItemCode}
+                        {data.productionOrderDataId.ComponentItemCode}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.ComponentItemName}
+                        {data.productionOrderDataId.ComponentItemName}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.ComponentPlannedQty}
+                        {data.productionOrderDataId.ComponentPlannedQty}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.cardName}
+                        {data.productionOrderDataId.cardName}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         <Stack direction="row" spacing={1}>
                           <Chip label={data.status}/>
                         </Stack>
                       </TableCell>
-                      {/*  <TableCell component="th" scope="row" sx={{textAlign: 'left'}}>*/}
-                      {/*    <IconButton>*/}
-                      {/*      <DeleteIcon*/}
-                      {/*        disabled={destroyJob.isSubmitting}*/}
-                      {/*        onClick={() => {*/}
-                      {/*          setItemToDelete(data._id);*/}
-                      {/*          setDialogOpen(true);*/}
-                      {/*        }}*/}
-                      {/*      />*/}
-                      {/*    </IconButton>*/}
-                      {/*    <NextLink*/}
-                      {/*      href={{*/}
-                      {/*        pathname: '/job-assigning/job-edit',*/}
-                      {/*        query: {jobId: data._id}*/}
-                      {/*      }}*/}
-                      {/*      passHref*/}
-                      {/*    >*/}
-                      {/*      <IconButton>*/}
-                      {/*        <EditIcon/>*/}
-                      {/*      </IconButton>*/}
-                      {/*    </NextLink>*/}
-                      {/*  </TableCell>*/}
                     </TableRow>
                   </NextLink>
                 ))
@@ -304,14 +228,6 @@ const AllOperatorData = () => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-
-      {/*<ConfirmationDialog*/}
-      {/*  open={isDialogOpen}*/}
-      {/*  onClose={() => setDialogOpen(false)}*/}
-      {/*  onConfirm={handleDeleteConfirm}*/}
-      {/*  title="Confirm Delete"*/}
-      {/*  message="Are you sure you want to delete this job?"*/}
-      {/*/>*/}
 
     </>
   );

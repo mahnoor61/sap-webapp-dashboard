@@ -89,77 +89,84 @@ const LoginPage = () => {
     password: yup.string().required('Password is required'),
   });
 
+  // const formik = useFormik({
+  //   initialValues: {
+  //     userName: '',
+  //     password: '',
+  //   },
+  //   validationSchema: validationSchema,
+  //   onSubmit: async (values) => {
+  //     try {
+  //       const apiEndpoint = `${BASE_URL}/api/ap/admin/login`;
+  //       const response = await axios.post(apiEndpoint, values);
+  //       const loginData = response.data.data;
+  //
+  //       // SAP Login API
+  //       const sapLoginData = {
+  //         CompanyDB: CompanyDB,
+  //         Password: Password,
+  //         UserName: UserName
+  //       };
+  //
+  //       try {
+  //         const sapResponse = await axios.post(loginUrl, sapLoginData);
+  //         console.log("SAP Response:", sapResponse.data);
+  //
+  //         if (!sapResponse.data.SessionId) {
+  //           throw new Error("SAP Login Failed: No SessionId received.");
+  //         }
+  //         const sessionId = sapResponse.data.SessionId;
+  //         // Cookies.set('sessionId', sessionId, {expires: 7, path: '/'});
+  //
+  //
+  //         loginData.sessionId = sessionId;
+  //         dispatch(login(loginData));
+  //
+  //         toast.success("Successfully logged in!");
+  //         if (loginData.role === "admin") {
+  //           router.push("/user-management");
+  //         } else {
+  //           router.push("/account-settings");
+  //         }
+  //       } catch (sapError) {
+  //         console.error("SAP Login Error:", sapError.response?.data || sapError);
+  //         toast.error(`SAP Login Failed: ${sapError.response?.data?.error?.message?.value || "Unknown error"}`);
+  //       }
+  //
+  //     } catch (err) {
+  //       toast.error(err.response?.data?.msg || 'Login failed');
+  //       console.error('Login Error:', err.response?.data.msg);
+  //       formik.resetForm();
+  //     }
+  //   },
+  // });
   const formik = useFormik({
     initialValues: {
-      userName: '',
+      email: '',
       password: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+
       try {
+
         const apiEndpoint = `${BASE_URL}/api/ap/admin/login`;
         const response = await axios.post(apiEndpoint, values);
         const loginData = response.data.data;
+        toast.success(`Successfully logged in!`)
+        if (loginData.role === "admin") {
+                    router.push("/user-management");
+                  } else {
+                    router.push("/account-settings");
+                  }
 
-        // SAP Login API
-        const sapLoginData = {
-          CompanyDB: CompanyDB,
-          Password: Password,
-          UserName: UserName
-        };
-
-        // try {
-        //   const sapResponse = await axios.post(loginUrl, sapLoginData,{ withCredentials: true });
-        //   const sessionId = sapResponse.data.SessionId;
-        //
-        //   // Dispatch login with SAP session ID
-        //
-        //   loginData.sessionId = sessionId;
-        //   dispatch(login(loginData));
-        //   toast.success(`Successfully logged in!`);
-        //   if (loginData.role == 'admin') {
-        //     router.push('/user-management');
-        //   } else {
-        //     router.push('/account-settings')
-        //   }
-        //
-        // } catch (sapError) {
-        //   toast.error(`SAP Login Failed: ${sapError.response?.data?.error?.message?.value || 'Unknown error'}`);
-        //   console.error('SAP Login Error:', sapError);
-        // }
-        try {
-          const sapResponse = await axios.post(loginUrl, sapLoginData);
-          console.log("SAP Response:", sapResponse.data);
-
-          if (!sapResponse.data.SessionId) {
-            throw new Error("SAP Login Failed: No SessionId received.");
-          }
-          const sessionId = sapResponse.data.SessionId;
-          // Cookies.set('sessionId', sessionId, {expires: 7, path: '/'});
-
-
-          loginData.sessionId = sessionId;
-          dispatch(login(loginData));
-
-          toast.success("Successfully logged in!");
-          if (loginData.role === "admin") {
-            router.push("/user-management");
-          } else {
-            router.push("/account-settings");
-          }
-        } catch (sapError) {
-          console.error("SAP Login Error:", sapError.response?.data || sapError);
-          toast.error(`SAP Login Failed: ${sapError.response?.data?.error?.message?.value || "Unknown error"}`);
-        }
-
+        dispatch(login(response.data.data));
       } catch (err) {
-        toast.error(err.response?.data?.msg || 'Login failed');
-        console.error('Login Error:', err.response?.data.msg);
-        formik.resetForm();
+        toast.error(err.response.data.msg);
+        console.error(err)
       }
     },
   });
-
 
   return (
     <>

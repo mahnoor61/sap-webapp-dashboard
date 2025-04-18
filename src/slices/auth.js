@@ -7,13 +7,13 @@ const initialState = localStorageAvailable
   isAuthenticated: false,
   user: {},
   token: '',
-  sessionId: ''
+  // sessionId: ''
 }
   : {
     isAuthenticated: false,
     user: {},
     token: '',
-    sessionId: ''
+    // sessionId: ''
   };
 
 const authSlice = createSlice({
@@ -23,14 +23,14 @@ const authSlice = createSlice({
     login: (state, action) => {
       const {token, sessionId} = action.payload;
       state.token = token;
-      state.sessionId = sessionId;
+      // state.sessionId = sessionId;
       state.isAuthenticated = true;
       state.user = action.payload;
 
 
       if (localStorageAvailable) {
         localStorage.setItem('accessToken', token);
-        localStorage.setItem('sessionId', sessionId);
+        // localStorage.setItem('sessionId', sessionId);
         localStorage.setItem('authState', JSON.stringify(state));
       }
 
@@ -38,14 +38,14 @@ const authSlice = createSlice({
     logout: (state) => {
       if (localStorageAvailable) {
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('sessionId');
+        // localStorage.removeItem('sessionId');
         localStorage.removeItem('authState');
       }
 
       state.isAuthenticated = false;
       state.user = {};
       state.token = '';
-      state.sessionId = '';
+      // state.sessionId = '';
     },
     updateUser: (state, action) => {
       state.user = action.payload;
