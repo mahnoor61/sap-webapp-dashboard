@@ -597,7 +597,6 @@ const ProductOrderDetail = () => {
       setProductionTimerRunning(true);
       window.location.reload();
       setDisabled(false);
-      // Clear any existing interval
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
