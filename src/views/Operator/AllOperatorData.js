@@ -102,11 +102,12 @@ const AllOperatorData = () => {
 
   // const filteredProductionList = FilterHelper(prodctionLists, searchQuery, ['user.userName', 'machine.code'])
 
-  const roleBasedProductionList = auth?.user?.role === 'operator' ? FilterHelper(allowedOrders, searchQuery, ['productionOrderNo', 'status']) : FilterHelper(prodctionLists, searchQuery, ['productionOrderNo'])
+  console.log("prodctionLists", prodctionLists)
+
+  const roleBasedProductionList = auth?.user?.role === 'operator' ? FilterHelper(allowedOrders, searchQuery, ['productionOrderNo', 'status']) : FilterHelper(prodctionLists, searchQuery, ['productionOrderNo', 'status'])
   const paginatedProductionList = PaginationHelper(roleBasedProductionList, page, rowsPerPage);
   const totalCount = roleBasedProductionList.length;
 
-  console.log("allowedOrders", allowedOrders)
 
   return (
     <>
@@ -117,7 +118,7 @@ const AllOperatorData = () => {
               <TableCell align="center" colSpan={10}>
                 <TextField
                   variant="filled"
-                  placeholder="Search through production order no"
+                  placeholder="Search through production order no OR status"
                   sx={{
                     '&::placeholder': {
                       color: 'rgba(71, 85, 105, 1)',
@@ -179,30 +180,45 @@ const AllOperatorData = () => {
                         {page * rowsPerPage + index + 1} {/* Actual Serial Number */}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.productionOrderNo}
+                        {data?.productionOrderNo}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.productionOrderDataId.itemCode}
+                        {data?.productionOrderDataId?.itemCode}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.productionOrderDataId.prodName}
+                        {data?.productionOrderDataId?.prodName}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.productionOrderDataId.ComponentItemCode}
+                        {data?.productionOrderDataId?.ComponentItemCode}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.productionOrderDataId.ComponentItemName}
+                        {data?.productionOrderDataId?.ComponentItemName}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.productionOrderDataId.ComponentPlannedQty}
+                        {data?.productionOrderDataId?.ComponentPlannedQty}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {data.productionOrderDataId.cardName}
+                        {data?.productionOrderDataId?.cardName}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         <Stack direction="row" spacing={1}>
-                          <Chip label={data.status}/>
+                          <Chip
+                            label={data?.status}
+                            sx={{
+                              backgroundColor:
+                                data?.status === 'pending' ? 'grey' :
+                                  data?.status === 'running' ? 'green' :
+                                    data?.status === 'pause' ? 'orange' :
+                                      data?.status === 'downtime' ? 'red' :
+                                      data?.status === 'make-time' ? 'blue' :
+                                        data?.status === 'completed' ? 'green' :
+                                          'default',
+                              color: '#fff',
+                              fontWeight: 'bold',
+                            }}
+                          />
                         </Stack>
+
                       </TableCell>
                     </TableRow>
                   </NextLink>

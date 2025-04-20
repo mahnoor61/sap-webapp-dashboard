@@ -35,7 +35,7 @@ const ProductOrderDetail = () => {
   const [isImageValid, setIsImageValid] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [productionOrderDetail, setProductionOrderDetail] = useState(null);
   const [remainingQty, setRemainingQty] = useState(0);
 
@@ -399,7 +399,7 @@ const ProductOrderDetail = () => {
       setMakeTime(0);
       setIsMakeTimeDone(true);
 
-      // setDisabled(false); //finish disabled button here on start production
+      setDisabled(false); //finish disabled button here on start production
       // Start production timer
 
       const startTime = Date.now();
@@ -587,7 +587,7 @@ const ProductOrderDetail = () => {
       setMakeTimerRunning(false);
       setMakeTime(0);
 
-      // setDisabled(false);
+
       // Resume Production Timer
 
       const startTime = Date.now() - serverProductionSeconds * 1000;
@@ -596,7 +596,7 @@ const ProductOrderDetail = () => {
       localStorage.setItem(`productionTimerStart-${order}`, startTime.toString());
       setProductionTimerRunning(true);
       window.location.reload();
-
+      setDisabled(false);
       // Clear any existing interval
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -622,6 +622,7 @@ const ProductOrderDetail = () => {
     if (isRunning === 'true' && startTimeStr) {
       const startTime = parseInt(startTimeStr);
       setProductionTimerRunning(true);
+      setDisabled(false);
 
       const interval = setInterval(() => {
         const now = Date.now();
@@ -798,6 +799,7 @@ const ProductOrderDetail = () => {
     if (isRunning === 'true' && startTimeStr) {
       const startTime = parseInt(startTimeStr);
       setProductionTimerRunning(true);
+      setDisabled(false);
 
       const interval = setInterval(() => {
         const now = Date.now();
@@ -878,8 +880,7 @@ const ProductOrderDetail = () => {
         setProductionTimer(0);
         stopFormik.resetForm();
         handleStopClickClose();
-
-        // Stop the production timer
+        setDisabled(true);r
         localStorage.removeItem(`productionTimerRunning-${order}`);
         localStorage.removeItem(`productionTimerStart-${order}`);
       } catch (error) {
@@ -942,38 +943,37 @@ const ProductOrderDetail = () => {
                       <Box sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
-                        flexDirection: {md: 'row', xs: 'column'},
+                        flexDirection: {md: 'column', xs: 'column'},
                         width: '100%',
                         mt: 10,
                         mb: 10
                       }}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}
-                             sx={{width: '100%'}}>
-                          <Box>
+                             sx={{width: '100%', flexDirection:'column'}}>
+                          <Box sx={{width:'100%'}}>
 
-                            {/*{*/}
-                            {/*  isDownClick ? "Hello" : "not hello"*/}
-                            {/*}*/}
 
                             {isDownClick ? (
-                              <Typography>Downtime: {formatTimeToHHMMSS(downTimer)}</Typography>
+                              <Typography variant='h5'>Downtime: {formatTimeToHHMMSS(downTimer)}</Typography>
                             ) : (
                               <>
                                 {makeTimerRunning && !productionTimerRunning && (
-                                  <Typography>Make Time: {formatTimeToHHMMSS(makeTime)}</Typography>
+                                  <Typography variant='h5'>Make Time: {formatTimeToHHMMSS(makeTime)}</Typography>
                                 )}
                                 {productionTimerRunning && (
-                                  <Typography>Production Time: {formatTimeToHHMMSS(productionTimer)}</Typography>
+                                  <Typography variant='h5'>Production
+                                    Time: {formatTimeToHHMMSS(productionTimer)}</Typography>
                                 )}
                                 {(!productionTimerRunning && pauseProductionTimer) ?
-                                  <Typography>Pause Time: {formatTimeToHHMMSS(pauseProductionTimer)}</Typography>
+                                  <Typography variant='h5'>Pause
+                                    Time: {formatTimeToHHMMSS(pauseProductionTimer)}</Typography>
                                   : null
                                 }
                               </>
                             )}
 
                           </Box>
-                          <Box display="flex" gap={2} flexWrap="wrap">
+                          <Box display="flex" gap={2} flexWrap="wrap" sx={{width:'100%'}}>
                             {isDownClick ? (
                               <>
                                 <Button variant="contained" color="error" onClick={handleDownTimeEnd}>
@@ -987,7 +987,7 @@ const ProductOrderDetail = () => {
                               <>
                                 {!makeTimerRunning && !productionTimerRunning && !pauseProductionTimer && !isMakeTimeDone && (
                                   <Button variant='contained' onClick={handleStartMakeTime}
-                                          sx={{backgroundColor: 'cyan'}}>
+                                          sx={{bgcolor:'blue'}}>
                                     Make Time
                                   </Button>
                                 )}
@@ -999,28 +999,78 @@ const ProductOrderDetail = () => {
                                 )}
 
                                 {productionTimerRunning && (
-                                  <>
-                                    <Button variant="contained" color="error"
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      flexDirection: { md: 'column', xs: 'column' }, // Both directions for md and xs are column, but we will handle their alignment separately.
+                                      width: '100%',
+                                      justifyContent: 'flex-start',
+                                      alignItems: 'center',
+                                      gap: 2
+                                    }}
+                                  >
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap:2,width: '100%', flexDirection:{md:'row', xs:'column'} }}>
+                                      <Button
+                                        variant="contained"
+                                        color="warning"
+                                        onClick={handlePauseClickOpen}
+                                        sx={{ flex: 1 }}
+                                      >
+                                        Pause Production
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={handleDownClickOpen}
+                                        sx={{ flex: 1 }}
+                                      >
+                                        Downtime Production
+                                      </Button>
+                                    </Box>
 
-                                      // disabled={!isLastRoute}
+                                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+                                      <Button
+                                        sx={{ flex: 1 }}
+                                        variant="contained"
+                                        color="success"
+                                        onClick={handleStopClickOpen}
+                                      >
+                                        Complete Production
+                                      </Button>
+                                    </Box>
+                                  </Box>
 
-                                            onClick={handleStopClickOpen}>
-                                      Stop Production
-                                    </Button>
-                                    <Button variant="contained" color="warning" onClick={handlePauseClickOpen}>
-                                      Pause Production
-                                    </Button>
-                                    <Button variant="contained" color="info" onClick={handleDownClickOpen}>
-                                      Downtime Production
-                                    </Button>
-                                  </>
+                                  // <Box sx={{
+                                  //   display: 'flex',
+                                  //   width:'100%',
+                                  //   flexDirection:{md:'row', xs:'column'},
+                                  //   justifyContent: 'space-between',
+                                  //   alignItems: 'flex-start',
+                                  //   gap: 3,
+                                  //   bgcolor:'red'
+                                  // }}>
+                                  //
+                                  //   <Button variant="contained" color="warning" onClick={handlePauseClickOpen}>
+                                  //     Pause Production
+                                  //   </Button>
+                                  //   <Button variant="contained" color="error" onClick={handleDownClickOpen}>
+                                  //     Downtime Production
+                                  //   </Button>
+                                  //   <Button variant="contained" color="success"
+                                  //
+                                  //     // disabled={!isLastRoute}
+                                  //
+                                  //           onClick={handleStopClickOpen}>
+                                  //     Complete Production
+                                  //   </Button>
+                                  // </Box>
                                 )}
 
                                 {(!productionTimerRunning && pauseProductionTimer) ?
                                   <Button variant="contained" color="warning" onClick={handleResumeProduction}>
                                     Resume Production
                                   </Button>
-                                : null
+                                  : null
                                 }
                               </>
                             )}
@@ -1102,31 +1152,29 @@ const ProductOrderDetail = () => {
                       gap: 3,
                       justifyContent: 'flex-start',
                       flexDirection: {md: 'row', xs: 'column'},
-                      width: '100%', mt: 10, mb: 5
+                      width: '100%', mt: 10
                     }}>
+                      <Button variant="contained" sx={{bgcolor:'blue'}} onClick={handleClickOpen}>Recieved Quantity</Button>
                       <Button variant="contained" disabled={disabled} color="warning"
                               onClick={handleClickIssueForMachineOpen}>Issue For Machine</Button>
-                      <Button variant="contained" disabled={disabled} color="success" onClick={handleCompletedQtyOpen}>Add
-                        Completed QTY</Button>
-                      {/*<Button variant="contained" disabled={disabled} color="primary" onClick={handleWastedQtyOpen}>Add*/}
+                      {/*<Button variant="contained" disabled={disabled} color="error" onClick={handleWastedQtyOpen}>Add*/}
                       {/*  Wasted QTY</Button>*/}
-                      {/*<Button variant="contained" color="error" onClick={handleClickOpen}>Total Recieved QTY</Button>*/}
+                      {/*<Button variant="contained" disabled={disabled} color="success" onClick={handleCompletedQtyOpen}>Add*/}
+                      {/*  Completed QTY</Button>*/}
+
                     </Box>
                     <Box sx={{
                       display: 'flex',
                       gap: 3,
-                      justifyContent: 'flex-end',
+                      justifyContent: 'flex-start',
                       flexDirection: {md: 'row', xs: 'column'},
                       width: '100%'
-                      , mt: 5, mb: 10
+                      , mt: 3, mb: 15
                     }}>
-                      {/*<Button variant="contained" disabled={disabled} color="warning"*/}
-                      {/*        onClick={handleClickIssueForMachineOpen}>Issue For Machine</Button>*/}
-                      {/*<Button variant="contained" disabled={disabled} color="success" onClick={handleCompletedQtyOpen}>Add*/}
-                      {/*  Completed QTY</Button>*/}
-                      <Button variant="contained" disabled={disabled} color="primary" onClick={handleWastedQtyOpen}>Add
-                        Wasted QTY</Button>
-                      <Button variant="contained" color="error" onClick={handleClickOpen}>Total Recieved QTY</Button>
+                      <Button variant="contained" disabled={disabled} color="error" onClick={handleWastedQtyOpen}>
+                        Wasted Quantity</Button>
+                      <Button variant="contained" disabled={disabled} color="success" onClick={handleCompletedQtyOpen}>
+                        Completed Quantity</Button>
                     </Box>
                     <TableContainer sx={{width: '100%', overflowX: 'auto'}}>
                       <Table size="small">

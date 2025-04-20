@@ -20,6 +20,9 @@ import ScrollToTop from 'src/@core/components/scroll-to-top'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import IconButton from "@mui/material/IconButton";
+import Menu from "mdi-material-ui/Menu";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -46,8 +49,13 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 }))
 
 const VerticalLayout = props => {
+  // const {hidden, settings, saveSettings, toggleNavVisibility} = props
+
+  // ** Hook
+
   // ** Props
   const { settings, children, scrollToTop } = props
+  const hiddenSm = useMediaQuery(theme => theme.breakpoints.down('sm'))
 
   // ** Vars
   const { contentWidth } = settings
@@ -59,9 +67,31 @@ const VerticalLayout = props => {
   // ** Toggle Functions
   const toggleNavVisibility = () => setNavVisible(!navVisible)
 
+  console.log("toggleNavVisibility", toggleNavVisibility)
+  console.log("navVisible", navVisible)
+  console.log("navWidth", navWidth)
+
   return (
     <>
       <VerticalLayoutWrapper className='layout-wrapper'>
+        {/*<Box >*/}
+        {/*<IconButton*/}
+        {/*  color='inherit'*/}
+        {/*  sx={{*/}
+        {/*    display: {lg:'block', xs:'none'}*/}
+        {/*  }}*/}
+        {/*  onClick={toggleNavVisibility}*/}
+        {/*  // sx={{ml: -2.75, ...(hiddenSm ? {} : {mr: 3.5})}}*/}
+        {/*>*/}
+        {/*  <Menu/>*/}
+        {/*</IconButton>*/}
+        {/*</Box>*/}
+        <Box
+          sx={{
+            display: navVisible ? 'block' : 'none'
+          }}
+        >
+
         <Navigation
           navWidth={navWidth}
           navVisible={navVisible}
@@ -69,6 +99,7 @@ const VerticalLayout = props => {
           toggleNavVisibility={toggleNavVisibility}
           {...props}
         />
+        </Box>
         <MainContentWrapper className='layout-content-wrapper'>
           <AppBar toggleNavVisibility={toggleNavVisibility} {...props} />
 
