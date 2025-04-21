@@ -1176,7 +1176,7 @@ const ProductOrderDetail = () => {
                       flexDirection: {md: 'row', xs: 'column'},
                       width: '100%', mt: 10
                     }}>
-                      <Button variant="contained" sx={{bgcolor: 'blue'}} onClick={handleClickOpen}>Recieved
+                      <Button variant="contained" sx={{bgcolor: 'blue'}} onClick={handleClickOpen}>Received
                         Quantity</Button>
                       <Button variant="contained" disabled={disabled} color="warning"
                               onClick={handleClickIssueForMachineOpen}>Issue For Machine</Button>
@@ -1219,7 +1219,7 @@ const ProductOrderDetail = () => {
                             <TableCell>{productionOrderDetail?.productionOrderDataId?.TransferredQuantity}</TableCell>
                           </TableRow>
                           <TableRow>
-                            <TableCell sx={{width: '50%'}}><strong>Recieved By Operator:</strong></TableCell>
+                            <TableCell sx={{width: '50%'}}><strong>Received By Operator:</strong></TableCell>
                             <TableCell>{productionOrderDetail?.recievedByOperator}</TableCell>
                           </TableRow>
                           <TableRow>
