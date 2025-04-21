@@ -179,12 +179,12 @@ const LoginPage = () => {
             <Box sx={{mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
               <Box
                 component="img"
-                width={150}
+                // width={100}
                 height={'auto'}
                 viewBox='0 0 30 23'
                 sx={{
-                  maxHeight: {xs: 233, md: 120},
-                  maxWidth: {xs: 350, md: 350},
+                  maxHeight: {xs: 233, md: 50},
+                  maxWidth: {xs: 350, md:100},
                 }}
                 alt="Logo"
                 src="/logo.png"
@@ -192,11 +192,11 @@ const LoginPage = () => {
               <Typography
                 variant='h6'
                 sx={{
-                  ml: 3,
+                  ml: 1,
                   lineHeight: 1,
                   fontWeight: 600,
                   textTransform: 'uppercase',
-                  fontSize: '1.5rem !important'
+                  fontSize: '1.3rem !important'
                 }}
               >
                 {themeConfig.templateName}
