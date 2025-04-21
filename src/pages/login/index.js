@@ -179,7 +179,6 @@ const LoginPage = () => {
             <Box sx={{mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
               <Box
                 component="img"
-                // width={100}
                 height={'auto'}
                 viewBox='0 0 30 23'
                 sx={{
