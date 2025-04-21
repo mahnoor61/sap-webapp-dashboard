@@ -37,7 +37,6 @@ const ProductOrderDetail = () => {
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [productionOrderDetail, setProductionOrderDetail] = useState(null);
-  const [palleteNo, setPalleteNo] = useState(1);
   const [remainingQty, setRemainingQty] = useState(0);
 
   //manage timer stats
