@@ -157,7 +157,7 @@ const LoginPage = () => {
         if (loginData.role === "admin") {
                     router.push("/user-management");
                   } else {
-                    router.push("/account-settings");
+                    router.push("/operator");
                   }
 
         dispatch(login(response.data.data));
