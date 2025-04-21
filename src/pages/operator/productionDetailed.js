@@ -879,7 +879,7 @@ const ProductOrderDetail = () => {
         setProductionTimer(0);
         stopFormik.resetForm();
         handleStopClickClose();
-        setDisabled(true);r
+        setDisabled(true);
         localStorage.removeItem(`productionTimerRunning-${order}`);
         localStorage.removeItem(`productionTimerStart-${order}`);
       } catch (error) {
@@ -909,7 +909,6 @@ const ProductOrderDetail = () => {
   //   getLastRouteConfirmation();
   // }, [order])
 
-  console.log(isDownClick)
 
   return (
 
@@ -948,8 +947,8 @@ const ProductOrderDetail = () => {
                         mb: 10
                       }}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}
-                             sx={{width: '100%', flexDirection:'column'}}>
-                          <Box sx={{width:'100%'}}>
+                             sx={{width: '100%', flexDirection: 'column'}}>
+                          <Box sx={{width: '100%'}}>
 
 
                             {isDownClick ? (
@@ -972,7 +971,7 @@ const ProductOrderDetail = () => {
                             )}
 
                           </Box>
-                          <Box display="flex" gap={2} flexWrap="wrap" sx={{width:'100%'}}>
+                          <Box display="flex" gap={2} flexWrap="wrap" sx={{width: '100%'}}>
                             {isDownClick ? (
                               <>
                                 <Button variant="contained" color="error" onClick={handleDownTimeEnd}>
@@ -986,7 +985,7 @@ const ProductOrderDetail = () => {
                               <>
                                 {!makeTimerRunning && !productionTimerRunning && !pauseProductionTimer && !isMakeTimeDone && (
                                   <Button variant='contained' onClick={handleStartMakeTime}
-                                          sx={{bgcolor:'blue'}}>
+                                          sx={{bgcolor: 'blue'}}>
                                     Make Time
                                   </Button>
                                 )}
@@ -1001,19 +1000,25 @@ const ProductOrderDetail = () => {
                                   <Box
                                     sx={{
                                       display: 'flex',
-                                      flexDirection: { md: 'column', xs: 'column' }, // Both directions for md and xs are column, but we will handle their alignment separately.
+                                      flexDirection: {md: 'column', xs: 'column'}, // Both directions for md and xs are column, but we will handle their alignment separately.
                                       width: '100%',
                                       justifyContent: 'flex-start',
                                       alignItems: 'center',
                                       gap: 2
                                     }}
                                   >
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap:2,width: '100%', flexDirection:{md:'row', xs:'column'} }}>
+                                    <Box sx={{
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      gap: 2,
+                                      width: '100%',
+                                      flexDirection: {md: 'row', xs: 'column'}
+                                    }}>
                                       <Button
                                         variant="contained"
                                         color="warning"
                                         onClick={handlePauseClickOpen}
-                                        sx={{ flex: 1 }}
+                                        sx={{flex: 1}}
                                       >
                                         Pause Production
                                       </Button>
@@ -1021,15 +1026,15 @@ const ProductOrderDetail = () => {
                                         variant="contained"
                                         color="error"
                                         onClick={handleDownClickOpen}
-                                        sx={{ flex: 1 }}
+                                        sx={{flex: 1}}
                                       >
                                         Downtime Production
                                       </Button>
                                     </Box>
 
-                                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+                                    <Box sx={{width: '100%', display: 'flex', justifyContent: 'flex-start'}}>
                                       <Button
-                                        sx={{ flex: 1 }}
+                                        sx={{flex: 1}}
                                         variant="contained"
                                         color="success"
                                         onClick={handleStopClickOpen}
@@ -1153,7 +1158,8 @@ const ProductOrderDetail = () => {
                       flexDirection: {md: 'row', xs: 'column'},
                       width: '100%', mt: 10
                     }}>
-                      <Button variant="contained" sx={{bgcolor:'blue'}} onClick={handleClickOpen}>Recieved Quantity</Button>
+                      <Button variant="contained" sx={{bgcolor: 'blue'}} onClick={handleClickOpen}>Recieved
+                        Quantity</Button>
                       <Button variant="contained" disabled={disabled} color="warning"
                               onClick={handleClickIssueForMachineOpen}>Issue For Machine</Button>
                       {/*<Button variant="contained" disabled={disabled} color="error" onClick={handleWastedQtyOpen}>Add*/}
