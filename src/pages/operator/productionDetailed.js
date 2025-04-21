@@ -37,6 +37,7 @@ const ProductOrderDetail = () => {
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [productionOrderDetail, setProductionOrderDetail] = useState(null);
+  const [palleteNo, setPalleteNo] = useState(1);
   const [remainingQty, setRemainingQty] = useState(0);
 
   //manage timer stats
@@ -254,6 +255,7 @@ const ProductOrderDetail = () => {
         });
         toast.success('Completed quantity added successfully.');
         setProductionOrderDetail(response.data.data);
+        await updatePalleteNo();
         completeFormik.resetForm();
       } catch (error) {
         console.log("error in completed qty", error)
@@ -283,6 +285,7 @@ const ProductOrderDetail = () => {
         });
         toast.success('Wasted quantity added successfully.');
         setProductionOrderDetail(response.data.data);
+        await updatePalleteNo();
         wastedFormik.resetForm();
       } catch (error) {
         console.log("error in wasted qty", error)
@@ -890,6 +893,22 @@ const ProductOrderDetail = () => {
 
   });
 
+  const updatePalleteNo = async () => {
+
+    try {
+      const response = await axios.post(`${BASE_URL}/api/ap/operator/update/issue-for-machine`, {
+        id: productionOrderDetail._id,
+      }, {
+        headers: {
+          "x-access-token": token
+        }
+      });
+      setProductionOrderDetail(response.data.data);
+      console.log("response", response)
+    } catch (error) {
+      console.error('error in update pallete for issue for machine', error);
+    }
+  }
 
   // const getLastRouteConfirmation = async () => {
   //   try {
@@ -1304,7 +1323,13 @@ const ProductOrderDetail = () => {
                                name="palleteNo"
                                type="text"
                                disabled={productionOrderDetail}
-                               value={productionOrderDetail?.currentPallateNo === 0 ? 1 : productionOrderDetail.currentPallateNo}
+
+                      // value={productionOrderDetail?.currentPallateNo === 0 ? 1 : productionOrderDetail.currentPallateNo}
+
+                               value={productionOrderDetail?.currentPallateNo}
+
+                      //          value={palleteNo}
+
                     />
                     <TextField fullWidth id="outlined-basic" variant="filled"
                                sx={{my: 4, width: '100%'}}
