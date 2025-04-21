@@ -188,6 +188,7 @@ const LoginPage = () => {
                 alt="Logo"
                 src="/logo.png"
               />
+              
               <Typography
                 variant='h6'
                 sx={{
