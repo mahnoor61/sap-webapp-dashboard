@@ -23,7 +23,7 @@ class CustomDocument extends Document {
           />
           <link rel='apple-touch-icon' sizes='180x180' href='/src/pages/portfolio-images/apple-touch-icon.png' />
           <link rel='shortcut icon'
-                href='/images/favicon.ico'
+                href='/logo.png'
           />
         </Head>
         <body>

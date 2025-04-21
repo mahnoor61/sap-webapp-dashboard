@@ -192,7 +192,7 @@ const ProductOrderDetail = () => {
         }, {
           headers: {"x-access-token": token}
         });
-        toast.success('Recieve by operator added successfully.');
+        toast.success('Receive by operator added successfully.');
         setProductionOrderDetail(response.data.data);
         await getRemainingQty();
         formik.resetForm();
@@ -992,7 +992,7 @@ const ProductOrderDetail = () => {
                                 )}
 
                                 {makeTimerRunning && !productionTimerRunning && (
-                                  <Button variant='contained' color='warning' onClick={handleStartProduction}>
+                                  <Button variant='contained' color='success' onClick={handleStartProduction}>
                                     Start Production
                                   </Button>
                                 )}

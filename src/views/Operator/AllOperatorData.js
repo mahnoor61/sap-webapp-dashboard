@@ -211,7 +211,7 @@ const AllOperatorData = () => {
                                     data?.status === 'pause' ? 'orange' :
                                       data?.status === 'downtime' ? 'red' :
                                       data?.status === 'make-time' ? 'blue' :
-                                        data?.status === 'completed' ? 'green' :
+                                        data?.status === 'completed' ? 'blue' :
                                           'default',
                               color: '#fff',
                               fontWeight: 'bold',
