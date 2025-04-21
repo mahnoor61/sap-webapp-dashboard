@@ -182,13 +182,13 @@ const LoginPage = () => {
                 height={'auto'}
                 viewBox='0 0 30 23'
                 sx={{
-                  maxHeight: {xs: 233, md: 50},
-                  maxWidth: {xs: 350, md:100},
+                  maxHeight: {xs: 50, md: 50},
+                  maxWidth: {xs: 100, md:100},
                 }}
                 alt="Logo"
                 src="/logo.png"
               />
-              
+
               <Typography
                 variant='h6'
                 sx={{

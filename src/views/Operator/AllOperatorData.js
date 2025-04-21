@@ -147,6 +147,7 @@ const AllOperatorData = () => {
             <TableRow sx={{justifyContent: 'space-between', alignItems: 'left'}}>
               <TableCell>#</TableCell>
               <TableCell>Production Orders</TableCell>
+              {/*<TableCell>Route No</TableCell>*/}
               <TableCell>Product Code</TableCell>
               <TableCell>Product Description</TableCell>
               <TableCell>Sheet Code</TableCell>
@@ -179,9 +180,13 @@ const AllOperatorData = () => {
                       <TableCell component="th" scope="row">
                         {page * rowsPerPage + index + 1} {/* Actual Serial Number */}
                       </TableCell>
+
                       <TableCell component="th" scope="row">
                         {data?.productionOrderNo}
                       </TableCell>
+                      {/*<TableCell component="th" scope="row">*/}
+                      {/*  {data.routeNo ? data.routeNo : ''}*/}
+                      {/*</TableCell>*/}
                       <TableCell component="th" scope="row">
                         {data?.productionOrderDataId?.itemCode}
                       </TableCell>
@@ -210,9 +215,9 @@ const AllOperatorData = () => {
                                   data?.status === 'running' ? 'green' :
                                     data?.status === 'pause' ? 'orange' :
                                       data?.status === 'downtime' ? 'red' :
-                                      data?.status === 'make-time' ? 'blue' :
-                                        data?.status === 'completed' ? 'blue' :
-                                          'default',
+                                        data?.status === 'make-time' ? 'blue' :
+                                          data?.status === 'completed' ? 'blue' :
+                                            'default',
                               color: '#fff',
                               fontWeight: 'bold',
                             }}

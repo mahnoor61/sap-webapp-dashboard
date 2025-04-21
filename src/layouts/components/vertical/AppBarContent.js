@@ -38,6 +38,7 @@ const AppBarContent = props => {
         ) : null}
       </Box>
       <Box  sx={{display: 'flex', alignItems: 'center', width:'100%'}}>
+
         <Box
           component="img"
           width={200}
@@ -53,24 +54,25 @@ const AppBarContent = props => {
           src={ `${WEB_URL}/logo.png`}
 
         />
-        <Box className='actions-right' sx={{display:'flex', justifyContent:'flex-end', alignItems:'center', width:'100%'}}>
         <Tooltip title="Expand Navbar" arrow>
-        <IconButton
-          color='inherit'
-          sx={{
-            display: {lg:'block', xs:'none'}
-          }}
-          onClick={() => {
-            toggleNavVisibility()
-            setShowImage(prev => !prev)
-          }}
+          <IconButton
+            color='inherit'
+            sx={{
+              display: {lg:'block', xs:'none'}
+            }}
+            onClick={() => {
+              toggleNavVisibility()
+              setShowImage(prev => !prev)
+            }}
 
-          // onClick={toggleNavVisibility}
-          // sx={{ml: -2.75, ...(hiddenSm ? {} : {mr: 3.5})}}
-        >
-          <Menu/>
-        </IconButton>
+            // onClick={toggleNavVisibility}
+            // sx={{ml: -2.75, ...(hiddenSm ? {} : {mr: 3.5})}}
+          >
+            <Menu/>
+          </IconButton>
         </Tooltip>
+        <Box className='actions-right' sx={{display:'flex', justifyContent:'flex-end', alignItems:'center', width:'100%'}}>
+
         <ModeToggler settings={settings} saveSettings={saveSettings}/>
         {/*<NotificationDropdown />*/}
         <UserDropdown/>
