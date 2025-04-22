@@ -150,6 +150,8 @@ const AllOperatorData = () => {
               {/*<TableCell>Route No</TableCell>*/}
               <TableCell>Product Code</TableCell>
               <TableCell>Product Description</TableCell>
+              {auth?.user?.role === 'admin' && <TableCell>Route</TableCell>}
+              {auth?.user?.role === 'admin' && <TableCell>Machine</TableCell>}
               <TableCell>Sheet Code</TableCell>
               <TableCell>Sheet Name</TableCell>
               <TableCell>Quantity of Sheets</TableCell>
@@ -193,6 +195,8 @@ const AllOperatorData = () => {
                       <TableCell component="th" scope="row">
                         {data?.productionOrderDataId?.prodName}
                       </TableCell>
+                      {auth?.user?.role === 'admin' && <TableCell>{data?.route?.code || '-'}</TableCell>}
+                      {auth?.user?.role === 'admin' && <TableCell>{data?.machine?.code || '-'}</TableCell>}
                       <TableCell component="th" scope="row">
                         {data?.productionOrderDataId?.ComponentItemCode}
                       </TableCell>
