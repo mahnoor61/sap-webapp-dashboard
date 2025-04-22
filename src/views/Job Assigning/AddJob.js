@@ -87,13 +87,32 @@ const AddJob = () => {
             </Stack>
 
             {/* Production Order Selection */}
+            {/*<Autocomplete*/}
+            {/*  fullWidth sx={{ mb: 2 }}*/}
+            {/*  options={prodcutionOrder}*/}
+            {/*  getOptionLabel={(option) => option.docNum}*/}
+            {/*  value={prodcutionOrder.find(po => po.docNum === formik.values.productionOrderNo) || null}*/}
+            {/*  onChange={(event, value) => formik.setFieldValue('productionOrderNo', value ? value.docNum : '')}*/}
+            {/*  renderInput={(params) => <TextField {...params} label="Production Order No" />}*/}
+            {/*/>*/}
             <Autocomplete
-              fullWidth sx={{ mb: 2 }}
+              fullWidth
+              sx={{ mb: 2 }}
               options={prodcutionOrder}
-              getOptionLabel={(option) => option.docNum}
-              value={prodcutionOrder.find(po => po.docNum === formik.values.productionOrderNo) || null}
-              onChange={(event, value) => formik.setFieldValue('productionOrderNo', value ? value.docNum : '')}
-              renderInput={(params) => <TextField {...params} label="Production Order No" />}
+              getOptionLabel={(option) => option.docNum || ''} // Prevent error if option is undefined
+              isOptionEqualToValue={(option, value) => option.docNum === value.docNum}
+              value={
+                prodcutionOrder.find(
+                  (po) => po.docNum === formik.values.productionOrderNo
+                ) || null
+              }
+              onChange={(event, value) =>
+                formik.setFieldValue('productionOrderNo', value ? value.docNum : '')
+              }
+              filterSelectedOptions // Optional: hides selected value from dropdown
+              renderInput={(params) => (
+                <TextField {...params} label="Production Order No" />
+              )}
             />
 
             {/* Display Added Assignments */}
