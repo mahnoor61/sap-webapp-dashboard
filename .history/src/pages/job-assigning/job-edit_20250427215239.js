@@ -42,7 +42,7 @@ const JobEdit = () => {
             headers: { 'x-access-token': token }
           })
           const job = response.data.data
-
+          console.log('job', job)
           setJobData(job)
           formik.setValues({
             productionOrderNo: job.productionOrderNo,
@@ -78,7 +78,7 @@ const JobEdit = () => {
           `${BASE_URL}/api/ap/admin/update/job/${jobId}`,
           {
             productionOrderNo: values.productionOrderNo,
-            ComponentItemCode: values.ComponentItemCode,
+            ComponentItemCode
             user: values.user,
             machine: values.machine,
             route: values.route
@@ -125,7 +125,7 @@ const JobEdit = () => {
                   options={prodcutionOrder}
                   getOptionLabel={option => (option.docNum ? option.docNum.toString() : '')} // thoda safe banaya
                   isOptionEqualToValue={(option, value) => option.docNum === value.docNum}
-                  value={prodcutionOrder.find(po => po.docNum == formik.values.productionOrderNo) || null}
+                  value={prodcutionOrder.find(po => po.docNum === formik.values.productionOrderNo) || null}
                   onChange={(event, value) => {
                     if (value) {
                       formik.setFieldValue('productionOrderNo', value.docNum)

@@ -88,6 +88,8 @@ const AddJob = () => {
     }
   })
 
+  console.log('prodcutionOrder', prodcutionOrder)
+
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', py: 5 }}>
       <CardContent>

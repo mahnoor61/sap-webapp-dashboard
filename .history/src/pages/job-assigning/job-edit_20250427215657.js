@@ -125,7 +125,7 @@ const JobEdit = () => {
                   options={prodcutionOrder}
                   getOptionLabel={option => (option.docNum ? option.docNum.toString() : '')} // thoda safe banaya
                   isOptionEqualToValue={(option, value) => option.docNum === value.docNum}
-                  value={prodcutionOrder.find(po => po.docNum == formik.values.productionOrderNo) || null}
+                  value={prodcutionOrder.find(po => po.docNum === formik.values.productionOrderNo) || null}
                   onChange={(event, value) => {
                     if (value) {
                       formik.setFieldValue('productionOrderNo', value.docNum)

@@ -123,13 +123,13 @@ const JobEdit = () => {
                   fullWidth
                   sx={{ mb: 2 }}
                   options={prodcutionOrder}
-                  getOptionLabel={option => (option.docNum ? option.docNum.toString() : '')} // thoda safe banaya
-                  isOptionEqualToValue={(option, value) => option.docNum === value.docNum}
-                  value={prodcutionOrder.find(po => po.docNum == formik.values.productionOrderNo) || null}
+                  getOptionLabel={option => (option.docNum ? option.docNum.toString() : '')}
+                  isOptionEqualToValue={(option, value) => option.docNum === Number(value.docNum)}
+                  value={prodcutionOrder.find(po => po.docNum === Number(formik.values.productionOrderNo)) || null}
                   onChange={(event, value) => {
                     if (value) {
                       formik.setFieldValue('productionOrderNo', value.docNum)
-                      formik.setFieldValue('ComponentItemCode', value.ComponentItemCode) // yeh naya add kiya
+                      formik.setFieldValue('ComponentItemCode', value.ComponentItemCode)
                     } else {
                       formik.setFieldValue('productionOrderNo', '')
                       formik.setFieldValue('ComponentItemCode', '')

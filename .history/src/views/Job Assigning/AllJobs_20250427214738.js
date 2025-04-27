@@ -105,7 +105,7 @@ const AllJobs = () => {
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow sx={{ width: '100%' }}>
-              <TableCell align='center' colSpan={10}>
+              <TableCell align='center' colSpan={5}>
                 <TextField
                   variant='filled'
                   placeholder='Search through production order'
@@ -161,7 +161,7 @@ const AllJobs = () => {
                     {data.productionOrderNo}
                   </TableCell>
                   <TableCell component='th' scope='row'>
-                    {data.ComponentItemCode}
+                    {data.productionOrderNo}
                   </TableCell>
                   {/*<TableCell component="th" scope="row">*/}
                   <TableCell component='th' scope='row'>

@@ -88,6 +88,8 @@ const AddJob = () => {
     }
   })
 
+  console.log('prodcutionOrder', prodcutionOrder)
+
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', py: 5 }}>
       <CardContent>
@@ -97,7 +99,16 @@ const AddJob = () => {
               <Chip sx={{ textAlign: 'center', mb: 5, width: '100%' }} label='Add Job' />
             </Stack>
 
-            {/* <Autocomplete
+            {/* Production Order Selection */}
+            {/*<Autocomplete*/}
+            {/*  fullWidth sx={{ mb: 2 }}*/}
+            {/*  options={prodcutionOrder}*/}
+            {/*  getOptionLabel={(option) => option.docNum}*/}
+            {/*  value={prodcutionOrder.find(po => po.docNum === formik.values.productionOrderNo) || null}*/}
+            {/*  onChange={(event, value) => formik.setFieldValue('productionOrderNo', value ? value.docNum : '')}*/}
+            {/*  renderInput={(params) => <TextField {...params} label="Production Order No" />}*/}
+            {/*/>*/}
+            <Autocomplete
               fullWidth
               sx={{ mb: 2 }}
               options={prodcutionOrder}
@@ -106,26 +117,6 @@ const AddJob = () => {
               value={prodcutionOrder.find(po => po.docNum === formik.values.productionOrderNo) || null}
               onChange={(event, value) => formik.setFieldValue('productionOrderNo', value ? value.docNum : '')}
               filterSelectedOptions // Optional: hides selected value from dropdown
-              renderInput={params => <TextField {...params} label='Production Order No' />}
-            /> */}
-
-            <Autocomplete
-              fullWidth
-              sx={{ mb: 2 }}
-              options={prodcutionOrder}
-              getOptionLabel={option => (option.docNum ? option.docNum.toString() : '')} // thoda safe banaya
-              isOptionEqualToValue={(option, value) => option.docNum === value.docNum}
-              value={prodcutionOrder.find(po => po.docNum === formik.values.productionOrderNo) || null}
-              onChange={(event, value) => {
-                if (value) {
-                  formik.setFieldValue('productionOrderNo', value.docNum)
-                  formik.setFieldValue('ComponentItemCode', value.ComponentItemCode) // yeh naya add kiya
-                } else {
-                  formik.setFieldValue('productionOrderNo', '')
-                  formik.setFieldValue('ComponentItemCode', '')
-                }
-              }}
-              filterSelectedOptions
               renderInput={params => <TextField {...params} label='Production Order No' />}
             />
 
