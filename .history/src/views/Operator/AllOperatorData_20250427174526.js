@@ -116,7 +116,7 @@ const AllOperatorData = () => {
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow sx={{ width: '100%' }}>
-              <TableCell align='center' colSpan={12}>
+              <TableCell align='center' colSpan={20}>
                 <TextField
                   variant='filled'
                   placeholder='Search through production order no OR status, machine or route'
