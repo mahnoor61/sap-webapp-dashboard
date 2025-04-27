@@ -105,6 +105,7 @@ const LoginPage = () => {
             Password: Password,
             UserName: UserName
           })
+          
 
           if (!sapResponse.data.data.SessionId) {
             throw new Error('SAP Login Failed: No SessionId received.')
@@ -122,11 +123,7 @@ const LoginPage = () => {
           } else {
             router.push('/account-settings')
           }
-        } catch (err) {
-          toast.error(err.response?.data?.msg || 'Login failed')
-          console.error('Login Error:', err.response?.data.msg)
-          formik.resetForm()
-        }
+        } 
       } catch (err) {
         toast.error(err.response?.data?.msg || 'Login failed')
         console.error('Login Error:', err.response?.data.msg)

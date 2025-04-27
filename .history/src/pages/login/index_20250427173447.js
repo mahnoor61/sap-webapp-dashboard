@@ -98,6 +98,7 @@ const LoginPage = () => {
         const response = await axios.post(apiEndpoint, values)
         const loginData = response.data.data
 
+
         try {
           // const sapResponse = await axios.post(loginUrl, sapLoginData)
           const sapResponse = await axios.post(`${BASE_URL}/api/ap/sap/login`, {
@@ -105,6 +106,7 @@ const LoginPage = () => {
             Password: Password,
             UserName: UserName
           })
+          
 
           if (!sapResponse.data.data.SessionId) {
             throw new Error('SAP Login Failed: No SessionId received.')
