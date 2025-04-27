@@ -101,7 +101,7 @@ const AllOperatorData = () => {
 
   // const filteredProductionList = FilterHelper(prodctionLists, searchQuery, ['user.userName', 'machine.code'])
 
-  // console.log('prodctionLists', prodctionLists)
+  console.log('prodctionLists', prodctionLists)
 
   const roleBasedProductionList =
     auth?.user?.role === 'operator'

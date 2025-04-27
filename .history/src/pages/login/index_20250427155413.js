@@ -98,19 +98,21 @@ const LoginPage = () => {
         const response = await axios.post(apiEndpoint, values)
         const loginData = response.data.data
 
-        try {
-          // const sapResponse = await axios.post(loginUrl, sapLoginData)
-          const sapResponse = await axios.post(`${BASE_URL}/api/ap/sap/login`, {
-            CompanyDB: CompanyDB,
-            Password: Password,
-            UserName: UserName
-          })
-          
+        // SAP Login API
+        const sapLoginData = {
+          CompanyDB: CompanyDB,
+          Password: Password,
+          UserName: UserName
+        }
 
-          if (!sapResponse.data.data.SessionId) {
+        try {
+          const sapResponse = await axios.post(loginUrl, sapLoginData)
+          console.log('SAP Response:', sapResponse.data)
+
+          if (!sapResponse.data.SessionId) {
             throw new Error('SAP Login Failed: No SessionId received.')
           }
-          const sessionId = sapResponse.data.data.SessionId
+          const sessionId = sapResponse.data.SessionId
 
           // Cookies.set('sessionId', sessionId, {expires: 7, path: '/'});
 
@@ -124,7 +126,7 @@ const LoginPage = () => {
             router.push('/account-settings')
           }
         } catch (sapError) {
-          console.error('SAP Login Error:', sapError.response?.data || sapError)
+          console.error('SAP Login Error:', sapError)
           toast.error(`SAP Login Failed: ${sapError.response?.data?.error?.message?.value || 'Unknown error'}`)
         }
       } catch (err) {

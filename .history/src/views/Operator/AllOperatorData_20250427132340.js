@@ -101,7 +101,7 @@ const AllOperatorData = () => {
 
   // const filteredProductionList = FilterHelper(prodctionLists, searchQuery, ['user.userName', 'machine.code'])
 
-  // console.log('prodctionLists', prodctionLists)
+  console.log('prodctionLists', prodctionLists)
 
   const roleBasedProductionList =
     auth?.user?.role === 'operator'
@@ -119,7 +119,7 @@ const AllOperatorData = () => {
               <TableCell align='center' colSpan={10}>
                 <TextField
                   variant='filled'
-                  placeholder='Search through production order no OR status, machine or route'
+                  placeholder='Search through production order no OR status'
                   sx={{
                     '&::placeholder': {
                       color: 'rgba(71, 85, 105, 1)'
