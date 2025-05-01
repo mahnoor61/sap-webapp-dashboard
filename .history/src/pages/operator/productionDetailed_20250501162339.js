@@ -260,7 +260,7 @@ const ProductOrderDetail = () => {
             }
           )
 
-          console.log('sapResponse issue for machine=>', sapResponse)
+          console.log('sapResponse issue for machine=>', sapResponse.data.data)
         } catch (error) {
           console.log('error in posting issue for machine into sap', error.response.data.msg)
         }
@@ -317,7 +317,7 @@ const ProductOrderDetail = () => {
             }
           )
 
-          console.log('sapResponse of completed quantity=>', sapResponse)
+          console.log('sapResponse of completed quantity=>', sapResponse.data.data)
         } catch (error) {
           console.log('error in posting completed quantity into sap', error.response.data.msg)
         }
@@ -1467,7 +1467,11 @@ const ProductOrderDetail = () => {
                       name='palleteNo'
                       type='text'
                       disabled={productionOrderDetail}
+                      // value={productionOrderDetail?.currentPallateNo === 0 ? 1 : productionOrderDetail.currentPallateNo}
+
                       value={productionOrderDetail?.currentPallateNo}
+
+                      //          value={palleteNo}
                     />
                     <TextField
                       fullWidth

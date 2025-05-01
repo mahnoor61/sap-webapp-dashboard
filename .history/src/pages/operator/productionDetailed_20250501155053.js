@@ -237,34 +237,22 @@ const ProductOrderDetail = () => {
             headers: { 'x-access-token': token }
           }
         )
-
+const sapSessionId = localStorage.getItem('') 
+        const sapResponse = axios.post(
+          `${BASE_URL}/api/ap/operator/get/first/route`,
+          {
+            id: productionOrderDetail._id,
+            Quantity: values.issueForMachine,
+            sessionId: sapSessionId
+          },
+          {
+            headers: { 'x-access-token': token }
+          }
+        )
+        console.log('sapResponse', sapResponse)
         toast.success('Issue for machine added successfully.')
         setProductionOrderDetail(response.data.data)
         await getRemainingQty()
-
-        try {
-          const sapSessionId = localStorage.getItem('sessionId')
-
-          const sapResponse = await axios.post(
-            `${BASE_URL}/api/ap/operator/get/first/route`,
-            {
-              id: productionOrderDetail._id,
-              Quantity: values.issueForMachine,
-              sessionId: sapSessionId
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': token
-              }
-            }
-          )
-
-          console.log('sapResponse issue for machine=>', sapResponse)
-        } catch (error) {
-          console.log('error in posting issue for machine into sap', error.response.data.msg)
-        }
-
         issueFormik.resetForm()
       } catch (error) {
         console.log('error in issue for machine', error)
@@ -298,30 +286,6 @@ const ProductOrderDetail = () => {
         toast.success('Completed quantity added successfully.')
         setProductionOrderDetail(response.data.data)
         await updatePalleteNo()
-
-        try {
-          const sapSessionId = localStorage.getItem('sessionId')
-
-          const sapResponse = await axios.post(
-            `${BASE_URL}/api/ap/operator/get/last/route`,
-            {
-              id: productionOrderDetail._id,
-              Quantity: values.completedQuantity,
-              sessionId: sapSessionId
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': token
-              }
-            }
-          )
-
-          console.log('sapResponse of completed quantity=>', sapResponse)
-        } catch (error) {
-          console.log('error in posting completed quantity into sap', error.response.data.msg)
-        }
-
         completeFormik.resetForm()
       } catch (error) {
         console.log('error in completed qty', error)
@@ -1467,7 +1431,11 @@ const ProductOrderDetail = () => {
                       name='palleteNo'
                       type='text'
                       disabled={productionOrderDetail}
+                      // value={productionOrderDetail?.currentPallateNo === 0 ? 1 : productionOrderDetail.currentPallateNo}
+
                       value={productionOrderDetail?.currentPallateNo}
+
+                      //          value={palleteNo}
                     />
                     <TextField
                       fullWidth

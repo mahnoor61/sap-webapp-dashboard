@@ -303,10 +303,10 @@ const ProductOrderDetail = () => {
           const sapSessionId = localStorage.getItem('sessionId')
 
           const sapResponse = await axios.post(
-            `${BASE_URL}/api/ap/operator/get/last/route`,
+            `${BASE_URL}/api/ap/operator/get/first/route`,
             {
               id: productionOrderDetail._id,
-              Quantity: values.completedQuantity,
+              Quantity: values.issueForMachine,
               sessionId: sapSessionId
             },
             {
@@ -319,7 +319,7 @@ const ProductOrderDetail = () => {
 
           console.log('sapResponse of completed quantity=>', sapResponse)
         } catch (error) {
-          console.log('error in posting completed quantity into sap', error.response.data.msg)
+          console.log('error in posting issue for machine into sap', error.response.data.msg)
         }
 
         completeFormik.resetForm()
@@ -1467,7 +1467,11 @@ const ProductOrderDetail = () => {
                       name='palleteNo'
                       type='text'
                       disabled={productionOrderDetail}
+                      // value={productionOrderDetail?.currentPallateNo === 0 ? 1 : productionOrderDetail.currentPallateNo}
+
                       value={productionOrderDetail?.currentPallateNo}
+
+                      //          value={palleteNo}
                     />
                     <TextField
                       fullWidth

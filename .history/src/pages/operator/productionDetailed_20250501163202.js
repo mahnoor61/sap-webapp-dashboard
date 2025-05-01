@@ -1468,6 +1468,8 @@ const ProductOrderDetail = () => {
                       type='text'
                       disabled={productionOrderDetail}
                       value={productionOrderDetail?.currentPallateNo}
+
+                      //          value={palleteNo}
                     />
                     <TextField
                       fullWidth

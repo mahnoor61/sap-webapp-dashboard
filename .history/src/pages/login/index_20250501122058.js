@@ -120,8 +120,8 @@ const LoginPage = () => {
           if (loginData.role === 'admin') {
             router.push('/user-management')
           } else if (loginData.role === 'operator') {
-            router.push('/operator')
-          } else {
+            
+          }else {
             router.push('/account-settings')
           }
         } catch (err) {

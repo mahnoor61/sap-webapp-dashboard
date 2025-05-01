@@ -119,8 +119,9 @@ const LoginPage = () => {
           toast.success('Successfully logged in!')
           if (loginData.role === 'admin') {
             router.push('/user-management')
-          } else if (loginData.role === 'operator') {
             router.push('/operator')
+          } else if (loginData.role === 'operator') {
+            
           } else {
             router.push('/account-settings')
           }
