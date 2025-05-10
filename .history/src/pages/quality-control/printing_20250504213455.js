@@ -1,0 +1,573 @@
+import React, { forwardRef, useContext, useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import {
+  CardContent,
+  Card,
+  TextField,
+  Button,
+  Grid,
+  Box,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  Chip,
+  Stack,
+  Autocomplete,
+  Container,
+  Typography,
+  DialogActions,
+  Dialog,
+  TablePagination,
+  TableContainer,
+  CircularProgress,
+  MenuItem,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from '@mui/material/'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import axios from 'axios'
+import toast from 'react-hot-toast'
+import { useSelector } from 'react-redux'
+import { Editor } from '@tinymce/tinymce-react'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormControl from '@mui/material/FormControl'
+import FormLabel from '@mui/material/FormLabel'
+import { FilterHelper, PaginationHelper } from '/src/helpers/filter'
+import SearchIcon from '@mui/icons-material/Search'
+import DoneIcon from '@mui/icons-material/Done'
+import ClearIcon from '@mui/icons-material/Clear'
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+
+const Printing = () => {
+  const serialRef = useRef(1)
+  const [responses, setResponses] = useState({})
+
+  const [open, setOpen] = useState(false)
+  const [activeCell, setActiveCell] = useState('')
+  const [reason, setReason] = useState('')
+
+  const [shift, setShift] = useState('A')
+  const [response, setResponse] = useState('Okay')
+  const [loadingComplete, setLoadingComplete] = useState(true)
+  // const [open, setOpen] = React.useState(false)
+
+  const router = useRouter()
+  const [userData, setUserData] = useState('')
+  const { id } = router.query
+  const auth = useSelector(state => state.auth)
+  const token = auth.token
+
+  // function for not okay  dialogue
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const getData = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/ap/qc/get/data/${id}`, {
+        headers: { 'x-access-token': token }
+      })
+      setUserData(res.data.data)
+    } catch (error) {
+      console.log('error in get data through id in printing', error)
+    }
+  }
+
+  useEffect(() => {
+    getData()
+  }, [id])
+
+  console.log('userData', userData)
+  const today = new Date()
+  const formattedDate = today.toLocaleDateString()
+
+  const handleChange = event => {
+    setShift(event.target.value)
+  }
+
+  const handleChangeForDropdown = event => {
+    setResponse(event.target.value)
+  }
+
+  const questions = [
+    'text',
+    'colorVariation',
+    'doubling',
+    'dust',
+    'setOff',
+    'scumming',
+    'sideLay',
+    'frontLay',
+    'registration',
+    'dmsFromPlate'
+  ]
+
+  const handleFormSubmit = async () => {
+    const finalData = Object.entries(responses).map(([key, value]) => {
+      const [row, question] = key.split('_')
+      return {
+        serial: serialRef.current++,
+        question,
+        response: value.answer,
+        reason: value.answer === 'Not Okay' ? value.reason : ''
+      }
+    })
+
+    await axios.post(`${BASE_URL}/api/ap/qc/printing/${id}`, finalData, {
+      headers: { 'x-access-token': token }
+    })
+
+    toast.success('Submitted successfully')
+  }
+
+  return (
+    <>
+      <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', py: 5, width: '100%' }}>
+        <CardContent sx={{ width: '100%' }}>
+          <Grid container sx={{ mt: 5 }}>
+            <Grid item lg={12}>
+              <Paper sx={{ padding: 2, overflowX: 'auto' }}>
+                {/* Top Form Section */}
+                <Grid container spacing={2} mb={2}>
+                  {/* <Button variant='contained'>Print</Button> */}
+                  <Box
+                    sx={{
+                      bgcolor: '#87CEEB',
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+
+                      p: 3,
+                      mt: 5,
+                      mb: 3,
+                      borderRadius: '10px'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                      <Typography variant='subtitle2' sx={{ fontWeight: '900' }}>
+                        Document Code:
+                      </Typography>
+                      <Typography>{userData?.jobId?.productionOrderNo}</Typography>
+                    </Box>
+
+                    <Typography variant='subtitle2'>UBC/QC/SOR - 1</Typography>
+
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                      <Typography variant='subtitle2' sx={{ fontWeight: '900' }}>
+                        Issue Date:
+                      </Typography>
+                      <Typography>{formattedDate}</Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+                <TableContainer component={Paper}>
+                  <Table aria-label='simple table' sx={{ width: '100%' }}>
+                    <TableHead sx={{ width: '100%' }}>
+                      <TableRow sx={{ width: '100%' }}>
+                        <TableCell sx={{ width: '100%', p: '0 !important' }} colSpan={13}>
+                          <Box
+                            sx={{
+                              mt: 3,
+                              mb: 5,
+                              display: 'flex',
+
+                              gap: 3,
+                              justifyContent: 'space-between',
+                              width: '100%',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <Grid item xs={12} lg={3}>
+                              <TextField fullWidth label='Machine' value={userData?.machine?.code} size='small' />
+                            </Grid>
+                            <Grid item xs={12} lg={3}>
+                              <TextField
+                                fullWidth
+                                label='Operator Name'
+                                value={userData?.userId?.userName}
+                                size='small'
+                              />
+                            </Grid>
+                            <Grid item xs={6} lg={2}>
+                              <TextField
+                                select
+                                fullWidth
+                                label='Shift'
+                                value={shift}
+                                onChange={handleChange}
+                                size='small'
+                              >
+                                <MenuItem value='A'>A</MenuItem>
+                                <MenuItem value='B'>B</MenuItem>
+                              </TextField>
+                            </Grid>
+                            <Grid item xs={6} lg={4}>
+                              <TextField fullWidth label='Date' value={formattedDate} size='small' />
+                            </Grid>
+                          </Box>
+                          <Box
+                            sx={{
+                              mt: 3,
+                              mb: 3,
+                              display: 'flex',
+                              gap: 3,
+                              justifyContent: 'space-between',
+                              width: '100%',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <Grid item xs={12}>
+                              <Grid container spacing={5}>
+                                <Grid item xs={6} lg={3}>
+                                  <TextField
+                                    fullWidth
+                                    label='Job Card No'
+                                    value={userData?.jobData?.docNum}
+                                    size='small'
+                                  />
+                                </Grid>
+                                <Grid item xs={6} lg={6}>
+                                  <TextField
+                                    fullWidth
+                                    label='Job Name'
+                                    value={userData?.jobData?.prodName}
+                                    size='small'
+                                  />
+                                </Grid>
+                                <Grid item xs={6} lg={3}>
+                                  <TextField
+                                    fullWidth
+                                    label='Sales Order Nbr'
+                                    value={userData?.jobData?.OriginNum}
+                                    size='small'
+                                  />
+                                </Grid>
+                                <Grid item xs={6} lg={6}>
+                                  <TextField
+                                    fullWidth
+                                    label='Sheet Name'
+                                    value={userData?.jobData?.ComponentItemName}
+                                    size='small'
+                                  />
+                                </Grid>
+
+                                <Grid item xs={6} lg={3}>
+                                  <TextField
+                                    fullWidth
+                                    label='Received Quantity'
+                                    value={userData?.jobId?.recievedByOperator}
+                                    size='small'
+                                  />
+                                </Grid>
+                                <Grid item xs={6} lg={3}>
+                                  <TextField
+                                    fullWidth
+                                    label='Completed Quantity'
+                                    value={userData?.jobId?.totalCompletedQuantity}
+                                    size='small'
+                                  />
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
+                        <TableCell>Sr No</TableCell>
+                        <TableCell>Time</TableCell>
+                        <TableCell>Quantity</TableCell>
+                        <TableCell>Text</TableCell>
+                        <TableCell>Color Variation</TableCell>
+                        <TableCell>Doubling</TableCell>
+                        <TableCell>Dust</TableCell>
+                        <TableCell>Set Off</TableCell>
+                        <TableCell>Scumming</TableCell>
+                        <TableCell>Side Lay</TableCell>
+                        <TableCell>Front Lay</TableCell>
+                        <TableCell>Misregistration</TableCell>
+                        <TableCell>D/M/S from Plate</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody sx={{ width: '100%' }}>
+                      {userData?.makeTime && userData?.makeTimeStatus ? (
+                        <TableRow sx={{ width: '100%' }}>
+                          <TableCell>1</TableCell> {/* Serial Number */}
+                          <TableCell>{new Date(userData.makeTime).toLocaleTimeString()}</TableCell> {/* Time */}
+                          <TableCell colSpan={11}>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '100%',
+                                py: 2, // Optional: vertical padding
+                                fontWeight: 'bold',
+                                color: 'white',
+                                width: '100%'
+                              }}
+                            >
+                              {userData.makeTimeStatus}
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      ) : null}
+
+                      {userData?.quantity && userData?.quantityTime ? (
+                        <TableRow>
+                          {data.map((row, rowIndex) => (
+                            <TableRow key={rowIndex}>
+                              <TableCell>{rowIndex + 1}</TableCell>
+                              <TableCell>{/* Time */}</TableCell>
+                              <TableCell>{row.quantity}</TableCell>
+                              {questions.map((question, questionIndex) => (
+                                <TableCell key={`${rowIndex}_${question}`}>
+                                  <TextField
+                                    select
+                                    value={responses[`${rowIndex}_${question}`]?.answer || ''}
+                                    onChange={e => {
+                                      const value = e.target.value
+                                      if (value === 'Not Okay') {
+                                        setOpen(true)
+                                        setActiveCell(`${rowIndex}_${question}`)
+                                      } else {
+                                        setResponses(prev => ({
+                                          ...prev,
+                                          [`${rowIndex}_${question}`]: { answer: value, reason: '' }
+                                        }))
+                                      }
+                                    }}
+                                    size='small'
+                                  >
+                                    <MenuItem value='Okay'>Okay</MenuItem>
+                                    <MenuItem value='Not Okay'>Not Okay</MenuItem>
+                                  </TextField>
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          ))}
+                          {/* <TableCell>{userData.makeTime ? 2 : 1}</TableCell>{' '}
+                          {/* Incremented Serial if makeTime also existed */}
+                          {/* <TableCell>{new Date(userData.quantityTime).toLocaleTimeString()}</TableCell> */}
+                          {/* <TableCell>{userData.quantity}</TableCell>  */}
+                          {/* <TextField select value={response} onChange={handleChangeForDropdown} size='small'>
+                              <MenuItem value='Okay'>Okay</MenuItem>
+                              <MenuItem value='Not Okay' onClick={handleOpen}>
+                                Not Okay
+                              </MenuItem>
+                            </TextField> */}
+                          {/* <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DoneIcon />
+                        </TableCell>
+                        <TableCell>
+                          <ClearIcon />
+                        </TableCell> */}
+                        </TableRow>
+                      ) : null}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
+                  <Button
+                    onClick={() => {
+                      setResponses(prev => ({
+                        ...prev,
+                        [activeCell]: { answer: 'Not Okay', reason }
+                      }))
+                      setOpen(false)
+                      setReason('')
+                    }}
+                    type='submit'
+                    variant='contained'
+                    // disabled={formik.isSubmitting}
+                    sx={{
+                      backgroundColor: '#0563BB',
+                      '&:hover': { backgroundColor: '#0AA4D2 !important' }
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          {/* <form onSubmit={formik.handleSubmit}> */}
+          <DialogTitle id='alert-dialog-title'>{'Give Reason For Not Okay'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              <TextField
+                required
+                fullWidth
+                id='outlined-basic'
+                label='Add Reason'
+                variant='filled'
+                sx={{ my: 4, width: '100%' }}
+                placeholder='Add Reason'
+                name='reason'
+                type='text'
+                // error={Boolean(formik.touched.quantity && formik.errors.quantity)}
+                // helperText={formik.touched.quantity && formik.errors.quantity}
+                // onBlur={formik.handleBlur}
+                // onChange={formik.handleChange}
+                // value={formik.values.quantity}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+
+            <Button type='submit' autoFocus>
+              Submit
+            </Button>
+          </DialogActions>
+          {/* </form> */}
+        </Dialog>
+      </React.Fragment>
+    </>
+  )
+}
+
+export default Printing
+
+// const questions = [
+//   'text',
+//   'sideLay',
+//   'scumming',
+//   'setOff',
+//   'doubling',
+//   'dust',
+//   'frontLay',
+//   'registration',
+//   'colorVariation',
+//   'dmsFromPlate'
+// ]
+
+// const formik = useFormik({
+//   initialValues: questions.reduce((acc, q) => {
+//     acc[q] = { answer: '', reason: '' }
+
+//     return acc
+//   }, {}),
+//   onSubmit: async values => {
+//     try {
+//       // Format the data as needed
+//       const formattedValues = Object.fromEntries(
+//         Object.entries(values).map(([key, val]) => [
+//           key,
+//           val.answer === 'Not Okay' ? `${val.answer} - ${val.reason}` : val.answer
+//         ])
+//       )
+
+//       await axios.post(`${BASE_URL}/api/ap/qc/printing/${id}`, formattedValues, {
+//         headers: { 'x-access-token': token }
+//       })
+
+//       toast.success('Printing data saved successfully.')
+//       router.push('/quality-control')
+//       formik.resetForm()
+//     } catch (error) {
+//       console.error('error in printing qc form', error)
+//       toast.error(error.response?.data?.msg || 'Submission failed')
+//     }
+//   }
+// })
+//     <form onSubmit={formik.handleSubmit}>
+//           <Grid container spacing={2} sx={{ px: { xs: 2, md: 10 } }}>
+//             <Stack spacing={1} sx={{ width: '100%' }}>
+//               <Chip label='Add Printing' sx={{ textAlign: 'center', mb: 5, width: '100%' }} />
+//             </Stack>
+
+//             {questions.map((question, index) => (
+//               <Grid item xs={12} sm={6} key={index}>
+//                 <FormControl fullWidth>
+//                   <FormLabel sx={{ fontWeight: '900' }}>{question}</FormLabel>
+//                   <RadioGroup
+//                     row
+//                     name={question}
+//                     value={formik.values[question].answer}
+//                     onChange={e =>
+//                       formik.setFieldValue(question, {
+//                         answer: e.target.value,
+//                         reason: ''
+//                       })
+//                     }
+//                   >
+//                     <FormControlLabel value='Okay' control={<Radio />} label='Okay' />
+//                     <FormControlLabel value='Not Okay' control={<Radio />} label='Not Okay' />
+//                   </RadioGroup>
+//                   {formik.values[question].answer === 'Not Okay' && (
+//                     <TextField
+//                       label='Enter reason'
+//                       variant='outlined'
+//                       fullWidth
+//                       value={formik.values[question].reason}
+//                       onChange={e =>
+//                         formik.setFieldValue(question, {
+//                           ...formik.values[question],
+//                           reason: e.target.value
+//                         })
+//                       }
+//                       sx={{ mt: 1 }}
+//                     />
+//                   )}
+//                 </FormControl>
+//               </Grid>
+//             ))}
+
+//             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+//               <Button
+//                 type='submit'
+//                 variant='contained'
+//                 disabled={formik.isSubmitting}
+//                 sx={{
+//                   backgroundColor: '#0563BB',
+//                   '&:hover': { backgroundColor: '#0AA4D2 !important' }
+//                 }}
+//               >
+//                 Submit
+//               </Button>
+//             </Grid>
+//           </Grid>
+//         </form>
