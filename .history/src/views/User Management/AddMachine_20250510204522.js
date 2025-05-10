@@ -27,8 +27,7 @@ const AddMachine = () => {
 
   const formik = useFormik({
     initialValues: {
-      machine: '',
-      routeId: ''
+      machine: ''
     },
     validationSchema: yup.object({
       machine: yup.string().required('Machine is required')
@@ -38,8 +37,7 @@ const AddMachine = () => {
         const response = await axios.post(
           `${BASE_URL}/api/ap/admin/create/machine`,
           {
-            machine: values.machine,
-            routeId: formik.values.route
+            machine: values.machine
           },
           {
             headers: {
@@ -51,8 +49,8 @@ const AddMachine = () => {
         formik.resetForm()
       } catch (error) {
         console.log(error)
-        toast.error(error.response.data.msg)
         formik.resetForm()
+        toast.error(error.response.data.msg)
       }
     }
   })
@@ -85,14 +83,21 @@ const AddMachine = () => {
               fullWidth
               sx={{ mb: 2 }}
               options={route}
-              getOptionLabel={option => option.code}
-              isOptionEqualToValue={(option, value) => option._id === value}
-              value={route.find(po => po._id === formik.values.route) || null}
-              onChange={(event, value) => formik.setFieldValue('route', value ? value._id : '')}
-              filterSelectedOptions
-              renderInput={params => <TextField {...params} label='Route' />}
+              getOptionLabel={option => option.code} // Prevent error if option is undefined
+              isOptionEqualToValue={(option, value) => option.code === value.code}
+              value={route.find(po => po.docNum === formik.values.productionOrderNo) || null}
+              onChange={(event, value) => formik.setFieldValue('productionOrderNo', value ? value.docNum : '')}
+              filterSelectedOptions // Optional: hides selected value from dropdown
+              renderInput={params => <TextField {...params} label='Production Order No' />}
             />
-
+            {/* <Autocomplete
+              fullWidth
+              options={route}
+              getOptionLabel={option => option.code}
+              value={newRow.route}
+              // onChange={(event, value) => setNewRow({ ...newRow, route: value })}
+              // renderInput={params => <TextField {...params} label='Route' />}
+            /> */}
             <Grid item xs={12}>
               <Button
                 sx={{

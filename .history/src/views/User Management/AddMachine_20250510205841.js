@@ -28,7 +28,7 @@ const AddMachine = () => {
   const formik = useFormik({
     initialValues: {
       machine: '',
-      routeId: ''
+      route: ''
     },
     validationSchema: yup.object({
       machine: yup.string().required('Machine is required')
@@ -39,7 +39,7 @@ const AddMachine = () => {
           `${BASE_URL}/api/ap/admin/create/machine`,
           {
             machine: values.machine,
-            routeId: formik.values.route
+            route: formik.values.route
           },
           {
             headers: {
@@ -51,8 +51,8 @@ const AddMachine = () => {
         formik.resetForm()
       } catch (error) {
         console.log(error)
-        toast.error(error.response.data.msg)
         formik.resetForm()
+        toast.error(error.response.data.msg)
       }
     }
   })
@@ -85,11 +85,13 @@ const AddMachine = () => {
               fullWidth
               sx={{ mb: 2 }}
               options={route}
-              getOptionLabel={option => option.code}
-              isOptionEqualToValue={(option, value) => option._id === value}
-              value={route.find(po => po._id === formik.values.route) || null}
-              onChange={(event, value) => formik.setFieldValue('route', value ? value._id : '')}
-              filterSelectedOptions
+              getOptionLabel={option => option.code} // Prevent error if option is undefined
+              isOptionEqualToValue={(option, value) => option.code === value.code}
+              onChange={formik.handleChange}
+              value={formik.values.machine}
+              // value={route.find(po => po.code === formik.values.route) || null}
+              // onChange={(event, value) => formik.setFieldValue('route', value ? value.code : '')}
+              filterSelectedOptions // Optional: hides selected value from dropdown
               renderInput={params => <TextField {...params} label='Route' />}
             />
 

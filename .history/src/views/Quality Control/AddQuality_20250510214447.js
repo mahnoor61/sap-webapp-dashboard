@@ -219,7 +219,7 @@ const AddQuality = () => {
                     fullWidth
                     options={printingMachine}
                     getOptionLabel={option => option?.code || ''} // null safety
-                    value={selectedMachine}
+                    value={printingMachine}
                     isOptionEqualToValue={(option, value) => option._id === value._id}
                     onChange={(event, value) => {
                       setSelectedMachine(value)

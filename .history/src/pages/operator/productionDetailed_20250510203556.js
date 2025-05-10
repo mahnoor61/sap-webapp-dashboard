@@ -1296,7 +1296,6 @@ const ProductOrderDetail = () => {
                       </Button>
                       <Button
                         variant='contained'
-                        
                         // disabled={disabled}
                         color='warning'
                         onClick={handleClickIssueForMachineOpen}
@@ -1319,13 +1318,7 @@ const ProductOrderDetail = () => {
                         mb: 15
                       }}
                     >
-                      <Button
-                        variant='contained'
-                        
-                        // disabled={disabled}
-                        color='error'
-                        onClick={handleWastedQtyOpen}
-                      >
+                      <Button variant='contained' disabled={disabled} color='error' onClick={handleWastedQtyOpen}>
                         Wasted Quantity
                       </Button>
                       <Button variant='contained' disabled={disabled} color='success' onClick={handleCompletedQtyOpen}>

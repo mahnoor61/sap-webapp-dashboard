@@ -51,8 +51,8 @@ const AddMachine = () => {
         formik.resetForm()
       } catch (error) {
         console.log(error)
-        toast.error(error.response.data.msg)
         formik.resetForm()
+        toast.error(error.response.data.msg)
       }
     }
   })

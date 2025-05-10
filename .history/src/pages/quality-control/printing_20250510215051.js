@@ -1506,7 +1506,6 @@ const Printing = () => {
                                 padding: '6px',
                                 border: '1px solid #ccc',
                                 fontWeight: 'bold',
-                                
                                 // backgroundColor: '#e6f7ff',
                                 textAlign: 'center'
                               }}

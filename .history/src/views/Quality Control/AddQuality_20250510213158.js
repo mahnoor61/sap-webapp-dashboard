@@ -43,7 +43,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 const AddQuality = () => {
   const [jobs, setJobs] = useState([])
-  const [printingMachine, setPrintingMachine] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
   const [selectedMachine, setSelectedMachine] = useState(null)
   const [page, setPage] = useState(0)
@@ -172,26 +171,8 @@ const AddQuality = () => {
     }
   }
 
-  const getAllPrintingMachines = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/ap/qc/get/printing-machine`, {
-        headers: {
-          'x-access-token': token
-        }
-      })
+const getAllPrintingMachines = ()
 
-      setPrintingMachine(response.data.data)
-    } catch (error) {
-      console.log('error in get all printing machines', error)
-      toast.error(error)
-    }
-  }
-
-  useEffect(() => {
-    getAllPrintingMachines()
-  }, [])
-
-  console.log('printingMachine', printingMachine)
 
   return (
     <>
@@ -217,22 +198,6 @@ const AddQuality = () => {
                   <Autocomplete
                     sx={{ width: { xs: '100%', md: '30%' } }}
                     fullWidth
-                    options={printingMachine}
-                    getOptionLabel={option => option?.code || ''} // null safety
-                    value={selectedMachine}
-                    isOptionEqualToValue={(option, value) => option._id === value._id}
-                    onChange={(event, value) => {
-                      setSelectedMachine(value)
-                      if (value?._id) {
-                        getAllJobsOfSelectedMachine(value._id)
-                      }
-                    }}
-                    renderInput={params => <TextField {...params} label='Machine' />}
-                  />
-
-                  {/* <Autocomplete
-                    sx={{ width: { xs: '100%', md: '30%' } }}
-                    fullWidth
                     options={machine}
                     getOptionLabel={option => option.code}
                     value={selectedMachine}
@@ -243,7 +208,7 @@ const AddQuality = () => {
                       }
                     }}
                     renderInput={params => <TextField {...params} label='Machine' />}
-                  /> */}
+                  />
                   <TextField
                     variant='filled'
                     placeholder='Search through production order'

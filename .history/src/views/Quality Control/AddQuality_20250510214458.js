@@ -217,7 +217,7 @@ const AddQuality = () => {
                   <Autocomplete
                     sx={{ width: { xs: '100%', md: '30%' } }}
                     fullWidth
-                    options={printingMachine}
+                    options={machine}
                     getOptionLabel={option => option?.code || ''} // null safety
                     value={selectedMachine}
                     isOptionEqualToValue={(option, value) => option._id === value._id}

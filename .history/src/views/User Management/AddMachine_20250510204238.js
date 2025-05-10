@@ -21,14 +21,14 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const AddMachine = () => {
-  const { route } = useContext(RouteContext)
+  const { route } = useContext(RouteContext);
+
   const auth = useSelector(state => state.auth)
   const token = auth.token
 
   const formik = useFormik({
     initialValues: {
-      machine: '',
-      routeId: ''
+      machine: ''
     },
     validationSchema: yup.object({
       machine: yup.string().required('Machine is required')
@@ -38,8 +38,7 @@ const AddMachine = () => {
         const response = await axios.post(
           `${BASE_URL}/api/ap/admin/create/machine`,
           {
-            machine: values.machine,
-            routeId: formik.values.route
+            machine: values.machine
           },
           {
             headers: {
@@ -51,8 +50,8 @@ const AddMachine = () => {
         formik.resetForm()
       } catch (error) {
         console.log(error)
-        toast.error(error.response.data.msg)
         formik.resetForm()
+        toast.error(error.response.data.msg)
       }
     }
   })
@@ -81,18 +80,6 @@ const AddMachine = () => {
               onChange={formik.handleChange}
               value={formik.values.machine}
             />
-            <Autocomplete
-              fullWidth
-              sx={{ mb: 2 }}
-              options={route}
-              getOptionLabel={option => option.code}
-              isOptionEqualToValue={(option, value) => option._id === value}
-              value={route.find(po => po._id === formik.values.route) || null}
-              onChange={(event, value) => formik.setFieldValue('route', value ? value._id : '')}
-              filterSelectedOptions
-              renderInput={params => <TextField {...params} label='Route' />}
-            />
-
             <Grid item xs={12}>
               <Button
                 sx={{

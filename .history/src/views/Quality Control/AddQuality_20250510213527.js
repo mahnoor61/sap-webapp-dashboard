@@ -217,22 +217,6 @@ const AddQuality = () => {
                   <Autocomplete
                     sx={{ width: { xs: '100%', md: '30%' } }}
                     fullWidth
-                    options={printingMachine}
-                    getOptionLabel={option => option?.code || ''} // null safety
-                    value={selectedMachine}
-                    isOptionEqualToValue={(option, value) => option._id === value._id}
-                    onChange={(event, value) => {
-                      setSelectedMachine(value)
-                      if (value?._id) {
-                        getAllJobsOfSelectedMachine(value._id)
-                      }
-                    }}
-                    renderInput={params => <TextField {...params} label='Machine' />}
-                  />
-
-                  {/* <Autocomplete
-                    sx={{ width: { xs: '100%', md: '30%' } }}
-                    fullWidth
                     options={machine}
                     getOptionLabel={option => option.code}
                     value={selectedMachine}
@@ -243,7 +227,7 @@ const AddQuality = () => {
                       }
                     }}
                     renderInput={params => <TextField {...params} label='Machine' />}
-                  /> */}
+                  />
                   <TextField
                     variant='filled'
                     placeholder='Search through production order'
