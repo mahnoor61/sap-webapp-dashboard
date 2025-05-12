@@ -109,7 +109,6 @@ const AddQuality = () => {
   const formik = useFormik({
     initialValues: {
       quantity: '',
-      quantityTime: '',
       userId: '',
       jobId: ''
     },
@@ -118,12 +117,10 @@ const AddQuality = () => {
     }),
     onSubmit: async values => {
       try {
-        const currentTime = new Date().toISOString()
         const response = await axios.post(
           `${BASE_URL}/api/ap/qc/add-quantity`,
           {
             quantity: values.quantity,
-            quantityTime: currentTime,
             userId: userId,
             jobId: formik.values.jobId
           },

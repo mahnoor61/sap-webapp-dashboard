@@ -123,7 +123,7 @@ const AddQuality = () => {
           `${BASE_URL}/api/ap/qc/add-quantity`,
           {
             quantity: values.quantity,
-            quantityTime: currentTime,
+            quantityTime
             userId: userId,
             jobId: formik.values.jobId
           },
