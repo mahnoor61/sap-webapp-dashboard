@@ -22,9 +22,6 @@ import AddIcon from '@mui/icons-material/Add'
 import AddTaskIcon from '@mui/icons-material/AddTask'
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop'
 import DirectionsIcon from '@mui/icons-material/Directions'
-import AllRoles from 'src/views/User Management/AllRoles'
-import AllMachines from 'src/views/User Management/AllMachines'
-import AllRoutes from 'src/views/User Management/AllRoutes'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -96,7 +93,7 @@ const Users = () => {
               value='AllRoles'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <AddTaskIcon />
+                  <PeopleAltIcon />
                   <TabName>All Roles</TabName>
                 </Box>
               }
@@ -111,29 +108,11 @@ const Users = () => {
               }
             />
             <Tab
-              value='AllMachines'
-              label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <LocalPrintshopIcon />
-                  <TabName>All Machines</TabName>
-                </Box>
-              }
-            />
-            <Tab
               value='AddRoutes'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <DirectionsIcon />
                   <TabName>Add Routes</TabName>
-                </Box>
-              }
-            />
-            <Tab
-              value='AllRoutes'
-              label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <DirectionsIcon />
-                  <TabName>All Routes</TabName>
                 </Box>
               }
             />
@@ -149,20 +128,12 @@ const Users = () => {
           <TabPanel sx={{ p: 0 }} value='AddRoles'>
             <AddRole />
           </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='AllRoles'>
-            <AllRoles />
-          </TabPanel>
+
           <TabPanel sx={{ p: 0 }} value='AddMachines'>
             <AddMachine />
           </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='AllMachines'>
-            <AllMachines />
-          </TabPanel>
           <TabPanel sx={{ p: 0 }} value='AddRoutes'>
             <AddRoutes />
-          </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='AllRoutes'>
-            <AllRoutes />
           </TabPanel>
         </TabContext>
       </Card>

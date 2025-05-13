@@ -24,7 +24,6 @@ import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import AllRoles from 'src/views/User Management/AllRoles'
 import AllMachines from 'src/views/User Management/AllMachines'
-import AllRoutes from 'src/views/User Management/AllRoutes'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -161,8 +160,8 @@ const Users = () => {
           <TabPanel sx={{ p: 0 }} value='AddRoutes'>
             <AddRoutes />
           </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='AllRoutes'>
-            <AllRoutes />
+          <TabPanel sx={{ p: 0 }} value='AllMachines'>
+            <AllMachines />
           </TabPanel>
         </TabContext>
       </Card>

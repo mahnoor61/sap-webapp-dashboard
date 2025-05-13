@@ -155,15 +155,15 @@ const Users = () => {
           <TabPanel sx={{ p: 0 }} value='AddMachines'>
             <AddMachine />
           </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='AllMachines'>
+          {/* {/* <TabPanel sx={{ p: 0 }} value='AllMachines'>
             <AllMachines />
-          </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='AddRoutes'>
+          </TabPanel> */}
+          <TabPanel sx={{ p: 0 }} value='AddRoutes'> */}
             <AddRoutes />
           </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='AllRoutes'>
+          {/* <TabPanel sx={{ p: 0 }} value='AllRoutes'>
             <AllRoutes />
-          </TabPanel>
+          </TabPanel> */}
         </TabContext>
       </Card>
       {/*</Box>*/}
