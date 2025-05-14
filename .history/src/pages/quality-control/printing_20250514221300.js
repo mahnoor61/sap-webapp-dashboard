@@ -144,7 +144,7 @@ const Printing = () => {
     'side Lay',
     'front Lay',
     'registration',
-    'd/m/sFromPlate'
+    'dmsFromPlate'
   ]
 
   const rows = [{ id: 1, serial: 1 }]
@@ -197,7 +197,7 @@ const Printing = () => {
 
   const handleSubmit = async () => {
     const requiredFields = [
-      'd/m/sFromPlate',
+      'd/msFromPlate',
       'text',
       'dust',
       'side Lay',
@@ -222,7 +222,7 @@ const Printing = () => {
       const dataToSend = {
         shift: shift,
         date: formattedDate,
-        dmsFromPlate: formatResponseValue(responses['d/m/sFromPlate']),
+        dmsFromPlate: formatResponseValue(responses['dmsFromPlate']),
         text: formatResponseValue(responses['text']),
         dust: formatResponseValue(responses['dust']),
         sideLay: formatResponseValue(responses['side Lay']),
@@ -790,7 +790,7 @@ const Printing = () => {
               <TableCell>Side Lay</TableCell>
               <TableCell>Front Lay</TableCell>
               <TableCell>Registration</TableCell>
-              <TableCell>d/m/sFromPlate</TableCell>
+              <TableCell>dmsFromPlate</TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ width: '100%' }}>

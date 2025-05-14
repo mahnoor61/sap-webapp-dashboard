@@ -790,7 +790,7 @@ const Printing = () => {
               <TableCell>Side Lay</TableCell>
               <TableCell>Front Lay</TableCell>
               <TableCell>Registration</TableCell>
-              <TableCell>d/m/sFromPlate</TableCell>
+              <TableCell>dmsFromPlate</TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ width: '100%' }}>

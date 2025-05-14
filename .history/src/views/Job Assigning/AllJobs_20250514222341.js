@@ -26,8 +26,8 @@ import ConfirmationDialog from '../ConfirmationDialog'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
-const AllMachines = () => {
-  const [machines, setMachines] = useState([])
+const AllJobs = () => {
+  const [jobs, setJobs] = useState([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [loadingComplete, setLoadingComplete] = useState(true)
@@ -37,50 +37,46 @@ const AllMachines = () => {
   const auth = useSelector(state => state.auth)
   const token = auth.token
 
-  // const handleDeleteConfirm = () => {
-  //   if (itemToDelete) {
-  //     destroyUser(itemToDelete)
-  //     setItemToDelete(null)
-  //     setDialogOpen(false)
-  //   }
-  // }
+  const handleDeleteConfirm = () => {
+    if (itemToDelete) {
+      destroyJob(itemToDelete)
+      setItemToDelete(null)
+      setDialogOpen(false)
+    }
+  }
 
-  // let response
+  let response
 
-  // const destroyUser = async id => {
-  //   try {
-  //     response = await axios.delete(`${BASE_URL}/api/ap/admin/destroy/${id}`, {
-  //       headers: {
-  //         'x-access-token': token
-  //       }
-  //     })
-  //     toast.success('User deleted successfully')
-  //     const updatedUsers = users.filter(row => row._id !== id)
-  //     setUsers(updatedUsers)
-  //   } catch (error) {
-  //     console.log('error in delete user')
-  //     toast.error(error.response.data.msg)
-  //   }
-  // }
-
-  const getAllMachines = async () => {
+  const destroyJob = async id => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/ap/admin/all/machines`, {
+      response = await axios.delete(`${BASE_URL}/api/ap/admin/destroy/job/${id}`, {
         headers: {
           'x-access-token': token
         }
       })
-      setMachines(response.data.data)
-      setLoadingComplete(false)
+      toast.success('Job deleted successfully')
+      const updated = jobs.filter(row => row._id !== id)
+      setJobs(updated)
     } catch (error) {
-      console.log('error in get all users')
+      console.log('error in delete job', error)
       toast.error(error.response.data.msg)
     }
   }
-
-  useEffect(() => {
-    getAllMachines()
-  }, [])
+  console.log('jobs', jobs)
+  const getAllJobs = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/ap/admin/get/jobs`, {
+        headers: {
+          'x-access-token': token
+        }
+      })
+      setJobs(response.data.data)
+      setLoadingComplete(false)
+    } catch (error) {
+      console.log('error in get all jobs', error)
+      toast.error(error)
+    }
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -91,20 +87,28 @@ const AllMachines = () => {
     setPage(0)
   }
 
-  const filteredUsers = FilterHelper(machines, searchQuery, ['code'])
-  const paginatedUsers = PaginationHelper(filteredUsers, page, rowsPerPage)
-  const totalCount = filteredUsers.length
+  useEffect(() => {
+    getAllJobs()
+  }, [])
+
+  // const filteredJob = FilterHelper(jobs, searchQuery, ['user.userName', 'machine.code'])
+  const filteredJob = FilterHelper(jobs, searchQuery, ['productionOrderNo'])
+
+  const paginatedJob = PaginationHelper(filteredJob, page, rowsPerPage)
+  const totalCount = filteredJob.length
+
+  console.log('paginatedJob', paginatedJob)
 
   return (
     <>
       <TableContainer component={Paper}>
-        <Table aria-label='simple table' sx={{ width: '100%' }}>
-          <TableHead sx={{ width: '100%' }}>
+        <Table aria-label='simple table'>
+          <TableHead>
             <TableRow sx={{ width: '100%' }}>
-              <TableCell sx={{ width: '100%' }} colSpan={5}>
+              <TableCell align='center' colSpan={10}>
                 <TextField
                   variant='filled'
-                  placeholder='Search through machine...'
+                  placeholder='Search through production order'
                   sx={{
                     '&::placeholder': {
                       color: 'rgba(71, 85, 105, 1)'
@@ -114,7 +118,7 @@ const AllMachines = () => {
                     flex: '1 0 0',
                     gap: '10px',
                     alignSelf: 'stretch',
-                    flexGrow: 1,
+                    flexGrow: '3',
                     borderRadius: 1
                   }}
                   onChange={event => setSearchQuery(event.target.value)}
@@ -134,52 +138,45 @@ const AllMachines = () => {
                 />
               </TableCell>
             </TableRow>
-            <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
-              <TableCell>Name</TableCell>
-              <TableCell>Route</TableCell>
-              {/*<TableCell>Name</TableCell>*/}
-              {/* <TableCell>Email</TableCell> */}
-              {/*<TableCell>Password</TableCell>*/}
-              {/* <TableCell>Role</TableCell>
+            <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left' }}>
+              <TableCell>Production Orders</TableCell>
+              <TableCell>Sheet Code</TableCell>
               <TableCell>Machine</TableCell>
-              <TableCell>Action</TableCell> */}
+              <TableCell>Route</TableCell>
+              <TableCell>User Name</TableCell>
+              <TableCell sx={{ textAlign: 'left' }}>Action</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ width: '100%' }}>
+          <TableBody>
             {loadingComplete ? (
               <TableRow align='center'>
                 <TableCell colSpan={4} align='center'>
                   <CircularProgress />
                 </TableCell>
               </TableRow>
-            ) : paginatedUsers && paginatedUsers.length > 0 ? (
-              paginatedUsers.map(data => (
+            ) : paginatedJob && paginatedJob.length > 0 ? (
+              paginatedJob.map(data => (
                 <TableRow key={data._id}>
                   <TableCell component='th' scope='row'>
-                    {data.code}
+                    {data?.productionOrderNo}
                   </TableCell>
                   <TableCell component='th' scope='row'>
-                    {data?.route?.code}
+                    {data?.ComponentItemCode}
                   </TableCell>
                   {/*<TableCell component="th" scope="row">*/}
-                  {/*  {data.password}*/}
-                  {/*</TableCell>*/}
-                  {/*<TableCell component="th" scope="row">*/}
-                  {/*  {data.name}*/}
-                  {/*</TableCell>*/}
-                  {/* <TableCell component='th' scope='row'>
-                    {data.email}
+                  <TableCell component='th' scope='row'>
+                    {data?.machine.code}
                   </TableCell>
                   <TableCell component='th' scope='row'>
-                    {data.role?.name ? data.role.name : 'No Role'}
+                    {data.route.code}
                   </TableCell>
                   <TableCell component='th' scope='row'>
-                    {data.machine?.code ? data.machine.code : 'No Machine'}
+                    {data.user.userName}
                   </TableCell>
-                  <TableCell component='th' scope='row'>
+                  <TableCell component='th' scope='row' sx={{ textAlign: 'left' }}>
                     <IconButton>
                       <DeleteIcon
-                        disabled={destroyUser.isSubmitting}
+                        disabled={destroyJob.isSubmitting}
                         onClick={() => {
                           setItemToDelete(data._id)
                           setDialogOpen(true)
@@ -188,8 +185,8 @@ const AllMachines = () => {
                     </IconButton>
                     <NextLink
                       href={{
-                        pathname: '/user-management/user-edit',
-                        query: { userId: data._id }
+                        pathname: '/job-assigning/job-edit',
+                        query: { jobId: data._id }
                       }}
                       passHref
                     >
@@ -197,13 +194,13 @@ const AllMachines = () => {
                         <EditIcon />
                       </IconButton>
                     </NextLink>
-                  </TableCell> */}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell colSpan={4} align='center'>
-                  No Machines Found
+                  No Job Found
                 </TableCell>
               </TableRow>
             )}
@@ -221,15 +218,15 @@ const AllMachines = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      {/* <ConfirmationDialog
+      <ConfirmationDialog
         open={isDialogOpen}
         onClose={() => setDialogOpen(false)}
         onConfirm={handleDeleteConfirm}
         title='Confirm Delete'
-        message='Are you sure you want to delete this User?'
-      /> */}
+        message='Are you sure you want to delete this job?'
+      />
     </>
   )
 }
 
-export default AllMachines
+export default AllJobs

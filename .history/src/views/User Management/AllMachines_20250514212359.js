@@ -159,7 +159,7 @@ const AllMachines = () => {
                     {data.code}
                   </TableCell>
                   <TableCell component='th' scope='row'>
-                    {data?.route?.code}
+                    {data.code}
                   </TableCell>
                   {/*<TableCell component="th" scope="row">*/}
                   {/*  {data.password}*/}

@@ -136,7 +136,7 @@ const AllMachines = () => {
             </TableRow>
             <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
               <TableCell>Name</TableCell>
-              <TableCell>Route</TableCell>
+              <TableCell>Name</TableCell>
               {/*<TableCell>Name</TableCell>*/}
               {/* <TableCell>Email</TableCell> */}
               {/*<TableCell>Password</TableCell>*/}
@@ -157,9 +157,6 @@ const AllMachines = () => {
                 <TableRow key={data._id}>
                   <TableCell component='th' scope='row'>
                     {data.code}
-                  </TableCell>
-                  <TableCell component='th' scope='row'>
-                    {data?.route?.code}
                   </TableCell>
                   {/*<TableCell component="th" scope="row">*/}
                   {/*  {data.password}*/}

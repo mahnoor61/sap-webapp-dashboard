@@ -158,9 +158,6 @@ const AllMachines = () => {
                   <TableCell component='th' scope='row'>
                     {data.code}
                   </TableCell>
-                  <TableCell component='th' scope='row'>
-                    {data?.route?.code}
-                  </TableCell>
                   {/*<TableCell component="th" scope="row">*/}
                   {/*  {data.password}*/}
                   {/*</TableCell>*/}
