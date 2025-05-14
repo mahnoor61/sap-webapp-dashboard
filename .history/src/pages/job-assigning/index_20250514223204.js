@@ -63,7 +63,7 @@ const Job = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <WorkHistoryIcon />
-                  <TabName>All Job Assigned</TabName>
+                  <TabName>All Job Assigning</TabName>
                 </Box>
               }
             />
