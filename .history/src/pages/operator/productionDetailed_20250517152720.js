@@ -691,6 +691,7 @@ const ProductOrderDetail = () => {
       setMakeTimerRunning(false)
       setMakeTime(0)
       setHandleDisable(false)
+      // Resume Production Timer
 
       const startTime = Date.now() - serverProductionSeconds * 1000
 
@@ -783,7 +784,7 @@ const ProductOrderDetail = () => {
       setDownPopUp(false)
       setIsDownClick(true)
       setHandleDisable(true)
-
+      // Stop the production timer
       localStorage.removeItem(`productionTimerRunning-${order}`)
       localStorage.removeItem(`productionTimerStart-${order}`)
       setIsDownClick(true)

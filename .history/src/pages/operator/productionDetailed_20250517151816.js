@@ -38,7 +38,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 const ProductOrderDetail = () => {
   const [open, setOpen] = React.useState(false)
-  const [handleDisable, setHandleDisable] = React.useState(false)
+  const [handleDisabk, setOpen] = React.useState(false)
   const [stopPopUp, setStopPopUp] = React.useState(false)
   const [makeReadyTimePopUp, setMakeReadyTimePopUp] = React.useState(false)
   const [productionTimePopUp, setProductionTimePopUp] = React.useState(false)
@@ -608,8 +608,8 @@ const ProductOrderDetail = () => {
       toast.success('Production time & pause reason saved!')
       setPausePopUp(false)
       setIsPauseClick(true)
-      setHandleDisable(true)
 
+      // Stop the production timer
       localStorage.removeItem(`productionTimerRunning-${order}`)
       localStorage.removeItem(`productionTimerStart-${order}`)
       setProductionTimerRunning(false)
@@ -690,7 +690,8 @@ const ProductOrderDetail = () => {
       localStorage.removeItem(`pauseProductionTimerRunning-${order}`)
       setMakeTimerRunning(false)
       setMakeTime(0)
-      setHandleDisable(false)
+
+      // Resume Production Timer
 
       const startTime = Date.now() - serverProductionSeconds * 1000
 
@@ -782,8 +783,8 @@ const ProductOrderDetail = () => {
       toast.success('Production time & down time reason saved!')
       setDownPopUp(false)
       setIsDownClick(true)
-      setHandleDisable(true)
 
+      // Stop the production timer
       localStorage.removeItem(`productionTimerRunning-${order}`)
       localStorage.removeItem(`productionTimerStart-${order}`)
       setIsDownClick(true)
@@ -869,7 +870,6 @@ const ProductOrderDetail = () => {
       localStorage.setItem(`productionTimerRunning-${order}`, 'true')
       localStorage.setItem(`productionTimerStart-${order}`, startTime.toString())
       setProductionTimerRunning(true)
-      setHandleDisable(false)
       window.location.reload()
 
       // Clear any existing interval
@@ -1297,7 +1297,8 @@ const ProductOrderDetail = () => {
                       </Button>
                       <Button
                         variant='contained'
-                        disabled={handleDisable}
+                        
+                        // disabled={disabled}
                         color='warning'
                         onClick={handleClickIssueForMachineOpen}
                       >
@@ -1319,15 +1320,16 @@ const ProductOrderDetail = () => {
                         mb: 15
                       }}
                     >
-                      <Button variant='contained' disabled={handleDisable} color='error' onClick={handleWastedQtyOpen}>
-                        Wasted Quantity
-                      </Button>
                       <Button
                         variant='contained'
-                        disabled={disabled || handleDisable}
-                        color='success'
-                        onClick={handleCompletedQtyOpen}
+                        
+                        // disabled={disabled}
+                        color='error'
+                        onClick={handleWastedQtyOpen}
                       >
+                        Wasted Quantity
+                      </Button>
+                      <Button variant='contained' disabled={disabled} color='success' onClick={handleCompletedQtyOpen}>
                         Completed Quantity
                       </Button>
                     </Box>

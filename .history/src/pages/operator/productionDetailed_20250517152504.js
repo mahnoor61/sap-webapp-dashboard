@@ -578,6 +578,7 @@ const ProductOrderDetail = () => {
   })
 
   const handlePauseProduction = async () => {
+
     try {
       const formattedProductionTime = formatTimeToHHMMSS(productionTimer)
 
@@ -690,7 +691,8 @@ const ProductOrderDetail = () => {
       localStorage.removeItem(`pauseProductionTimerRunning-${order}`)
       setMakeTimerRunning(false)
       setMakeTime(0)
-      setHandleDisable(false)
+
+      // Resume Production Timer
 
       const startTime = Date.now() - serverProductionSeconds * 1000
 
@@ -782,8 +784,8 @@ const ProductOrderDetail = () => {
       toast.success('Production time & down time reason saved!')
       setDownPopUp(false)
       setIsDownClick(true)
-      setHandleDisable(true)
 
+      // Stop the production timer
       localStorage.removeItem(`productionTimerRunning-${order}`)
       localStorage.removeItem(`productionTimerStart-${order}`)
       setIsDownClick(true)
@@ -869,7 +871,6 @@ const ProductOrderDetail = () => {
       localStorage.setItem(`productionTimerRunning-${order}`, 'true')
       localStorage.setItem(`productionTimerStart-${order}`, startTime.toString())
       setProductionTimerRunning(true)
-      setHandleDisable(false)
       window.location.reload()
 
       // Clear any existing interval
