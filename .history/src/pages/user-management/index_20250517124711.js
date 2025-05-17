@@ -68,9 +68,9 @@ const Users = () => {
             <Tab
               value='AddUser'
               label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center'}}>
                   <AddIcon />
-                  <TabName sx={{ fontSize: '12px' }}>Add Users</TabName>
+                  <TabName sx={{, fontSize: '15px' }}>Add Users</TabName>
                 </Box>
               }
             />
@@ -79,7 +79,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <PeopleAltIcon />
-                  <TabName sx={{ fontSize: '12px' }}>All Users</TabName>
+                  <TabName>All Users</TabName>
                 </Box>
               }
             />
@@ -88,7 +88,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <AddTaskIcon />
-                  <TabName sx={{ fontSize: '12px' }}>Add Roles</TabName>
+                  <TabName>Add Roles</TabName>
                 </Box>
               }
             />
@@ -97,7 +97,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <AddTaskIcon />
-                  <TabName sx={{ fontSize: '12px' }}>All Roles</TabName>
+                  <TabName>All Roles</TabName>
                 </Box>
               }
             />
@@ -106,7 +106,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <LocalPrintshopIcon />
-                  <TabName sx={{ fontSize: '12px' }}>Add Machines</TabName>
+                  <TabName>Add Machines</TabName>
                 </Box>
               }
             />
@@ -115,7 +115,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <LocalPrintshopIcon />
-                  <TabName sx={{ fontSize: '12px' }}>All Machines</TabName>
+                  <TabName>All Machines</TabName>
                 </Box>
               }
             />
@@ -124,7 +124,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <DirectionsIcon />
-                  <TabName sx={{ fontSize: '12px' }}>Add Routes</TabName>
+                  <TabName>Add Routes</TabName>
                 </Box>
               }
             />
@@ -133,7 +133,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <DirectionsIcon />
-                  <TabName sx={{ fontSize: '12px' }}>All Routes</TabName>
+                  <TabName>All Routes</TabName>
                 </Box>
               }
             />

@@ -12,11 +12,12 @@ import { AuthGuard } from '../../guard/authGuard'
 import UserLayout from '../../layouts/UserLayout'
 import ArticleIcon from '@mui/icons-material/Article'
 import Head from 'next/head'
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory'
+
+// import AllJob from "../../views/Operator/AllOperator";
 
 import AddJob from '../../views/Job Assigning/AddJob'
 import AllJobs from '../../views/Job Assigning/AllJobs'
-import AllOperatorData from '../../views/Operator/AllOperatorData'
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -38,7 +39,7 @@ const TabName = styled('span')(({ theme }) => ({
 
 const Job = () => {
   // ** State
-  const [value, setValue] = useState('ProductionOrderList')
+  const [value, setValue] = useState('AddJobAssigning')
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -47,7 +48,7 @@ const Job = () => {
   return (
     <>
       <Head>
-        <title>Operator | Admin</title>
+        <title>Job | Admin</title>
       </Head>
       {/*<Box sx={{ height:'100%', display:'flex', alignItems:'center', width:'100%'}}>*/}
       <Card sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', width: '100%' }}>
@@ -58,17 +59,29 @@ const Job = () => {
             sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
           >
             <Tab
-              value='ProductionOrderList'
+              value='AllJobAssigning'
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <FormatListNumberedIcon />
-                  <TabName sx={{ fontSize: '12px' }}>All Production Order List</TabName>
+                  <WorkHistoryIcon />
+                  <TabName>All Job Assigned</TabName>
+                </Box>
+              }
+            />
+            <Tab
+              value='AddJobAssigning'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <AddBoxIcon />
+                  <TabName sx={{ fontSize: '12px' }}>Add Job Assigned</TabName>
                 </Box>
               }
             />
           </TabList>
-          <TabPanel sx={{ p: 0 }} value='ProductionOrderList'>
-            <AllOperatorData />
+          <TabPanel sx={{ p: 0 }} value='AllJobAssigning'>
+            <AllJobs />
+          </TabPanel>
+          <TabPanel sx={{ p: 0 }} value='AddJobAssigning'>
+            <AddJob />
           </TabPanel>
         </TabContext>
       </Card>

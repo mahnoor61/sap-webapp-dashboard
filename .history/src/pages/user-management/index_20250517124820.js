@@ -133,7 +133,7 @@ const Users = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <DirectionsIcon />
-                  <TabName sx={{ fontSize: '12px' }}>All Routes</TabName>
+                  <TabName>All Routes</TabName>
                 </Box>
               }
             />

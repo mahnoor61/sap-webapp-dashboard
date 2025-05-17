@@ -59,7 +59,7 @@ const AccountSettings = () => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <LockOpenOutline />
-                <TabName sx={{ fontSize: '12px' }}>Info</TabName>
+                <TabName>Info</TabName>
               </Box>
             }
           />
