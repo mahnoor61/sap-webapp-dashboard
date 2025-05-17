@@ -734,14 +734,15 @@ const ProductOrderDetail = () => {
 
       // Clear Pause Timer
 
-      localStorage.removeItem(`productionTimerRunning-${order}`)
-      localStorage.removeItem(`productionTimerStart-${order}`)
-      setProductionTimerRunning(false)
-      setProductionTimer(0)
-      setIsMakeTimeDone(false)
+      localStorage.removeItem(`pauseProductionTimerStart-${order}`)
+      localStorage.removeItem(`pauseProductionTimerRunning-${order}`)
       setMakeTimerRunning(false)
+      setMakeTime(0)
+
+      setProductionTimerRunning(false)
+      window.location.reload()
     } catch (error) {
-      toast.error('Failed to break production.')
+      toast.error('Failed to start production.')
       console.error(error)
     }
   }

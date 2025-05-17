@@ -729,19 +729,37 @@ const ProductOrderDetail = () => {
           headers: { 'x-access-token': token }
         }
       )
-      console.log('res', res)
+      console.log('res', res
       toast.success('Job break successfully!')
 
       // Clear Pause Timer
 
-      localStorage.removeItem(`productionTimerRunning-${order}`)
-      localStorage.removeItem(`productionTimerStart-${order}`)
-      setProductionTimerRunning(false)
-      setProductionTimer(0)
-      setIsMakeTimeDone(false)
+      localStorage.removeItem(`pauseProductionTimerStart-${order}`)
+      localStorage.removeItem(`pauseProductionTimerRunning-${order}`)
       setMakeTimerRunning(false)
+      setMakeTime(0)
+
+      // setHandleDisable(false)
+
+      // const startTime = Date.now() - serverProductionSeconds * 1000
+
+      // localStorage.setItem(`productionTimerRunning-${order}`, 'true')
+      // localStorage.setItem(`productionTimerStart-${order}`, startTime.toString())
+      // setProductionTimerRunning(true)
+      // window.location.reload()
+      // setDisabled(false)
+      // if (intervalRef.current) {
+      //   clearInterval(intervalRef.current)
+      // }
+
+      // // Start a new one
+      // intervalRef.current = setInterval(() => {
+      //   const now = Date.now()
+      //   const elapsed = Math.floor((now - startTime) / 1000)
+      //   setProductionTimer(elapsed)
+      // }, 1000)
     } catch (error) {
-      toast.error('Failed to break production.')
+      toast.error('Failed to start production.')
       console.error(error)
     }
   }

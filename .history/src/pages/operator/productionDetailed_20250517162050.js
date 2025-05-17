@@ -738,10 +738,18 @@ const ProductOrderDetail = () => {
       localStorage.removeItem(`productionTimerStart-${order}`)
       setProductionTimerRunning(false)
       setProductionTimer(0)
-      setIsMakeTimeDone(false)
-      setMakeTimerRunning(false)
+
+      // window.location.reload()
+
+      // setProductionTimerRunning(false) // Yeh timer band karne ke liye
+      // setProductionTimer(0)
+      // stopFormik.resetForm()
+      // handleStopClickClose()
+      // setDisabled(true)
+      // localStorage.removeItem(`productionTimerRunning-${order}`)
+      // localStorage.removeItem(`productionTimerStart-${order}`)
     } catch (error) {
-      toast.error('Failed to break production.')
+      toast.error('Failed to start production.')
       console.error(error)
     }
   }

@@ -741,7 +741,7 @@ const ProductOrderDetail = () => {
       setIsMakeTimeDone(false)
       setMakeTimerRunning(false)
     } catch (error) {
-      toast.error('Failed to break production.')
+      toast.error('Failed to break production.', )
       console.error(error)
     }
   }

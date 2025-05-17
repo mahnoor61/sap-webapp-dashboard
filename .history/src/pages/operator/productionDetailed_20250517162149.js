@@ -738,10 +738,8 @@ const ProductOrderDetail = () => {
       localStorage.removeItem(`productionTimerStart-${order}`)
       setProductionTimerRunning(false)
       setProductionTimer(0)
-      setIsMakeTimeDone(false)
-      setMakeTimerRunning(false)
     } catch (error) {
-      toast.error('Failed to break production.')
+      toast.error('Failed to start production.')
       console.error(error)
     }
   }

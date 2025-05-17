@@ -715,37 +715,6 @@ const ProductOrderDetail = () => {
     }
   }
 
-  const handleBreakProduction = async () => {
-    try {
-      const formattedProductionTime = formatTimeToHHMMSS(productionTimer)
-
-      const res = await axios.post(
-        `${BASE_URL}/api/ap/operator/production/order/break/production-time`,
-        {
-          id: productionOrderDetail._id,
-          startProductionTime: formattedProductionTime
-        },
-        {
-          headers: { 'x-access-token': token }
-        }
-      )
-      console.log('res', res)
-      toast.success('Job break successfully!')
-
-      // Clear Pause Timer
-
-      localStorage.removeItem(`productionTimerRunning-${order}`)
-      localStorage.removeItem(`productionTimerStart-${order}`)
-      setProductionTimerRunning(false)
-      setProductionTimer(0)
-      setIsMakeTimeDone(false)
-      setMakeTimerRunning(false)
-    } catch (error) {
-      toast.error('Failed to break production.')
-      console.error(error)
-    }
-  }
-
   useEffect(() => {
     const isRunning = localStorage.getItem(`productionTimerRunning-${order}`)
     const startTimeStr = localStorage.getItem(`productionTimerStart-${order}`)
@@ -1181,14 +1150,13 @@ const ProductOrderDetail = () => {
                                         gap: 2,
                                         width: '100%',
                                         flexDirection: { md: 'row', xs: 'column' }
-
                                         // width: '100%', display: 'flex', justifyContent: 'flex-start'
                                       }}
                                     >
                                       <Button
                                         variant='contained'
                                         color='error'
-                                        onClick={handleBreakProduction}
+                                        onClick={handleDownClickOpen}
                                         sx={{ flex: 1 }}
                                       >
                                         Job Break

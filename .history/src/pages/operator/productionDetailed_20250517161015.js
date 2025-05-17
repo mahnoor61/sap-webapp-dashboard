@@ -715,33 +715,58 @@ const ProductOrderDetail = () => {
     }
   }
 
-  const handleBreakProduction = async () => {
+  const handlebreakProduction = async () => {
     try {
-      const formattedProductionTime = formatTimeToHHMMSS(productionTimer)
+      const res = await axios.get(`${BASE_URL}/api/ap/operator/get/prodTime/${productionOrderDetail._id}`, {
+        headers: { 'x-access-token': token }
+      })
 
-      const res = await axios.post(
-        `${BASE_URL}/api/ap/operator/production/order/break/production-time`,
+      const productionTimeString = res.data.data // "00:00:10"
+      const serverProductionSeconds = convertHHMMSSStringToSeconds(productionTimeString)
+
+      const formattedTime = formatTimeToHHMMSS(pauseProductionTimer)
+
+      await axios.post(
+        `${BASE_URL}/api/ap/operator/production/order/update/pause-production-time`,
         {
           id: productionOrderDetail._id,
-          startProductionTime: formattedProductionTime
+          pauseProductionTime: formattedTime
         },
         {
           headers: { 'x-access-token': token }
         }
       )
-      console.log('res', res)
-      toast.success('Job break successfully!')
+
+      toast.success('Pause time saved and production resumed!')
 
       // Clear Pause Timer
 
-      localStorage.removeItem(`productionTimerRunning-${order}`)
-      localStorage.removeItem(`productionTimerStart-${order}`)
-      setProductionTimerRunning(false)
-      setProductionTimer(0)
-      setIsMakeTimeDone(false)
+      localStorage.removeItem(`pauseProductionTimerStart-${order}`)
+      localStorage.removeItem(`pauseProductionTimerRunning-${order}`)
       setMakeTimerRunning(false)
+      setMakeTime(0)
+
+      // setHandleDisable(false)
+
+      // const startTime = Date.now() - serverProductionSeconds * 1000
+
+      // localStorage.setItem(`productionTimerRunning-${order}`, 'true')
+      // localStorage.setItem(`productionTimerStart-${order}`, startTime.toString())
+      // setProductionTimerRunning(true)
+      // window.location.reload()
+      // setDisabled(false)
+      // if (intervalRef.current) {
+      //   clearInterval(intervalRef.current)
+      // }
+
+      // // Start a new one
+      // intervalRef.current = setInterval(() => {
+      //   const now = Date.now()
+      //   const elapsed = Math.floor((now - startTime) / 1000)
+      //   setProductionTimer(elapsed)
+      // }, 1000)
     } catch (error) {
-      toast.error('Failed to break production.')
+      toast.error('Failed to start production.')
       console.error(error)
     }
   }
@@ -1188,7 +1213,7 @@ const ProductOrderDetail = () => {
                                       <Button
                                         variant='contained'
                                         color='error'
-                                        onClick={handleBreakProduction}
+                                        onClick={handleDownClickOpen}
                                         sx={{ flex: 1 }}
                                       >
                                         Job Break
