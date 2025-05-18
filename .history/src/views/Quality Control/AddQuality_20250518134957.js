@@ -36,7 +36,6 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { useFormik } from 'formik'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import * as yup from 'yup'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -281,7 +280,7 @@ const AddQuality = () => {
               <TableCell>Quantity of Sheets</TableCell>
               <TableCell>Customer Name</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -359,20 +358,6 @@ const AddQuality = () => {
                         }}
                       />
                     </Stack>
-                  </TableCell>
-                  <TableCell component='th' scope='row'>
-                    <NextLink
-                      href={{
-                        pathname: '/quality-control/printing'
-
-                        // query: { userId: data._id }
-                      }}
-                      passHref
-                    >
-                      <IconButton>
-                        <RemoveRedEyeIcon />
-                      </IconButton>
-                    </NextLink>
                   </TableCell>
                 </TableRow>
               ))

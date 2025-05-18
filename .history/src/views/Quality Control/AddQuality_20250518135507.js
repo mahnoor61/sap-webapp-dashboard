@@ -363,8 +363,7 @@ const AddQuality = () => {
                   <TableCell component='th' scope='row'>
                     <NextLink
                       href={{
-                        pathname: '/quality-control/printing'
-
+                        pathname: '/user-management/user-edit'
                         // query: { userId: data._id }
                       }}
                       passHref

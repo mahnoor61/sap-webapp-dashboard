@@ -62,7 +62,7 @@ const JobEdit = () => {
 
   const formik = useFormik({
     initialValues: {
-      productionOrderNo: '',
+      productionOrderNo: jobData.?productionOrderNo,
       ComponentItemCode: '',
       user: '',
       machine: '',
@@ -98,6 +98,8 @@ const JobEdit = () => {
     }
   })
 
+  console.log('formik.values.productionOrderNo', formik.values.productionOrderNo)
+
   return (
     <>
       {jobData && (
@@ -121,34 +123,27 @@ const JobEdit = () => {
                   renderInput={(params) => <TextField {...params} label="Production Order No"/>}
                 /> */}
 
-                <TextField
-                  fullWidth
-                  label='Production Order No'
-                  value={formik.values.productionOrderNo || ''}
-                  disabled
-                  sx={{ mb: 2 }}
-                />
-
-                {/* <Autocomplete
+                <Autocomplete
                   fullWidth
                   sx={{ mb: 2 }}
                   options={prodcutionOrder}
                   getOptionLabel={option => (option.docNum ? option.docNum.toString() : '')} // thoda safe banaya
-              
-                  // isOptionEqualToValue={(option, value) => option.docNum === value.docNum}
-                  // value={prodcutionOrder.find(po => po.docNum == formik.values.productionOrderNo)}
-                  // onChange={(event, value) => {
-                  //   if (value) {
-                  //     formik.setFieldValue('productionOrderNo', value.docNum)
-                  //     formik.setFieldValue('ComponentItemCode', value.ComponentItemCode) // yeh naya add kiya
-                  //   } else {
-                  //     formik.setFieldValue('productionOrderNo', '')
-                  //     formik.setFieldValue('ComponentItemCode', '')
-                  //   }
-                  // }}
-                  // filterSelectedOptions
+                  isOptionEqualToValue={(option, value) => option.docNum === value.docNum}
+                  value={formik.values.productionOrderNo}
+                  // value={prodcutionOrder.find(po => po.docNum == formik.values.productionOrderNo) || null}
+
+                  onChange={(event, value) => {
+                    if (value) {
+                      formik.setFieldValue('productionOrderNo', value.docNum)
+                      formik.setFieldValue('ComponentItemCode', value.ComponentItemCode) // yeh naya add kiya
+                    } else {
+                      formik.setFieldValue('productionOrderNo', '')
+                      formik.setFieldValue('ComponentItemCode', '')
+                    }
+                  }}
+                  filterSelectedOptions
                   renderInput={params => <TextField {...params} label='Production Order No' />}
-                /> */}
+                />
 
                 <Grid container spacing={2}>
                   {jobData && (

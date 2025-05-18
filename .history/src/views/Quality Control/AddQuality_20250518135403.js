@@ -361,16 +361,24 @@ const AddQuality = () => {
                     </Stack>
                   </TableCell>
                   <TableCell component='th' scope='row'>
+                    <IconButton>
+                      <DeleteIcon
+                        disabled={destroyUser.isSubmitting}
+                        onClick={() => {
+                          setItemToDelete(data._id)
+                          setDialogOpen(true)
+                        }}
+                      />
+                    </IconButton>
                     <NextLink
                       href={{
-                        pathname: '/quality-control/printing'
-
-                        // query: { userId: data._id }
+                        pathname: '/user-management/user-edit',
+                        query: { userId: data._id }
                       }}
                       passHref
                     >
                       <IconButton>
-                        <RemoveRedEyeIcon />
+                        <EditIcon />
                       </IconButton>
                     </NextLink>
                   </TableCell>

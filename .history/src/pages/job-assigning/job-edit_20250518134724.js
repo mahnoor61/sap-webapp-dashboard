@@ -121,12 +121,22 @@ const JobEdit = () => {
                   renderInput={(params) => <TextField {...params} label="Production Order No"/>}
                 /> */}
 
-                <TextField
+                <Autocomplete
                   fullWidth
-                  label='Production Order No'
-                  value={formik.values.productionOrderNo || ''}
-                  disabled
                   sx={{ mb: 2 }}
+                  options={prodcutionOrder}
+                  getOptionLabel={option => (option.docNum ? option.docNum.toString() : '')}
+                  value={prodcutionOrder.find(order => order.docNum === formik.values.productionOrderNo) || null}
+                  onChange={(event, value) => {
+                    if (value) {
+                      formik.setFieldValue('productionOrderNo', value.docNum)
+                      formik.setFieldValue('ComponentItemCode', value.ComponentItemCode || '') // if applicable
+                    } else {
+                      formik.setFieldValue('productionOrderNo', '')
+                      formik.setFieldValue('ComponentItemCode', '')
+                    }
+                  }}
+                  renderInput={params => <TextField {...params} label='Production Order No' />}
                 />
 
                 {/* <Autocomplete

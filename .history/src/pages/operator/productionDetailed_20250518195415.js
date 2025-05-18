@@ -493,8 +493,7 @@ const ProductOrderDetail = () => {
   const handleStartProduction = async () => {
     try {
       const formattedTime = formatTimeToHHMMSS(makeTime)
-      const wasted = localStorage.getItem('totalWastedQty') || 0
-
+      const wasted = localStorage.getItem('totalWastedQty')
       const res = await axios.post(
         `${BASE_URL}/api/ap/operator/production/order/update/make-time`,
         {
@@ -508,8 +507,7 @@ const ProductOrderDetail = () => {
       )
 
       toast.success('Make time saved!')
-      localStorage.removeItem('totalWastedQty')
-
+localStorage.removeItem()
       // Reset make timer
       localStorage.removeItem(`makeTimerRunning-${order}`)
       localStorage.removeItem(`makeTimerStart-${order}`)

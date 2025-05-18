@@ -116,8 +116,8 @@ const Printing = () => {
     }
   }
 
-  console.log('userData', userData)
 
+  
   useEffect(() => {
     getData()
   }, [id])

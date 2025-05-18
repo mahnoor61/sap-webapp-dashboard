@@ -121,14 +121,6 @@ const JobEdit = () => {
                   renderInput={(params) => <TextField {...params} label="Production Order No"/>}
                 /> */}
 
-                <TextField
-                  fullWidth
-                  label='Production Order No'
-                  value={formik.values.productionOrderNo || ''}
-                  disabled
-                  sx={{ mb: 2 }}
-                />
-
                 {/* <Autocomplete
                   fullWidth
                   sx={{ mb: 2 }}

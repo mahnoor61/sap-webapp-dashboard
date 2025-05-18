@@ -374,7 +374,7 @@ const ProductOrderDetail = () => {
         )
         toast.success('Wasted quantity added successfully.')
         const newQty = parseInt(values.wastedQuantity)
-
+        
         // ✅ Always use the same key name
         const existing = parseInt(localStorage.getItem('totalWastedQty'))
 
@@ -386,6 +386,15 @@ const ProductOrderDetail = () => {
           const updatedQty = existing + newQty
           localStorage.setItem('totalWastedQty', updatedQty)
         }
+        
+
+        // if (existingIndex !== -1) {
+        //   existing[existingIndex].wastedQuantity += newQty
+        // } else {
+        //   existing.push({ id, wastedQuantity: newQty })
+        // }
+
+        // localStorage.setItem('wastedData', JSON.stringify(existing))
 
         setProductionOrderDetail(response.data.data)
         await updatePalleteNo()
@@ -493,14 +502,12 @@ const ProductOrderDetail = () => {
   const handleStartProduction = async () => {
     try {
       const formattedTime = formatTimeToHHMMSS(makeTime)
-      const wasted = localStorage.getItem('totalWastedQty') || 0
 
       const res = await axios.post(
         `${BASE_URL}/api/ap/operator/production/order/update/make-time`,
         {
           id: productionOrderDetail._id,
-          makeTime: formattedTime,
-          totalWastedQuantity: parseInt(wasted)
+          makeTime: formattedTime
         },
         {
           headers: { 'x-access-token': token }
@@ -508,7 +515,6 @@ const ProductOrderDetail = () => {
       )
 
       toast.success('Make time saved!')
-      localStorage.removeItem('totalWastedQty')
 
       // Reset make timer
       localStorage.removeItem(`makeTimerRunning-${order}`)

@@ -373,19 +373,21 @@ const ProductOrderDetail = () => {
           }
         )
         toast.success('Wasted quantity added successfully.')
-        const newQty = parseInt(values.wastedQuantity)
+        const existing = JSON.parse(localStorage.getItem('wastedData')) || []
 
-        // ✅ Always use the same key name
-        const existing = parseInt(localStorage.getItem('totalWastedQty'))
+        // Check if this ID already exists
+        const existingIndex = existing.findIndex(entry => entry.id === id)
 
-        if (isNaN(existing)) {
-          // If not set yet, initialize with newQty
-          localStorage.setItem('totalWastedQty', newQty)
+        if (existingIndex !== -1) {
+          // If exists, add newQty to existing one
+          existing[existingIndex].wastedQuantity += newQty
         } else {
-          // Else, add newQty to existing value
-          const updatedQty = existing + newQty
-          localStorage.setItem('totalWastedQty', updatedQty)
+          // If not exists, push new entry
+          existing.push({ id, wastedQuantity: newQty })
         }
+
+        // Save back to localStorage
+        localStorage.setItem('wastedData', JSON.stringify(existing))
 
         setProductionOrderDetail(response.data.data)
         await updatePalleteNo()
@@ -493,14 +495,12 @@ const ProductOrderDetail = () => {
   const handleStartProduction = async () => {
     try {
       const formattedTime = formatTimeToHHMMSS(makeTime)
-      const wasted = localStorage.getItem('totalWastedQty') || 0
 
       const res = await axios.post(
         `${BASE_URL}/api/ap/operator/production/order/update/make-time`,
         {
           id: productionOrderDetail._id,
-          makeTime: formattedTime,
-          totalWastedQuantity: parseInt(wasted)
+          makeTime: formattedTime
         },
         {
           headers: { 'x-access-token': token }
@@ -508,7 +508,6 @@ const ProductOrderDetail = () => {
       )
 
       toast.success('Make time saved!')
-      localStorage.removeItem('totalWastedQty')
 
       // Reset make timer
       localStorage.removeItem(`makeTimerRunning-${order}`)
