@@ -308,34 +308,9 @@ const Printing = () => {
 
   console.log('userId', userId)
 
+
   if (jobId) {
-    const getAllQCList = async () => {
-      try {
-        const response = await axios.post(
-          `${BASE_URL}/api/ap/qc/get/qc-data`,
-          {
-            // jobId: userData?.jobId?._id,
-
-            // userId: userData?.userId?._id
-
-            jobId: jobId,
-            userId: userId
-          },
-          {
-            headers: {
-              'x-access-token': token
-            }
-          }
-        )
-
-        console.log('response', response)
-        setUsers(response.data.data)
-        setLoadingComplete(false)
-      } catch (error) {
-        console.log('error in qc all current table data', error)
-        setLoadingComplete(false)
-      }
-    }
+    
   }
 
   const getAllQcCurrentTableData = async () => {
@@ -343,12 +318,12 @@ const Printing = () => {
       const response = await axios.post(
         `${BASE_URL}/api/ap/qc/get/qc-data`,
         {
-          jobId: userData?.jobId?._id,
+          // jobId: userData?.jobId?._id,
 
-          userId: userData?.userId?._id
+          // userId: userData?.userId?._id
 
-          // jobId: jobId,
-          // userId: userId
+          jobId: jobId,
+          userId: userId
         },
         {
           headers: {
@@ -371,12 +346,6 @@ const Printing = () => {
       getAllQcCurrentTableData()
     }
   }, [userData])
-
-  useEffect(() => {
-    if (jobId) {
-      getAllQCList()
-    }
-  }, [jobId])
 
   function printReceipt() {
     const printContents = document.getElementById('receipt')?.innerHTML

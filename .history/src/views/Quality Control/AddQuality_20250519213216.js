@@ -77,7 +77,9 @@ const AddQuality = () => {
           'x-access-token': token
         }
       })
+      const jobId = response?.data?.data?._id
 
+      // console.log('response', response)
       setJobs(response.data.data)
       setLoadingComplete(false)
     } catch (error) {
@@ -363,7 +365,7 @@ const AddQuality = () => {
                       href={{
                         pathname: '/quality-control/printing',
 
-                        query: { jobId: data._id }
+                        query: { jobId: jobId }
                       }}
                       passHref
                     >

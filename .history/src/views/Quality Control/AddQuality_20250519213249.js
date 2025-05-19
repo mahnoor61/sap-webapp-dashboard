@@ -77,7 +77,10 @@ const AddQuality = () => {
           'x-access-token': token
         }
       })
+      const jobId = response?.data?.data?._id
 
+      console.log('response', response)
+      console.log('response', response)
       setJobs(response.data.data)
       setLoadingComplete(false)
     } catch (error) {
@@ -361,9 +364,9 @@ const AddQuality = () => {
                   <TableCell component='th' scope='row'>
                     <NextLink
                       href={{
-                        pathname: '/quality-control/printing',
+                        pathname: '/quality-control/printing'
 
-                        query: { jobId: data._id }
+                        // query: { jobId: jobId }
                       }}
                       passHref
                     >

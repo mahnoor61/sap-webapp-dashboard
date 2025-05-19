@@ -309,7 +309,7 @@ const Printing = () => {
   console.log('userId', userId)
 
   if (jobId) {
-    const getAllQCList = async () => {
+    const getAllQcCurrentTableData = async () => {
       try {
         const response = await axios.post(
           `${BASE_URL}/api/ap/qc/get/qc-data`,
@@ -373,8 +373,8 @@ const Printing = () => {
   }, [userData])
 
   useEffect(() => {
-    if (jobId) {
-      getAllQCList()
+    if (userData?.jobId?._id && userData?.userId?._id) {
+      getAllQcCurrentTableData()
     }
   }, [jobId])
 

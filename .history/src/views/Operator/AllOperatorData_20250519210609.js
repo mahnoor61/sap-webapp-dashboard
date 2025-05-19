@@ -235,7 +235,7 @@ const AllOperatorData = () => {
                                   : data?.status === 'completed'
                                   ? 'blue'
                                   : data?.status === 'job-break'
-                                  ? '#ff4c51'
+                                  ? 'error'
                                   : 'default',
                               color: '#fff',
                               fontWeight: 'bold'

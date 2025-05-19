@@ -222,8 +222,7 @@ const AllOperatorData = () => {
                             label={data?.status}
                             sx={{
                               backgroundColor:
-                                data?.status === 'pending'
-                                  ? 'grey'
+                                data?.status === 'pending'? 'grey'
                                   : data?.status === 'running'
                                   ? 'green'
                                   : data?.status === 'pause'
@@ -234,9 +233,7 @@ const AllOperatorData = () => {
                                   ? 'blue'
                                   : data?.status === 'completed'
                                   ? 'blue'
-                                  : data?.status === 'job-break'
-                                  ? '#ff4c51'
-                                  : 'default',
+                                  :  data?.status === 'pending'? 'grey' 'default',
                               color: '#fff',
                               fontWeight: 'bold'
                             }}

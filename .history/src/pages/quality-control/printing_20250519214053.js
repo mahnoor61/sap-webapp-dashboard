@@ -374,7 +374,7 @@ const Printing = () => {
 
   useEffect(() => {
     if (jobId) {
-      getAllQCList()
+      getAllQcCurrentTableData()
     }
   }, [jobId])
 

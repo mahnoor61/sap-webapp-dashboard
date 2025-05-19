@@ -309,7 +309,7 @@ const Printing = () => {
   console.log('userId', userId)
 
   if (jobId) {
-    const getAllQCList = async () => {
+    const getAllQcCurrentTableData = async () => {
       try {
         const response = await axios.post(
           `${BASE_URL}/api/ap/qc/get/qc-data`,
@@ -343,9 +343,9 @@ const Printing = () => {
       const response = await axios.post(
         `${BASE_URL}/api/ap/qc/get/qc-data`,
         {
-          jobId: userData?.jobId?._id,
+          // jobId: userData?.jobId?._id,
 
-          userId: userData?.userId?._id
+          // userId: userData?.userId?._id
 
           // jobId: jobId,
           // userId: userId
@@ -371,12 +371,6 @@ const Printing = () => {
       getAllQcCurrentTableData()
     }
   }, [userData])
-
-  useEffect(() => {
-    if (jobId) {
-      getAllQCList()
-    }
-  }, [jobId])
 
   function printReceipt() {
     const printContents = document.getElementById('receipt')?.innerHTML
