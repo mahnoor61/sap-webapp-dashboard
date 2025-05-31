@@ -111,8 +111,7 @@ const AddQuality = () => {
     initialValues: {
       quantity: '',
       quantityTime: '',
-
-      // userId: '',
+      userId: '',
       jobId: ''
     },
     validationSchema: yup.object({
@@ -126,7 +125,6 @@ const AddQuality = () => {
           {
             quantity: values.quantity,
             quantityTime: currentTime,
-
             // userId: userId,
             jobId: formik.values.jobId
           },
@@ -160,8 +158,7 @@ const AddQuality = () => {
         `${BASE_URL}/api/ap/qc/add-quantity`,
         {
           makeTime: currentTime,
-
-          // userId,
+          userId,
           jobId: formik.values.jobId
         },
         {
@@ -208,7 +205,7 @@ const AddQuality = () => {
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow sx={{ width: '100%' }}>
-              <TableCell align='center' colSpan={9}>
+              <TableCell align='center' colSpan={8}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -379,7 +376,7 @@ const AddQuality = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={9} align='center'>
+                <TableCell colSpan={4} align='center'>
                   No Job Found
                 </TableCell>
               </TableRow>

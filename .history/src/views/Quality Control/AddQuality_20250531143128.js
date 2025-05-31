@@ -137,7 +137,7 @@ const AddQuality = () => {
           }
         )
         toast.success('Quantity save successfully.')
-        router.push(`/quality-control/printing?id=${response.data.data._id}`)
+        // router.push(`/quality-control/printing?id=${response.data.data._id}`)
         handleClose()
         formik.resetForm()
       } catch (error) {

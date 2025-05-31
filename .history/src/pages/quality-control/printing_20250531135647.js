@@ -617,27 +617,24 @@ const Printing = () => {
                       </TableCell>
                     </TableRow>
                     {!jobId && (
-                      <TableRow
-                        sx={{
-                          // display: id ? 'block' : 'none',
-                          justifyContent: 'space-between',
-                          alignItems: 'left',
-                          width: '100%'
-                        }}
-                      >
-                        {questions.map((question, questionIndex) => (
-                          <TableCell key={question}>
-                            {question} {/* Or use a more user-friendly label here */}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    )}
-                  </TableHead>
+                    <TableRow
+                      sx={{
+                        // display: id ? 'block' : 'none',
+                        justifyContent: 'space-between',
+                        alignItems: 'left',
+                        width: '100%'
+                      }}
+                    >
+                      {questions.map((question, questionIndex) => (
+                        <TableCell key={question}>
+                          {question} {/* Or use a more user-friendly label here */}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>)}
                   <TableBody
                     sx={{
-                      width: '100%',
-                      display: jobId ? 'none' : 'table-row-group'
-
+                      width: '100%'
                       // , display: jobId ? 'none' : 'block'
                     }}
                   >
@@ -1160,7 +1157,7 @@ const Printing = () => {
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
+                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userId?.userName}</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>

@@ -38,7 +38,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
+
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -90,8 +90,6 @@ const Printing = () => {
   const token = auth?.token
   const userId = auth?.user?._id
 
-  // const userName = auth?.user?.name;
-
   // function for not okay  dialogue
   const handleOpen = () => {
     setOpen(true)
@@ -121,37 +119,11 @@ const Printing = () => {
     }
   }
 
-  useEffect(() => {
-    getData()
-  }, [id])
-
-  const getJobData = async () => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/ap/qc/get/job-data`,
-        {
-          jobId: jobId
-        },
-        {
-          headers: {
-            'x-access-token': token
-          }
-        }
-      )
-      setUserData(response.data.data)
-      setLoadingComplete(false)
-    } catch (error) {
-      console.log('error in get job data', error)
-
-      // setLoadingComplete(false)
-    }
-  }
-
   console.log('userData', userData)
 
   useEffect(() => {
-    getJobData()
-  }, [jobId])
+    getData()
+  }, [id])
 
   const today = new Date()
   const formattedDate = today.toLocaleDateString()
@@ -253,7 +225,6 @@ const Printing = () => {
 
     try {
       const dataToSend = {
-        qcNo: `UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`,
         shift: shift,
         date: formattedDate,
         dmsFromPlate: formatResponseValue(responses['d/m/sFromPlate']),
@@ -289,6 +260,39 @@ const Printing = () => {
     }
   }
 
+  // const handleSubmit = async () => {
+  //   try {
+  //     const dataToSend = {
+  //       shift: shift,
+  //       date: formattedDate,
+
+  //       // serialNo: userData.serialNo,
+
+  //       dmsFromPlate: formatResponseValue(responses['dmsFromPlate']),
+  //       text: formatResponseValue(responses['text']), // fix case
+  //       dust: formatResponseValue(responses['dust']),
+  //       sideLay: formatResponseValue(responses['side Lay']), // remove space
+  //       frontLay: formatResponseValue(responses['front Lay']), // remove space
+  //       registration: formatResponseValue(responses['registration']),
+  //       scumming: formatResponseValue(responses['scumming']),
+  //       setOff: formatResponseValue(responses['set Off']),
+  //       doubling: formatResponseValue(responses['doubling']),
+  //       colorVariation: formatResponseValue(responses['color Variation'])
+  //     }
+
+  //     const res = await axios.post(`${BASE_URL}/api/ap/qc/printing/${id}`, dataToSend, {
+  //       headers: { 'x-access-token': token }
+  //     })
+
+  //     toast.success('Printing form submitted successfully')
+  //     await getAllQcCurrentTableData()
+  //     localStorage.removeItem('printing_responses')
+  //     console.log('Submitted successfully', res.data)
+  //   } catch (err) {
+  //     console.error('Submission printing failed', err)
+  //   }
+  // }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
@@ -313,7 +317,6 @@ const Printing = () => {
             // userId: userData?.userId?._id
 
             jobId: jobId
-
             // userId: userId
           },
           {
@@ -322,6 +325,8 @@ const Printing = () => {
             }
           }
         )
+
+        console.log('response', response)
         setUsers(response.data.data)
         setLoadingComplete(false)
       } catch (error) {
@@ -440,6 +445,19 @@ const Printing = () => {
     }
   }
 
+  const parameters = [
+    { key: 'text', label: 'Text' },
+    { key: 'colorVariation', label: 'Color Variation' },
+    { key: 'doubling', label: 'Doubling' },
+    { key: 'dust', label: 'Dust' },
+    { key: 'setOff', label: 'Set Off' },
+    { key: 'scumming', label: 'Scumming' },
+    { key: 'sideLay', label: 'Side Lay' },
+    { key: 'frontLay', label: 'Front Lay' },
+    { key: 'registration', label: 'Misregistration' },
+    { key: 'dmsFromPlate', label: 'D/M/S from Plate' }
+  ]
+
   return (
     <>
       <Card
@@ -480,7 +498,7 @@ const Printing = () => {
                     <Typography>{userData?.jobId?.productionOrderNo}</Typography>
                   </Box>
 
-                  <Typography variant='subtitle2'>UBC/QC/SOR - {userData?.jobId?.productionOrderNo}</Typography>
+                  <Typography variant='subtitle2'>UBC/QC/SOR - 1</Typography>
 
                   <Box sx={{ display: 'flex', gap: 2 }}>
                     <Typography variant='subtitle2' sx={{ fontWeight: '900' }}>
@@ -522,7 +540,7 @@ const Printing = () => {
                               fullWidth
                               label='Operator Name'
                               InputLabelProps={{ shrink: true }}
-                              value={userData?.userData?.userName}
+                              value={userData?.userId?.userName}
                               size='small'
                             />
                           </Grid>
@@ -616,31 +634,15 @@ const Printing = () => {
                         </Box>
                       </TableCell>
                     </TableRow>
-                    {!jobId && (
-                      <TableRow
-                        sx={{
-                          // display: id ? 'block' : 'none',
-                          justifyContent: 'space-between',
-                          alignItems: 'left',
-                          width: '100%'
-                        }}
-                      >
-                        {questions.map((question, questionIndex) => (
-                          <TableCell key={question}>
-                            {question} {/* Or use a more user-friendly label here */}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    )}
+                    <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
+                      {questions.map((question, questionIndex) => (
+                        <TableCell key={question}>
+                          {question} {/* Or use a more user-friendly label here */}
+                        </TableCell>
+                      ))}
+                    </TableRow>
                   </TableHead>
-                  <TableBody
-                    sx={{
-                      width: '100%',
-                      display: jobId ? 'none' : 'table-row-group'
-
-                      // , display: jobId ? 'none' : 'block'
-                    }}
-                  >
+                  <TableBody sx={{ width: '100%' }}>
                     {userData?.time && userData?.makeTimeStatus ? (
                       <TableRow sx={{ width: '100%' }}>
                         <TableCell>{new Date(userData.time).toLocaleTimeString()}</TableCell>
@@ -695,7 +697,7 @@ const Printing = () => {
                                       setResponses(prev => ({
                                         ...prev,
                                         [question]: {
-                                          answer: value,
+                                          answer: 'Okay',
                                           reason: ''
                                         }
                                       }))
@@ -708,14 +710,11 @@ const Printing = () => {
                                 >
                                   <MenuItem value='Okay'>Okay</MenuItem>
                                   <MenuItem value='Not Okay'>Not Okay</MenuItem>
-                                  {question === 'd/m/sFromPlate' && <MenuItem value='N/A'>N/A</MenuItem>}
                                 </Select>
                               ) : selections[cellKey] === 'Okay' ? (
                                 <DoneIcon sx={{ color: 'green !important' }} />
                               ) : selections[cellKey] === 'Not Okay' ? (
                                 <ClearIcon sx={{ color: 'red !important' }} />
-                              ) : selections[cellKey] === 'N/A' ? (
-                                <DoNotDisturbOnIcon sx={{ color: 'red !important' }} />
                               ) : (
                                 ''
                               )}
@@ -729,7 +728,7 @@ const Printing = () => {
               </TableContainer>
 
               {showSubmit && !userData?.makeTimeStatus && (
-                <Grid item xs={12} sx={{ display: jobId ? 'none' : 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
                   <Button
                     onClick={() => {
                       // setResponses({})
@@ -967,8 +966,6 @@ const Printing = () => {
                         <DoneIcon sx={{ color: 'green' }} />
                       ) : data?.formId?.dmsFromPlate?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
-                      ) : data?.formId?.dmsFromPlate?.answer === 'N/A' ? (
-                        <DoNotDisturbOnIcon sx={{ color: 'red !important' }} />
                       ) : (
                         ''
                       )}
@@ -978,8 +975,8 @@ const Printing = () => {
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={13} align='center'>
-                  No Data Found
+                <TableCell colSpan={4} align='center'>
+                  No Users Found
                 </TableCell>
               </TableRow>
             )}
@@ -1076,6 +1073,12 @@ const Printing = () => {
                 type='text'
                 value={reason}
                 onChange={e => setReason(e.target.value)}
+
+                // error={Boolean(formik.touched.quantity && formik.errors.quantity)}
+                // helperText={formik.touched.quantity && formik.errors.quantity}
+                // onBlur={formik.handleBlur}
+                // onChange={formik.handleChange}
+                // value={formik.values.quantity}
               />
             </DialogContentText>
           </DialogContent>
@@ -1142,25 +1145,50 @@ const Printing = () => {
                     Document Code : {userData?.jobId?.productionOrderNo}
                   </td>
                   {/* <td style={{ border: '1px solid #999', fontWight: 'bold' }}></td> */}
-                  <td style={{ border: '1px solid #999', fontWeight: '500' }}>
-                    {`UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`}
-                  </td>
+                  <td style={{ border: '1px solid #999', fontWeight: '500' }}> UBC/QC/SOR-01</td>
                   <td style={{ border: '1px solid #999', fontWeight: 'bold' }}> Issue Date: {formattedDate}</td>
                 </tr>
               </table>
             </div>
+            {/* <Box mb={2}>
+            <Table size='small' sx={{ border: '1px solid #999', width: '100%' }}>
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={4} align='center' sx={{ fontWeight: 'bold', border: '1px solid #999' }}>
+                    QC Report For Printing
+                  </TableCell>
+                  <TableCell rowSpan={4} align='center' sx={{ border: '1px solid #999', width: 200 }}>
+                    <img src='/white-logo.png' alt='UBC Logo' width='60' />
+                    <Typography sx={{ fontWeight: 'bold', fontSize: '14px' }}></Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell sx={{ border: '1px solid #999', fontWeight: 500 }}>
+                    Document Code: {userData?.jobId?.productionOrderNo}
+                  </TableCell>
+                  <TableCell sx={{ border: '1px solid #999', fontWeight: 'bold' }}>UBC/QC/SOR-01</TableCell>
+
+                  <TableCell sx={{ border: '1px solid #999', fontWeight: 500 }}>Issue Date: {formattedDate}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Box> */}
           </DialogTitle>
 
           <DialogContent>
-            <div>
+            <div
+
+            // style={{ overflowX: 'auto' }}
+            >
               <div>
+                {/* Top Info Table */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '16px' }}>
                   <tbody>
                     <tr>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
+                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userId?.userName}</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>
@@ -1195,28 +1223,25 @@ const Printing = () => {
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Time
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Quantity
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Text
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Color Variation
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Doubling
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Dust
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Set Off
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Scumming
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
                         Side Lay
                       </th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
@@ -1263,8 +1288,6 @@ const Printing = () => {
                           <td style={{ padding: '6px', border: '1px solid #ccc' }}>
                             {new Date(user.time).toLocaleTimeString()}
                           </td>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>{user?.quantity}</td>
-
                           {[
                             'text',
                             'colorVariation',
@@ -1288,8 +1311,6 @@ const Printing = () => {
                                   <span style={{ color: 'green' }}>✓</span>
                                 ) : answer === 'Not Okay' ? (
                                   <span style={{ color: 'red' }}>✗</span>
-                                ) : answer === 'N/A' ? (
-                                  <span style={{ color: 'red' }}>-</span>
                                 ) : (
                                   ''
                                 )}
@@ -1336,8 +1357,178 @@ const Printing = () => {
                     })}
                   </ul>
                 </div>
+
+                {/* <table
+                  style={{ width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px' }}
+                >
+                  <thead style={{ backgroundColor: 'skyblue' }}>
+                    <tr>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Sr. No</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
+                        Quality Parameter
+                      </th>
+                      {users.map(user => (
+                        <th
+                          key={user._id}
+                          style={{
+                            padding: '6px',
+                            border: '1px solid #ccc',
+                            fontWeight: 'bold',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'center'
+                          }}
+                        >
+                          Time
+                          <br />
+                          {new Date(user.time).toLocaleTimeString()}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {parameters.map((param, index) => (
+                      <tr key={param.key}>
+                        <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
+                        <td
+                          // rowSpan={12}
+                          style={{ padding: '6px', border: '1px solid #ccc' }}
+                        >
+                          {param.label}
+                        </td>
+                        {users.map(user => {
+                          if (user.makeTimeStatus) {
+                            return index === 0 ? (
+                              <td
+                                key={user._id + '_make'}
+                                rowSpan={parameters.length}
+                                style={{
+                                  padding: '6px',
+                                  border: '1px solid #ccc',
+                                  textAlign: 'center',
+                                  backgroundColor: '#e6f7ff',
+                                  fontWeight: 'bold'
+                                }}
+                              >
+                                {user.makeTimeStatus}
+                              </td>
+                            ) : null
+                          } else {
+                            const answer = user?.formId?.[param.key]?.answer
+                            return (
+                              <td
+                                key={user._id + param.key}
+                                style={{ padding: '6px', border: '1px solid #ccc', textAlign: 'center' }}
+                              >
+                                {answer === 'Okay' ? (
+                                  <span style={{ color: 'green' }}>✓</span>
+                                ) : answer === 'Not Okay' ? (
+                                  <span style={{ color: 'red' }}>✗</span>
+                                ) : (
+                                  ''
+                                )}
+                              </td>
+                            )
+                          }
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table> */}
               </div>
             </div>
+
+            {/* <Box sx={{ overflowX: 'auto' }}>
+            <Box sx={{ minWidth: `${users.length * 100 + 300}px` }}>
+              <Table size='small' border='1' sx={{ mb: 2 }}>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>Machine:</TableCell>
+                    <TableCell>{userData?.machine?.code}</TableCell>
+                    <TableCell>Operator Name:</TableCell>
+                    <TableCell>{userData?.userId?.userName}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Shift:</TableCell>
+                    <TableCell>{shift}</TableCell>
+                    <TableCell>Date:</TableCell>
+                    <TableCell>{formattedDate}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Job Name:</TableCell>
+                    <TableCell colSpan={3} align='center'>
+                      {userData?.jobData?.prodName}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>PRDN. No:</TableCell>
+                    <TableCell>{userData?.jobId?.productionOrderNo}</TableCell>
+                    <TableCell>S O No:</TableCell>
+                    <TableCell>{userData?.jobData?.OriginNum}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+
+              <Table size='small' sx={{ border: '1px solid #ccc', mb: 4 }}>
+                <TableHead sx={{ bgcolor: 'skyblue' }}>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Sr. No</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Quality Parameter</TableCell>
+                    {users.map(user => (
+                      <TableCell
+                        key={user._id}
+                        sx={{
+                          fontWeight: 'bold',
+                          whiteSpace: 'nowrap',
+                          textAlign: 'center'
+                        }}
+                      >
+                        Time
+                        <br />
+                        {new Date(user.time).toLocaleTimeString()}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {parameters.map((param, index) => (
+                    <TableRow key={param.key}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{param.label}</TableCell>
+                      {users.map(user => {
+                        if (user.makeTimeStatus) {
+                          return index === 0 ? (
+                            <TableCell
+                              key={user._id + '_make'}
+                              rowSpan={parameters.length}
+                              align='center'
+                              sx={{ fontWeight: 'bold', backgroundColor: '#e6f7ff' }}
+                            >
+                              {user.makeTimeStatus}
+                            </TableCell>
+                          ) : null
+                        } else {
+                          const answer = user?.formId?.[param.key]?.answer
+                          return (
+                            <TableCell key={user._id + param.key} align='center'>
+                              {answer === 'Okay' ? (
+                                <DoneIcon sx={{ color: 'green' }} />
+                              ) : answer === 'Not Okay' ? (
+                                <ClearIcon sx={{ color: 'red' }} />
+                              ) : (
+                                ''
+                              )}
+                            </TableCell>
+                          )
+                        }
+                      })}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Box> */}
           </DialogContent>
         </div>
         <DialogActions>

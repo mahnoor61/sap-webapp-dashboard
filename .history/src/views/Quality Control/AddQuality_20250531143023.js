@@ -208,7 +208,7 @@ const AddQuality = () => {
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow sx={{ width: '100%' }}>
-              <TableCell align='center' colSpan={9}>
+              <TableCell align='center' colSpan={}>
                 <Box
                   sx={{
                     display: 'flex',

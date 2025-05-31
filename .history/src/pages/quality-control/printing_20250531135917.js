@@ -637,7 +637,7 @@ const Printing = () => {
                     sx={{
                       width: '100%',
                       display: jobId ? 'none' : 'table-row-group'
-
+                      
                       // , display: jobId ? 'none' : 'block'
                     }}
                   >
@@ -1160,7 +1160,7 @@ const Printing = () => {
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
+                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userId?.userName}</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>

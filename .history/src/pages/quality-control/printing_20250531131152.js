@@ -90,8 +90,6 @@ const Printing = () => {
   const token = auth?.token
   const userId = auth?.user?._id
 
-  // const userName = auth?.user?.name;
-
   // function for not okay  dialogue
   const handleOpen = () => {
     setOpen(true)
@@ -138,7 +136,7 @@ const Printing = () => {
           }
         }
       )
-      setUserData(response.data.data)
+      // setUserData(response.data.data.productionOrderData)
       setLoadingComplete(false)
     } catch (error) {
       console.log('error in get job data', error)
@@ -522,7 +520,7 @@ const Printing = () => {
                               fullWidth
                               label='Operator Name'
                               InputLabelProps={{ shrink: true }}
-                              value={userData?.userData?.userName}
+                              value={userData?.userId?.userName}
                               size='small'
                             />
                           </Grid>
@@ -616,31 +614,15 @@ const Printing = () => {
                         </Box>
                       </TableCell>
                     </TableRow>
-                    {!jobId && (
-                      <TableRow
-                        sx={{
-                          // display: id ? 'block' : 'none',
-                          justifyContent: 'space-between',
-                          alignItems: 'left',
-                          width: '100%'
-                        }}
-                      >
-                        {questions.map((question, questionIndex) => (
-                          <TableCell key={question}>
-                            {question} {/* Or use a more user-friendly label here */}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    )}
+                    <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
+                      {questions.map((question, questionIndex) => (
+                        <TableCell key={question}>
+                          {question} {/* Or use a more user-friendly label here */}
+                        </TableCell>
+                      ))}
+                    </TableRow>
                   </TableHead>
-                  <TableBody
-                    sx={{
-                      width: '100%',
-                      display: jobId ? 'none' : 'table-row-group'
-
-                      // , display: jobId ? 'none' : 'block'
-                    }}
-                  >
+                  <TableBody sx={{ width: '100%' }}>
                     {userData?.time && userData?.makeTimeStatus ? (
                       <TableRow sx={{ width: '100%' }}>
                         <TableCell>{new Date(userData.time).toLocaleTimeString()}</TableCell>
@@ -729,7 +711,7 @@ const Printing = () => {
               </TableContainer>
 
               {showSubmit && !userData?.makeTimeStatus && (
-                <Grid item xs={12} sx={{ display: jobId ? 'none' : 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
                   <Button
                     onClick={() => {
                       // setResponses({})
@@ -1160,7 +1142,7 @@ const Printing = () => {
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
+                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userId?.userName}</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>

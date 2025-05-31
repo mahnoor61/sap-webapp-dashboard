@@ -90,8 +90,6 @@ const Printing = () => {
   const token = auth?.token
   const userId = auth?.user?._id
 
-  // const userName = auth?.user?.name;
-
   // function for not okay  dialogue
   const handleOpen = () => {
     setOpen(true)
@@ -124,34 +122,6 @@ const Printing = () => {
   useEffect(() => {
     getData()
   }, [id])
-
-  const getJobData = async () => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/ap/qc/get/job-data`,
-        {
-          jobId: jobId
-        },
-        {
-          headers: {
-            'x-access-token': token
-          }
-        }
-      )
-      setUserData(response.data.data)
-      setLoadingComplete(false)
-    } catch (error) {
-      console.log('error in get job data', error)
-
-      // setLoadingComplete(false)
-    }
-  }
-
-  console.log('userData', userData)
-
-  useEffect(() => {
-    getJobData()
-  }, [jobId])
 
   const today = new Date()
   const formattedDate = today.toLocaleDateString()
@@ -522,7 +492,7 @@ const Printing = () => {
                               fullWidth
                               label='Operator Name'
                               InputLabelProps={{ shrink: true }}
-                              value={userData?.userData?.userName}
+                              value={userData?.userId?.userName}
                               size='small'
                             />
                           </Grid>
@@ -616,31 +586,15 @@ const Printing = () => {
                         </Box>
                       </TableCell>
                     </TableRow>
-                    {!jobId && (
-                      <TableRow
-                        sx={{
-                          // display: id ? 'block' : 'none',
-                          justifyContent: 'space-between',
-                          alignItems: 'left',
-                          width: '100%'
-                        }}
-                      >
-                        {questions.map((question, questionIndex) => (
-                          <TableCell key={question}>
-                            {question} {/* Or use a more user-friendly label here */}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    )}
+                    <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
+                      {questions.map((question, questionIndex) => (
+                        <TableCell key={question}>
+                          {question} {/* Or use a more user-friendly label here */}
+                        </TableCell>
+                      ))}
+                    </TableRow>
                   </TableHead>
-                  <TableBody
-                    sx={{
-                      width: '100%',
-                      display: jobId ? 'none' : 'table-row-group'
-
-                      // , display: jobId ? 'none' : 'block'
-                    }}
-                  >
+                  <TableBody sx={{ width: '100%' }}>
                     {userData?.time && userData?.makeTimeStatus ? (
                       <TableRow sx={{ width: '100%' }}>
                         <TableCell>{new Date(userData.time).toLocaleTimeString()}</TableCell>
@@ -729,7 +683,7 @@ const Printing = () => {
               </TableContainer>
 
               {showSubmit && !userData?.makeTimeStatus && (
-                <Grid item xs={12} sx={{ display: jobId ? 'none' : 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
                   <Button
                     onClick={() => {
                       // setResponses({})
@@ -1142,9 +1096,7 @@ const Printing = () => {
                     Document Code : {userData?.jobId?.productionOrderNo}
                   </td>
                   {/* <td style={{ border: '1px solid #999', fontWight: 'bold' }}></td> */}
-                  <td style={{ border: '1px solid #999', fontWeight: '500' }}>
-                    {`UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`}
-                  </td>
+                  <td style={{ border: '1px solid #999', fontWeight: '500' }}>{ }</td>
                   <td style={{ border: '1px solid #999', fontWeight: 'bold' }}> Issue Date: {formattedDate}</td>
                 </tr>
               </table>
@@ -1160,7 +1112,7 @@ const Printing = () => {
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
+                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userId?.userName}</td>
                     </tr>
                     <tr>
                       <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>
@@ -1336,6 +1288,84 @@ const Printing = () => {
                     })}
                   </ul>
                 </div>
+
+                {/* <table
+                  style={{ width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px' }}
+                >
+                  <thead style={{ backgroundColor: 'skyblue' }}>
+                    <tr>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Sr. No</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
+                        Quality Parameter
+                      </th>
+                      {users.map(user => (
+                        <th
+                          key={user._id}
+                          style={{
+                            padding: '6px',
+                            border: '1px solid #ccc',
+                            fontWeight: 'bold',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'center'
+                          }}
+                        >
+                          Time
+                          <br />
+                          {new Date(user.time).toLocaleTimeString()}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {parameters.map((param, index) => (
+                      <tr key={param.key}>
+                        <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
+                        <td
+                          // rowSpan={12}
+                          style={{ padding: '6px', border: '1px solid #ccc' }}
+                        >
+                          {param.label}
+                        </td>
+                        {users.map(user => {
+                          if (user.makeTimeStatus) {
+                            return index === 0 ? (
+                              <td
+                                key={user._id + '_make'}
+                                rowSpan={parameters.length}
+                                style={{
+                                  padding: '6px',
+                                  border: '1px solid #ccc',
+                                  textAlign: 'center',
+                                  backgroundColor: '#e6f7ff',
+                                  fontWeight: 'bold'
+                                }}
+                              >
+                                {user.makeTimeStatus}
+                              </td>
+                            ) : null
+                          } else {
+                            const answer = user?.formId?.[param.key]?.answer
+                            return (
+                              <td
+                                key={user._id + param.key}
+                                style={{ padding: '6px', border: '1px solid #ccc', textAlign: 'center' }}
+                              >
+                                {answer === 'Okay' ? (
+                                  <span style={{ color: 'green' }}>✓</span>
+                                ) : answer === 'Not Okay' ? (
+                                  <span style={{ color: 'red' }}>✗</span>
+                                ) : (
+                                  ''
+                                )}
+                              </td>
+                            )
+                          }
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table> */}
               </div>
             </div>
           </DialogContent>
