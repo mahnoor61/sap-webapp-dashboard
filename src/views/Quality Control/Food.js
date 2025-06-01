@@ -42,7 +42,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
-const AddQuality = () => {
+const Food = () => {
   const [jobs, setJobs] = useState([])
   const [printingMachine, setPrintingMachine] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
@@ -72,20 +72,20 @@ const AddQuality = () => {
   const getAllJobsOfSelectedMachine = async machineId => {
     setLoadingComplete(true)
     try {
-      const response = await axios.get(`${BASE_URL}/api/ap/qc/get/machine-data/${machineId}`, {
+      const response = await axios.get(`${BASE_URL}/api/ap/qc/get/machine-data/food/${machineId}`, {
         headers: {
           'x-access-token': token
         }
       })
-
       setJobs(response.data.data)
       setLoadingComplete(false)
     } catch (error) {
-      console.log('error in get all jobs of selected machine in qc', error)
+      console.log('error in get all jobs of selected machine in food', error)
       toast.error(error)
       setLoadingComplete(false)
     }
   }
+
 
   useEffect(() => {
     if (selectedJob) {
@@ -121,8 +121,9 @@ const AddQuality = () => {
     onSubmit: async values => {
       try {
         const currentTime = new Date().toISOString()
+
         const response = await axios.post(
-          `${BASE_URL}/api/ap/qc/add-quantity`,
+          `${BASE_URL}/api/ap/qc/add-quantity/food`,
           {
             quantity: values.quantity,
             quantityTime: currentTime,
@@ -137,7 +138,7 @@ const AddQuality = () => {
           }
         )
         toast.success('Quantity save successfully.')
-        router.push(`/quality-control/printing?id=${response.data.data._id}`)
+        router.push(`/quality-control/food?id=${response.data.data._id}`)
         handleClose()
         formik.resetForm()
       } catch (error) {
@@ -148,6 +149,7 @@ const AddQuality = () => {
     }
   })
 
+
   const handleMakeTimeClick = async () => {
     try {
       // const currentTime = new Date().toLocaleString('en-PK', {
@@ -156,8 +158,9 @@ const AddQuality = () => {
       // })
 
       const currentTime = new Date().toISOString()
+
       const response = await axios.post(
-        `${BASE_URL}/api/ap/qc/add-quantity`,
+        `${BASE_URL}/api/ap/qc/add-quantity/food`,
         {
           makeTime: currentTime,
 
@@ -171,7 +174,7 @@ const AddQuality = () => {
         }
       )
       toast.success('Make time saved successfully.')
-      router.push(`/quality-control/printing?id=${response.data.data._id}`)
+      router.push(`/quality-control/food?id=${response.data.data._id}`)
       handleClose()
     } catch (error) {
       console.log('Error in saving time', error)
@@ -179,9 +182,9 @@ const AddQuality = () => {
     }
   }
 
-  const getAllPrintingMachines = async () => {
+  const getAllLaminatingMachines = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/ap/qc/get/printing-machine`, {
+      const response = await axios.get(`${BASE_URL}/api/ap/qc/get/food-machine`, {
         headers: {
           'x-access-token': token
         }
@@ -189,19 +192,20 @@ const AddQuality = () => {
 
       setPrintingMachine(response.data.data)
     } catch (error) {
-      console.log('error in get all printing machines', error)
+      console.log('error in get all food machines', error)
       toast.error(error)
     }
   }
 
   useEffect(() => {
-    getAllPrintingMachines()
+    getAllLaminatingMachines()
   }, [])
+
 
   return (
     <>
       <Stack spacing={1} sx={{ width: '100%' }}>
-        <Chip sx={{ textAlign: 'center', mb: 2, width: '100%', mt: 5 }} label='Printing' />
+        <Chip sx={{ textAlign: 'center', mb: 2, width: '100%', mt: 5 }} label='Sorting Report For Food' />
       </Stack>
 
       <TableContainer component={Paper}>
@@ -288,7 +292,7 @@ const AddQuality = () => {
           <TableBody>
             {loadingComplete ? (
               <TableRow align='center'>
-                <TableCell colSpan={4} align='center'>
+                <TableCell colSpan={9} align='center'>
                   <CircularProgress />
                 </TableCell>
               </TableRow>
@@ -345,16 +349,16 @@ const AddQuality = () => {
                             data?.status === 'pending'
                               ? 'grey'
                               : data?.status === 'running'
-                              ? 'green'
-                              : data?.status === 'pause'
-                              ? 'orange'
-                              : data?.status === 'downtime'
-                              ? 'red'
-                              : data?.status === 'make-time'
-                              ? 'blue'
-                              : data?.status === 'completed'
-                              ? 'blue'
-                              : 'default',
+                                ? 'green'
+                                : data?.status === 'pause'
+                                  ? 'orange'
+                                  : data?.status === 'downtime'
+                                    ? 'red'
+                                    : data?.status === 'make-time'
+                                      ? 'blue'
+                                      : data?.status === 'completed'
+                                        ? 'blue'
+                                        : 'default',
                           color: '#fff',
                           fontWeight: 'bold'
                         }}
@@ -364,7 +368,7 @@ const AddQuality = () => {
                   <TableCell component='th' scope='row'>
                     <NextLink
                       href={{
-                        pathname: '/quality-control/printing',
+                        pathname: '/quality-control/food',
 
                         query: { jobId: data._id }
                       }}
@@ -443,4 +447,4 @@ const AddQuality = () => {
   )
 }
 
-export default AddQuality
+export default Food;

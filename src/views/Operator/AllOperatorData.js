@@ -249,7 +249,7 @@ const AllOperatorData = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} align='center'>
+                <TableCell colSpan={11} align='center'>
                   No Production List Found
                 </TableCell>
               </TableRow>

@@ -62,7 +62,7 @@ const AllQuality = () => {
       toast.error(error.response.data.msg)
     }
   }
-  console.log('jobs', jobs)
+
   const getAllJobs = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/ap/admin/get/jobs`, {
@@ -97,7 +97,6 @@ const AllQuality = () => {
   const paginatedJob = PaginationHelper(filteredJob, page, rowsPerPage)
   const totalCount = filteredJob.length
 
-  console.log('paginatedJob', paginatedJob)
 
   return (
     <>

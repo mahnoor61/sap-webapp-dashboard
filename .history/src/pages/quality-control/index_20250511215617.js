@@ -13,7 +13,7 @@ import UserLayout from '../../layouts/UserLayout'
 import ArticleIcon from '@mui/icons-material/Article'
 import Head from 'next/head'
 import AllQuality from 'src/views/Quality Control/AllQuality'
-import AddQuality from 'src/views/Quality Control/AddQuality'
+import AddQuality from 'src/views/Quality Control/Printing'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {

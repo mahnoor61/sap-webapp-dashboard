@@ -1,5 +1,5 @@
-import React, { forwardRef, useContext, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/router'
+import React, {forwardRef, useContext, useEffect, useRef, useState} from 'react'
+import {useRouter} from 'next/router'
 import {
   CardContent,
   Card,
@@ -31,10 +31,10 @@ import {
   IconButton,
   Icon
 } from '@mui/material/'
-import { useTheme } from '@mui/material/styles'
+import {useTheme} from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useSelector } from 'react-redux'
-import { useFormik } from 'formik'
+import {useSelector} from 'react-redux'
+import {useFormik} from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -44,7 +44,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
-import { FilterHelper, PaginationHelper } from '/src/helpers/filter'
+import {FilterHelper, PaginationHelper} from '/src/helpers/filter'
 import SearchIcon from '@mui/icons-material/Search'
 import DoneIcon from '@mui/icons-material/Done'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -52,7 +52,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 const WEB_URL = process.env.NEXT_PUBLIC_WEB_URL
 
-const Printing = () => {
+const Pasting = () => {
   const theme = useTheme()
   const serialRef = useRef(1)
   const [users, setUsers] = useState([])
@@ -70,10 +70,6 @@ const Printing = () => {
   const [selections, setSelections] = useState({})
   const [showSubmit, setShowSubmit] = useState(true)
 
-  // const [rowIndex, colIndex] = activeCell.split('_');
-  // const serialNo = rows[rowIndex]?.serial;
-  // const header = questions[colIndex];
-
   const [shift, setShift] = useState('A')
   const [response, setResponse] = useState('Okay')
   const [loadingComplete, setLoadingComplete] = useState(true)
@@ -83,9 +79,9 @@ const Printing = () => {
   // const [open, setOpen] = React.useState(false)
 
   const router = useRouter()
-  const { jobId } = router.query
+  const {jobId} = router.query
   const [userData, setUserData] = useState('')
-  const { id } = router.query
+  const {id} = router.query
   const auth = useSelector(state => state.auth)
   const token = auth?.token
   const userId = auth?.user?._id
@@ -112,12 +108,12 @@ const Printing = () => {
 
   const getData = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/ap/qc/get/data/${id}`, {
-        headers: { 'x-access-token': token }
+      const res = await axios.get(`${BASE_URL}/api/ap/qc/get/data/pasting/${id}`, {
+        headers: {'x-access-token': token}
       })
       setUserData(res.data.data)
     } catch (error) {
-      console.log('error in get data through id in printing', error.response)
+      console.log('error in get data through id in pasting', error.response)
     }
   }
 
@@ -167,30 +163,31 @@ const Printing = () => {
     // '#',
     'Time',
     'Quantity',
-    'text',
-    'color Variation',
-    'doubling',
-    'dust',
-    'set Off',
-    'scumming',
-    'side Lay',
-    'front Lay',
-    'registration',
-    'd/m/sFromPlate'
+    'Folding',
+    'Gluing',
+    'Formation',
+    'Taping',
+    'Labeling',
+    'Quantity',
+    'MctnPacking',
+    'Stacking',
+    'DDabi',
+    'StuckIn',
+    'Lock'
   ]
 
-  const rows = [{ id: 1, serial: 1 }]
+  const rows = [{id: 1, serial: 1}]
 
   const handleCellClick = rowIndex => {
     setEditingCell(rowIndex)
   }
 
   const handleSelectChange = (rowIndex, value) => {
-    setSelections(prev => ({ ...prev, [rowIndex]: value }))
+    setSelections(prev => ({...prev, [rowIndex]: value}))
     setEditingCell(null) // Hide dropdown after selection
   }
   useEffect(() => {
-    const savedResponses = localStorage.getItem('printing_responses')
+    const savedResponses = localStorage.getItem('pasting_responses')
     if (savedResponses) {
       const parsed = JSON.parse(savedResponses)
       setResponses(parsed)
@@ -210,14 +207,14 @@ const Printing = () => {
 
   useEffect(() => {
     if (responses && Object.keys(responses).length > 0) {
-      localStorage.setItem('printing_responses', JSON.stringify(responses))
+      localStorage.setItem('pasting_responses', JSON.stringify(responses))
     }
   }, [responses])
 
   const formatResponseValue = responseObj => {
     // if (!responseObj) return { answer: '', reason: '', serialNo: '' }
 
-    if (!responseObj) return { answer: '', reason: '' }
+    if (!responseObj) return {answer: '', reason: ''}
 
     return {
       answer: responseObj.answer,
@@ -229,16 +226,17 @@ const Printing = () => {
 
   const handleSubmit = async () => {
     const requiredFields = [
-      'd/m/sFromPlate',
-      'text',
-      'dust',
-      'side Lay',
-      'front Lay',
-      'registration',
-      'scumming',
-      'set Off',
-      'doubling',
-      'color Variation'
+      'Folding',
+      'Gluing',
+      'Formation',
+      'Taping',
+      'Labeling',
+      'Quantity',
+      'MctnPacking',
+      'Stacking',
+      'DDabi',
+      'StuckIn',
+      'Lock'
     ]
 
     // Check if all required fields are filled
@@ -251,27 +249,29 @@ const Printing = () => {
     }
 
     try {
+
       const dataToSend = {
         qcNo: `UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`,
         shift: shift,
         date: formattedDate,
-        dmsFromPlate: formatResponseValue(responses['d/m/sFromPlate']),
-        text: formatResponseValue(responses['text']),
-        dust: formatResponseValue(responses['dust']),
-        sideLay: formatResponseValue(responses['side Lay']),
-        frontLay: formatResponseValue(responses['front Lay']),
-        registration: formatResponseValue(responses['registration']),
-        scumming: formatResponseValue(responses['scumming']),
-        setOff: formatResponseValue(responses['set Off']),
-        doubling: formatResponseValue(responses['doubling']),
-        colorVariation: formatResponseValue(responses['color Variation'])
+        folding: formatResponseValue(responses['Folding']),
+        gluing: formatResponseValue(responses['Gluing']),
+        formation: formatResponseValue(responses['Formation']),
+        taping: formatResponseValue(responses['Taping']),
+        labeling: formatResponseValue(responses['Labeling']),
+        quantity: formatResponseValue(responses['Quantity']),
+        mctnPacking: formatResponseValue(responses['MctnPacking']),
+        stacking: formatResponseValue(responses['Stacking']),
+        dDabi: formatResponseValue(responses['DDabi']),
+        stuckIn: formatResponseValue(responses['StuckIn']),
+        lock: formatResponseValue(responses['Lock'])
       }
 
-      const res = await axios.post(`${BASE_URL}/api/ap/qc/printing/${id}`, dataToSend, {
-        headers: { 'x-access-token': token }
+      const res = await axios.post(`${BASE_URL}/api/ap/qc/pasting/${id}`, dataToSend, {
+        headers: {'x-access-token': token}
       })
 
-      toast.success('Printing form submitted successfully')
+      toast.success('Laminating form submitted successfully')
       setIsSubmitted(true)
 
       await getAllQcCurrentTableData()
@@ -282,9 +282,9 @@ const Printing = () => {
       setReason('')
       setOpen(false)
       setShowSubmit(false) // 👇 button ko hide karne ke liye
-      localStorage.removeItem('printing_responses')
+      localStorage.removeItem('pasting_responses')
     } catch (err) {
-      console.error('Submission printing failed', err)
+      console.error('Submission die failed', err)
     }
   }
 
@@ -305,7 +305,7 @@ const Printing = () => {
     const getAllQCList = async () => {
       try {
         const response = await axios.post(
-          `${BASE_URL}/api/ap/qc/get/qc-data`,
+          `${BASE_URL}/api/ap/qc/get/qc-data/pasting`,
           {
             // jobId: userData?.jobId?._id,
 
@@ -333,7 +333,7 @@ const Printing = () => {
   const getAllQcCurrentTableData = async () => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/ap/qc/get/qc-data`,
+        `${BASE_URL}/api/ap/qc/get/qc-data/pasting`,
         {
           jobId: userData?.jobId?._id
 
@@ -369,7 +369,7 @@ const Printing = () => {
   }, [jobId])
 
   function printReceipt() {
-    const printContents = document.getElementById('receipt')?.innerHTML
+    const printContents = document.getElementById('receipt-pasting')?.innerHTML
     if (!printContents) return
 
     const styles = `
@@ -452,12 +452,12 @@ const Printing = () => {
           overflowX: 'auto'
         }}
       >
-        <CardContent sx={{ width: '100%' }}>
-          <Grid container sx={{ mt: 5, width: '100%' }}>
+        <CardContent sx={{width: '100%'}}>
+          <Grid container sx={{mt: 5, width: '100%'}}>
             <Grid item lg={12}>
               {/* <Paper sx={{ padding: 2, width: '100%', overflowX: 'auto' }}> */}
               {/* Top Form Section */}
-              <Grid container spacing={2} mb={2} sx={{ width: '100%', overflowX: 'auto' }}>
+              <Grid container spacing={2} mb={2} sx={{width: '100%', overflowX: 'auto'}}>
                 {/* <Button variant='contained'>Print</Button> */}
                 <Box
                   sx={{
@@ -472,8 +472,8 @@ const Printing = () => {
                     borderRadius: '10px'
                   }}
                 >
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Typography variant='subtitle2' sx={{ fontWeight: '900' }}>
+                  <Box sx={{display: 'flex', gap: 2}}>
+                    <Typography variant='subtitle2' sx={{fontWeight: '900'}}>
                       Document Code:
                     </Typography>
                     <Typography>{userData?.jobId?.productionOrderNo}</Typography>
@@ -481,8 +481,8 @@ const Printing = () => {
 
                   <Typography variant='subtitle2'>UBC/QC/SOR - {userData?.jobId?.productionOrderNo}</Typography>
 
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Typography variant='subtitle2' sx={{ fontWeight: '900' }}>
+                  <Box sx={{display: 'flex', gap: 2}}>
+                    <Typography variant='subtitle2' sx={{fontWeight: '900'}}>
                       Issue Date:
                     </Typography>
                     <Typography>{formattedDate}</Typography>
@@ -490,11 +490,11 @@ const Printing = () => {
                 </Box>
               </Grid>
               {/* <Box sx={{}}> */}
-              <TableContainer component={Paper} sx={{ width: '100%' }}>
-                <Table aria-label='simple table' sx={{ width: '100%' }}>
-                  <TableHead sx={{ width: '100%' }}>
-                    <TableRow sx={{ width: '100%' }}>
-                      <TableCell sx={{ width: '100%', p: '0 !important' }} colSpan={13}>
+              <TableContainer component={Paper} sx={{width: '100%'}}>
+                <Table aria-label='simple table' sx={{width: '100%'}}>
+                  <TableHead sx={{width: '100%'}}>
+                    <TableRow sx={{width: '100%'}}>
+                      <TableCell sx={{width: '100%', p: '0 !important'}} colSpan={13}>
                         <Box
                           sx={{
                             mt: 3,
@@ -513,14 +513,14 @@ const Printing = () => {
                               label='Machine'
                               value={userData?.machine?.code}
                               size='small'
-                              InputLabelProps={{ shrink: true }}
+                              InputLabelProps={{shrink: true}}
                             />
                           </Grid>
                           <Grid item xs={12} lg={3}>
                             <TextField
                               fullWidth
                               label='Operator Name'
-                              InputLabelProps={{ shrink: true }}
+                              InputLabelProps={{shrink: true}}
                               value={userData?.userData?.userName}
                               size='small'
                             />
@@ -539,7 +539,7 @@ const Printing = () => {
                             </TextField>
                           </Grid>
                           <Grid item xs={6} lg={4}>
-                            <TextField fullWidth label='Date' value={formattedDate} size='small' />
+                            <TextField fullWidth label='Date' value={formattedDate} size='small'/>
                           </Grid>
                         </Box>
                         <Box
@@ -559,7 +559,7 @@ const Printing = () => {
                                 <TextField
                                   fullWidth
                                   label='Job Card No'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.docNum}
                                   size='small'
                                 />
@@ -568,7 +568,7 @@ const Printing = () => {
                                 <TextField
                                   fullWidth
                                   label='Job Name'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.prodName}
                                   size='small'
                                 />
@@ -577,7 +577,7 @@ const Printing = () => {
                                 <TextField
                                   fullWidth
                                   label='Sales Order Nbr'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.OriginNum}
                                   size='small'
                                 />
@@ -586,7 +586,7 @@ const Printing = () => {
                                 <TextField
                                   fullWidth
                                   label='Sheet Name'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.ComponentItemName}
                                   size='small'
                                 />
@@ -596,7 +596,7 @@ const Printing = () => {
                                 <TextField
                                   fullWidth
                                   label='Received Quantity'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobId?.recievedByOperator}
                                   size='small'
                                 />
@@ -605,7 +605,7 @@ const Printing = () => {
                                 <TextField
                                   fullWidth
                                   label='Completed Quantity'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobId?.totalCompletedQuantity}
                                   size='small'
                                 />
@@ -641,9 +641,9 @@ const Printing = () => {
                     }}
                   >
                     {userData?.time && userData?.makeTimeStatus ? (
-                      <TableRow sx={{ width: '100%' }}>
+                      <TableRow sx={{width: '100%'}}>
                         <TableCell>{new Date(userData.time).toLocaleTimeString()}</TableCell>
-                        <TableCell colSpan={11} sx={{ width: '100%' }}>
+                        <TableCell colSpan={12} sx={{width: '100%'}}>
                           <Box
                             sx={{
                               width: '100%',
@@ -682,11 +682,11 @@ const Printing = () => {
                             >
                               {editingCell === cellKey && !isSubmitted ? (
                                 <Select
-                                  sx={{ width: '100px', maxWidth: '100%' }}
+                                  sx={{width: '100px', maxWidth: '100%'}}
                                   value={selections[cellKey] || ''}
                                   onChange={e => {
                                     const value = e.target.value
-                                    setSelections(prev => ({ ...prev, [cellKey]: value }))
+                                    setSelections(prev => ({...prev, [cellKey]: value}))
                                     if (value === 'Not Okay') {
                                       setActiveCell(cellKey)
                                       setOpen(true)
@@ -707,14 +707,12 @@ const Printing = () => {
                                 >
                                   <MenuItem value='Okay'>Okay</MenuItem>
                                   <MenuItem value='Not Okay'>Not Okay</MenuItem>
-                                  {question === 'd/m/sFromPlate' && <MenuItem value='N/A'>N/A</MenuItem>}
+                                  {/*{question === 'd/m/sFromPlate' && <MenuItem value='N/A'>N/A</MenuItem>}*/}
                                 </Select>
                               ) : selections[cellKey] === 'Okay' ? (
-                                <DoneIcon sx={{ color: 'green !important' }} />
+                                <DoneIcon sx={{color: 'green !important'}}/>
                               ) : selections[cellKey] === 'Not Okay' ? (
-                                <ClearIcon sx={{ color: 'red !important' }} />
-                              ) : selections[cellKey] === 'N/A' ? (
-                                <DoNotDisturbOnIcon sx={{ color: 'red !important' }} />
+                                <ClearIcon sx={{color: 'red !important'}}/>
                               ) : (
                                 ''
                               )}
@@ -728,7 +726,7 @@ const Printing = () => {
               </TableContainer>
 
               {showSubmit && !userData?.makeTimeStatus && (
-                <Grid item xs={12} sx={{ display: jobId ? 'none' : 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
+                <Grid item xs={12} sx={{display: jobId ? 'none' : 'flex', justifyContent: 'flex-end', mt: 3, mb: 3}}>
                   <Button
                     onClick={() => {
                       // setResponses({})
@@ -741,7 +739,7 @@ const Printing = () => {
                     variant='contained'
                     sx={{
                       backgroundColor: '#0563BB',
-                      '&:hover': { backgroundColor: '#0AA4D2 !important' }
+                      '&:hover': {backgroundColor: '#0AA4D2 !important'}
                     }}
                   >
                     Submit
@@ -759,10 +757,10 @@ const Printing = () => {
                   // borderRadius='10px'
                   // bgcolor='#f9f9f9' color='black'
                 >
-                  <Typography variant='h6' gutterBottom sx={{ fontWeight: 'bold' }}>
+                  <Typography variant='h6' gutterBottom sx={{fontWeight: 'bold'}}>
                     Issues (Not Okay)
                   </Typography>
-                  <ul style={{ paddingLeft: '20px' }}>
+                  <ul style={{paddingLeft: '20px'}}>
                     {Object.entries(responses)
                       .filter(([_, value]) => value.answer === 'Not Okay')
                       .map(([key, value], index) => (
@@ -779,13 +777,13 @@ const Printing = () => {
         </CardContent>
       </Card>
 
-      <TableContainer component={Paper} sx={{ mt: 20 }}>
-        <Table aria-label='simple table' sx={{ width: '100%' }}>
-          <TableHead sx={{ width: '100%' }}>
-            <TableRow sx={{ width: '100%' }}>
-              <TableCell sx={{ width: '100%' }} colSpan={13}>
+      <TableContainer component={Paper} sx={{mt: 20}}>
+        <Table aria-label='simple table' sx={{width: '100%'}}>
+          <TableHead sx={{width: '100%'}}>
+            <TableRow sx={{width: '100%'}}>
+              <TableCell sx={{width: '100%'}} colSpan={14}>
                 <Box
-                  colspan={12}
+                  colspan={14}
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -800,11 +798,11 @@ const Printing = () => {
                     variant='h4'
                     sx={{
                       flex: 1,
-                      textAlign: { md: 'center', xs: 'left' },
+                      textAlign: {md: 'center', xs: 'left'},
                       fontWeight: 'bold'
                     }}
                   >
-                    All Printing Data
+                    All Pasting Data
                   </Typography>
 
                   <Button
@@ -814,7 +812,7 @@ const Printing = () => {
                       mr: 2,
                       backgroundColor: '#0563BB',
                       color: 'white',
-                      '&:hover': { backgroundColor: '#0AA4D2 !important' }
+                      '&:hover': {backgroundColor: '#0AA4D2 !important'}
                     }}
                   >
                     Print
@@ -822,27 +820,28 @@ const Printing = () => {
                 </Box>
               </TableCell>
             </TableRow>
-            <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
+            <TableRow sx={{justifyContent: 'space-between', alignItems: 'left', width: '100%'}}>
               <TableCell>#</TableCell>
               <TableCell>Time</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Text</TableCell>
-              <TableCell>color Variation</TableCell>
-              <TableCell>Doubling</TableCell>
-              <TableCell>Dust</TableCell>
-              <TableCell>Set Off</TableCell>
-              <TableCell>Scumming</TableCell>
-              <TableCell>Side Lay</TableCell>
-              <TableCell>Front Lay</TableCell>
-              <TableCell>Registration</TableCell>
-              <TableCell>d/m/sFromPlate</TableCell>
+              <TableCell sx={{width: '5%'}}>Quantity</TableCell>
+              <TableCell sx={{width: '5%'}}>Folding</TableCell>
+              <TableCell sx={{width: '5%'}}>Gluing</TableCell>
+              <TableCell sx={{width: '5%'}}>Formation</TableCell>
+              <TableCell sx={{width: '5%'}}>Taping</TableCell>
+              <TableCell sx={{width: '5%'}}>Labeling</TableCell>
+              <TableCell sx={{width: '5%'}}>Quantity</TableCell>
+              <TableCell sx={{width: '5%'}}>MctnPacking</TableCell>
+              <TableCell sx={{width: '5%'}}>Stacking</TableCell>
+              <TableCell sx={{width: '5%'}}>DDabi</TableCell>
+              <TableCell sx={{width: '5%'}}>StuckIn</TableCell>
+              <TableCell sx={{width: '5%'}}>Lock</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ width: '100%' }}>
+          <TableBody sx={{width: '100%'}}>
             {loadingComplete ? (
               <TableRow align='center'>
-                <TableCell colSpan={13} align='center'>
-                  <CircularProgress />
+                <TableCell colSpan={14} align='center'>
+                  <CircularProgress/>
                 </TableCell>
               </TableRow>
             ) : paginatedUsers && paginatedUsers.length > 0 ? (
@@ -852,7 +851,7 @@ const Printing = () => {
                     <TableCell>{page * rowsPerPage + index + 1}</TableCell>
 
                     <TableCell>{new Date(data.time).toLocaleTimeString()}</TableCell>
-                    <TableCell colSpan={13} align='center' sx={{ fontWeight: 'bold' }}>
+                    <TableCell colSpan={14} align='center' sx={{fontWeight: 'bold'}}>
                       {data.makeTimeStatus}
                     </TableCell>
                   </TableRow>
@@ -863,11 +862,10 @@ const Printing = () => {
                     <TableCell>{data.quantity}</TableCell>
                     <TableCell>
                       {/* {data?.formId?.text?.answer} */}
-
-                      {data?.formId?.text?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.text?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.folding?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.folding?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -875,10 +873,10 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.colorVariation?.answer} */}
 
-                      {data?.formId?.colorVariation?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.colorVariation?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.gluing?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.gluing?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -886,19 +884,19 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.doubling?.answer} */}
 
-                      {data?.formId?.doubling?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.doubling?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.formation?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.formation?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
                     </TableCell>
                     <TableCell>
-                      {data?.formId?.dust?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.dust?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.taping?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.taping?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -906,10 +904,10 @@ const Printing = () => {
                       {/* {data?.formId?.dust?.answer} */}
                     </TableCell>
                     <TableCell>
-                      {data?.formId?.setOff?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.setOff?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.labeling?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.labeling?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -919,10 +917,10 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.scumming?.answer} */}
 
-                      {data?.formId?.scumming?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.scumming?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.quantity?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.quantity?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -930,10 +928,10 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.sideLay?.answer} */}
 
-                      {data?.formId?.sideLay?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.sideLay?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.mctnPacking?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.mctnPacking?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -941,10 +939,10 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.frontLay?.answer} */}
 
-                      {data?.formId?.frontLay?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.frontLay?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.stacking?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.stacking?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -952,22 +950,30 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.registration?.answer} */}
 
-                      {data?.formId?.registration?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.registration?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.dDabi?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.dDabi?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
                     </TableCell>
                     <TableCell>
                       {/* {data?.formId?.dmsFromPlate?.answer} */}
-                      {data?.formId?.dmsFromPlate?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.dmsFromPlate?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
-                      ) : data?.formId?.dmsFromPlate?.answer === 'N/A' ? (
-                        <DoNotDisturbOnIcon sx={{ color: 'red !important' }} />
+                      {data?.formId?.stuckIn?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.stuckIn?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
+                      ) : (
+                        ''
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {/* {data?.formId?.dmsFromPlate?.answer} */}
+                      {data?.formId?.lock?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.lock?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -977,7 +983,7 @@ const Printing = () => {
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={13} align='center'>
+                <TableCell colSpan={14} align='center'>
                   No Data Found
                 </TableCell>
               </TableRow>
@@ -997,7 +1003,7 @@ const Printing = () => {
             // backgroundColor: '#f9f9f9'
           }}
         >
-          <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+          <Typography variant='h6' sx={{fontWeight: 'bold', mb: 2}}>
             Not Okay Reasons
           </Typography>
 
@@ -1009,16 +1015,17 @@ const Printing = () => {
               const form = data?.formId || {}
 
               const fields = {
-                text: 'Text',
-                colorVariation: 'Color Variation',
-                doubling: 'Doubling',
-                dust: 'Dust',
-                setOff: 'Set Off',
-                scumming: 'Scumming',
-                sideLay: 'Side Lay',
-                frontLay: 'Front Lay',
-                registration: 'Registration',
-                dmsFromPlate: 'D/M/S from Plate'
+                folding: 'Folding',
+                gluing: 'Gluing',
+                formation: 'Formation',
+                taping: 'Taping',
+                labeling: 'Labeling',
+                quantity: 'Quantity',
+                mctnPacking: 'MctnPacking',
+                stacking: 'Stacking',
+                dDabi: 'DDabi',
+                stuckIn: 'StuckIn',
+                lock: 'Lock'
               }
 
               for (const key in fields) {
@@ -1035,7 +1042,7 @@ const Printing = () => {
             })
 
             .map((item, idx) => (
-              <Typography key={idx} sx={{ fontSize: 14, mb: 0.5 }}>
+              <Typography key={idx} sx={{fontSize: 14, mb: 0.5}}>
                 #{item.number} - <strong>{item.field}</strong>: {item.reason}
               </Typography>
             ))}
@@ -1069,7 +1076,7 @@ const Printing = () => {
                 id='outlined-basic'
                 label='Add Reason'
                 variant='filled'
-                sx={{ my: 4, width: '100%' }}
+                sx={{my: 4, width: '100%'}}
                 placeholder='Add Reason'
                 name='reason'
                 type='text'
@@ -1121,30 +1128,30 @@ const Printing = () => {
 
         // sx={{ '& .MuiDialog-paper': { backgroundColor: '#FDE5D1' } }}
       >
-        <div id='receipt' className='receipt' style={{ width: '100%', overflowX: 'auto' }}>
+        <div id='receipt-pasting' className='receipt-pasting' style={{width: '100%', overflowX: 'auto'}}>
           <DialogTitle>
-            <div style={{ marginBottom: '20px' }}>
-              <table style={{ width: '100%', border: '1px solid #999', borderCollapse: 'collapse' }}>
+            <div style={{marginBottom: '20px'}}>
+              <table style={{width: '100%', border: '1px solid #999', borderCollapse: 'collapse'}}>
                 <tr>
-                  <td colSpan={4} style={{ border: '1px solid #999', fontWeight: 'bold', textAlign: 'center' }}>
+                  <td colSpan={4} style={{border: '1px solid #999', fontWeight: 'bold', textAlign: 'center'}}>
                     QC Report For Printing
                   </td>
-                  <td rowSpan={4} style={{ border: '1px solid #999', textAlign: 'center', width: '200px' }}>
-                    <img src={`${WEB_URL}/white-logo.png`} alt='UBC Logo' width='60' />
-                    <br />
+                  <td rowSpan={4} style={{border: '1px solid #999', textAlign: 'center', width: '200px'}}>
+                    <img src={`${WEB_URL}/white-logo.png`} alt='UBC Logo' width='60'/>
+                    <br/>
 
-                    <div style={{ fontWeight: 'bold', fontSize: '14px' }}>UBC Convertec (Pvt) Ltd.</div>
+                    <div style={{fontWeight: 'bold', fontSize: '14px'}}>UBC Convertec (Pvt) Ltd.</div>
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ border: '1px solid #999', fontWeight: '500' }}>
+                  <td style={{border: '1px solid #999', fontWeight: '500'}}>
                     Document Code : {userData?.jobId?.productionOrderNo}
                   </td>
                   {/* <td style={{ border: '1px solid #999', fontWight: 'bold' }}></td> */}
-                  <td style={{ border: '1px solid #999', fontWeight: '500' }}>
+                  <td style={{border: '1px solid #999', fontWeight: '500'}}>
                     {`UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`}
                   </td>
-                  <td style={{ border: '1px solid #999', fontWeight: 'bold' }}> Issue Date: {formattedDate}</td>
+                  <td style={{border: '1px solid #999', fontWeight: 'bold'}}> Issue Date: {formattedDate}</td>
                 </tr>
               </table>
             </div>
@@ -1153,169 +1160,172 @@ const Printing = () => {
           <DialogContent>
             <div>
               <div>
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '16px' }}>
+                <table style={{width: '100%', borderCollapse: 'collapse', marginBottom: '16px'}}>
                   <tbody>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{shift}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Date:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{formattedDate}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Job Name:</td>
-                      <td colSpan={3} style={{ textAlign: 'center', padding: '6px', border: '1px solid #ccc' }}>
-                        {userData?.jobData?.prodName}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>PRDN. No:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobId?.productionOrderNo}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>S O No:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobData?.OriginNum}</td>
-                    </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Machine:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.machine?.code}</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Operator Name:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.userData?.userName}</td>
+                  </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Shift:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{shift}</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Date:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{formattedDate}</td>
+                  </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Job Name:</td>
+                    <td colSpan={3} style={{textAlign: 'center', padding: '6px', border: '1px solid #ccc'}}>
+                      {userData?.jobData?.prodName}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>PRDN. No:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.jobId?.productionOrderNo}</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>S O No:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.jobData?.OriginNum}</td>
+                  </tr>
                   </tbody>
                 </table>
 
                 {/* Bottom Quality Table */}
                 <table
-                  style={{ width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px' }}
+                  style={{width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px'}}
                 >
-                  <thead style={{ backgroundColor: 'skyblue' }}>
-                    <tr>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '6%' }}>
-                        Sr. No
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Time
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Quantity
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Text
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Color Variation
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Doubling
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Dust
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Set Off
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Scumming
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Side Lay
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
-                        Front Lay
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        registration
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        D/M/S from Plate
-                      </th>
-                    </tr>
+                  <thead style={{backgroundColor: 'skyblue'}}>
+                  <tr>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '6%'}}>
+                      Sr. No
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%'}}>
+                      Time
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%'}}>
+                      Quantity
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Folding
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Gluing
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Formation
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Taping
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Labeling
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Quantity
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      MctnPacking
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Stacking
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      DDabi
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      StuckIn
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Lock
+                    </th>
+                  </tr>
                   </thead>
 
                   <tbody>
-                    {users.map((user, index) => {
-                      if (user.makeTimeStatus) {
-                        return (
-                          <tr key={user._id}>
-                            <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
-                            <td style={{ padding: '6px', border: '1px solid #ccc' }}>
-                              {new Date(user.time).toLocaleTimeString()}
-                            </td>
-                            <td
-                              colSpan={11}
-                              style={{
-                                padding: '6px',
-                                border: '1px solid #ccc',
-                                fontWeight: 'bold',
-
-                                // backgroundColor: '#e6f7ff',
-                                textAlign: 'center'
-                              }}
-                            >
-                              {user.makeTimeStatus}
-                            </td>
-                          </tr>
-                        )
-                      }
-
+                  {users.map((user, index) => {
+                    if (user.makeTimeStatus) {
                       return (
                         <tr key={user._id}>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>
+                          <td style={{padding: '6px', border: '1px solid #ccc'}}>{index + 1}</td>
+                          <td style={{padding: '6px', border: '1px solid #ccc'}}>
                             {new Date(user.time).toLocaleTimeString()}
                           </td>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>{user?.quantity}</td>
+                          <td
+                            colSpan={12}
+                            style={{
+                              padding: '6px',
+                              border: '1px solid #ccc',
+                              fontWeight: 'bold',
 
-                          {[
-                            'text',
-                            'colorVariation',
-                            'doubling',
-                            'dust',
-                            'setOff',
-                            'scumming',
-                            'sideLay',
-                            'frontLay',
-                            'registration',
-                            'dmsFromPlate'
-                          ].map(key => {
-                            const answer = user?.formId?.[key]?.answer
-
-                            return (
-                              <td
-                                key={user._id + key}
-                                style={{ padding: '6px', border: '1px solid #ccc', textAlign: 'center' }}
-                              >
-                                {answer === 'Okay' ? (
-                                  <span style={{ color: 'green' }}>✓</span>
-                                ) : answer === 'Not Okay' ? (
-                                  <span style={{ color: 'red' }}>✗</span>
-                                ) : answer === 'N/A' ? (
-                                  <span style={{ color: 'red' }}>-</span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            )
-                          })}
+                              // backgroundColor: '#e6f7ff',
+                              textAlign: 'center'
+                            }}
+                          >
+                            {user.makeTimeStatus}
+                          </td>
                         </tr>
                       )
-                    })}
+                    }
+
+                    return (
+                      <tr key={user._id}>
+                        <td style={{padding: '6px', border: '1px solid #ccc'}}>{index + 1}</td>
+                        <td style={{padding: '6px', border: '1px solid #ccc'}}>
+                          {new Date(user.time).toLocaleTimeString()}
+                        </td>
+                        <td style={{padding: '6px', border: '1px solid #ccc'}}>{user?.quantity}</td>
+
+                        {[
+                          'folding',
+                          'gluing',
+                          'formation',
+                          'taping',
+                          'labeling',
+                          'quantity',
+                          'mctnPacking',
+                          'stacking',
+                          'dDabi',
+                          'stuckIn',
+                          'lock'
+                        ].map(key => {
+                          const answer = user?.formId?.[key]?.answer
+
+                          return (
+                            <td
+                              key={user._id + key}
+                              style={{padding: '6px', border: '1px solid #ccc', textAlign: 'center'}}
+                            >
+                              {answer === 'Okay' ? (
+                                <span style={{color: 'green'}}>✓</span>
+                              ) : answer === 'Not Okay' ? (
+                                <span style={{color: 'red'}}>✗</span>
+                              ) : (
+                                ''
+                              )}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
                   </tbody>
                 </table>
                 {/* Remarks Box */}
-                <div style={{ border: '2px solid #ccc', padding: '10px', marginTop: '20px' }}>
+                <div style={{border: '2px solid #ccc', padding: '10px', marginTop: '20px'}}>
                   <h3>Remarks</h3>
-                  <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <ul style={{margin: 0, paddingLeft: '20px'}}>
                     {users.map((user, index) => {
                       const fields = [
-                        'text',
-                        'colorVariation',
-                        'doubling',
-                        'dust',
-                        'setOff',
-                        'scumming',
-                        'sideLay',
-                        'frontLay',
-                        'registration',
-                        'dmsFromPlate'
+                        'folding',
+                        'gluing',
+                        'formation',
+                        'taping',
+                        'labeling',
+                        'quantity',
+                        'mctnPacking',
+                        'stacking',
+                        'dDabi',
+                        'stuckIn',
+                        'lock'
                       ]
 
                       return fields.map(field => {
@@ -1352,4 +1362,4 @@ const Printing = () => {
   )
 }
 
-export default Printing
+export default Pasting;

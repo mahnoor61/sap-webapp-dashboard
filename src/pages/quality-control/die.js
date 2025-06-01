@@ -70,10 +70,6 @@ const Printing = () => {
   const [selections, setSelections] = useState({})
   const [showSubmit, setShowSubmit] = useState(true)
 
-  // const [rowIndex, colIndex] = activeCell.split('_');
-  // const serialNo = rows[rowIndex]?.serial;
-  // const header = questions[colIndex];
-
   const [shift, setShift] = useState('A')
   const [response, setResponse] = useState('Okay')
   const [loadingComplete, setLoadingComplete] = useState(true)
@@ -112,7 +108,7 @@ const Printing = () => {
 
   const getData = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/ap/qc/get/data/${id}`, {
+      const res = await axios.get(`${BASE_URL}/api/ap/qc/get/data/die/${id}`, {
         headers: { 'x-access-token': token }
       })
       setUserData(res.data.data)
@@ -167,16 +163,17 @@ const Printing = () => {
     // '#',
     'Time',
     'Quantity',
-    'text',
-    'color Variation',
-    'doubling',
-    'dust',
-    'set Off',
-    'scumming',
+    'Position',
+    'Cutting',
+    'Creasing',
+    'Cracking',
+    'Embossing',
+    'Perforation',
     'side Lay',
     'front Lay',
-    'registration',
-    'd/m/sFromPlate'
+    'make Ready',
+    'Locking',
+    'Foiling'
   ]
 
   const rows = [{ id: 1, serial: 1 }]
@@ -190,7 +187,7 @@ const Printing = () => {
     setEditingCell(null) // Hide dropdown after selection
   }
   useEffect(() => {
-    const savedResponses = localStorage.getItem('printing_responses')
+    const savedResponses = localStorage.getItem('die_responses')
     if (savedResponses) {
       const parsed = JSON.parse(savedResponses)
       setResponses(parsed)
@@ -210,7 +207,7 @@ const Printing = () => {
 
   useEffect(() => {
     if (responses && Object.keys(responses).length > 0) {
-      localStorage.setItem('printing_responses', JSON.stringify(responses))
+      localStorage.setItem('die_responses', JSON.stringify(responses))
     }
   }, [responses])
 
@@ -229,16 +226,17 @@ const Printing = () => {
 
   const handleSubmit = async () => {
     const requiredFields = [
-      'd/m/sFromPlate',
-      'text',
-      'dust',
+      'Position',
+      'Cutting',
+      'Creasing',
+      'Cracking',
+      'Embossing',
+      'Perforation',
       'side Lay',
       'front Lay',
-      'registration',
-      'scumming',
-      'set Off',
-      'doubling',
-      'color Variation'
+      'make Ready',
+      'Locking',
+      'Foiling'
     ]
 
     // Check if all required fields are filled
@@ -251,27 +249,29 @@ const Printing = () => {
     }
 
     try {
+
       const dataToSend = {
         qcNo: `UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`,
         shift: shift,
         date: formattedDate,
-        dmsFromPlate: formatResponseValue(responses['d/m/sFromPlate']),
-        text: formatResponseValue(responses['text']),
-        dust: formatResponseValue(responses['dust']),
+        position: formatResponseValue(responses['Position']),
+        cutting: formatResponseValue(responses['Cutting']),
+        creasing: formatResponseValue(responses['Creasing']),
+        cracking: formatResponseValue(responses['Cracking']),
+        embossing: formatResponseValue(responses['Embossing']),
+        perforation: formatResponseValue(responses['Perforation']),
         sideLay: formatResponseValue(responses['side Lay']),
         frontLay: formatResponseValue(responses['front Lay']),
-        registration: formatResponseValue(responses['registration']),
-        scumming: formatResponseValue(responses['scumming']),
-        setOff: formatResponseValue(responses['set Off']),
-        doubling: formatResponseValue(responses['doubling']),
-        colorVariation: formatResponseValue(responses['color Variation'])
+        makeReady: formatResponseValue(responses['make Ready']),
+        locking: formatResponseValue(responses['Locking']),
+        foiling: formatResponseValue(responses['Foiling'])
       }
 
-      const res = await axios.post(`${BASE_URL}/api/ap/qc/printing/${id}`, dataToSend, {
+      const res = await axios.post(`${BASE_URL}/api/ap/qc/die-cutting/${id}`, dataToSend, {
         headers: { 'x-access-token': token }
       })
 
-      toast.success('Printing form submitted successfully')
+      toast.success('Die cutting form submitted successfully')
       setIsSubmitted(true)
 
       await getAllQcCurrentTableData()
@@ -282,9 +282,9 @@ const Printing = () => {
       setReason('')
       setOpen(false)
       setShowSubmit(false) // 👇 button ko hide karne ke liye
-      localStorage.removeItem('printing_responses')
+      localStorage.removeItem('die_responses')
     } catch (err) {
-      console.error('Submission printing failed', err)
+      console.error('Submission die failed', err)
     }
   }
 
@@ -305,7 +305,7 @@ const Printing = () => {
     const getAllQCList = async () => {
       try {
         const response = await axios.post(
-          `${BASE_URL}/api/ap/qc/get/qc-data`,
+          `${BASE_URL}/api/ap/qc/get/qc-data/die`,
           {
             // jobId: userData?.jobId?._id,
 
@@ -333,7 +333,7 @@ const Printing = () => {
   const getAllQcCurrentTableData = async () => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/ap/qc/get/qc-data`,
+        `${BASE_URL}/api/ap/qc/get/qc-data/die`,
         {
           jobId: userData?.jobId?._id
 
@@ -369,7 +369,7 @@ const Printing = () => {
   }, [jobId])
 
   function printReceipt() {
-    const printContents = document.getElementById('receipt')?.innerHTML
+    const printContents = document.getElementById('receipt-die')?.innerHTML
     if (!printContents) return
 
     const styles = `
@@ -643,7 +643,7 @@ const Printing = () => {
                     {userData?.time && userData?.makeTimeStatus ? (
                       <TableRow sx={{ width: '100%' }}>
                         <TableCell>{new Date(userData.time).toLocaleTimeString()}</TableCell>
-                        <TableCell colSpan={11} sx={{ width: '100%' }}>
+                        <TableCell colSpan={12} sx={{ width: '100%' }}>
                           <Box
                             sx={{
                               width: '100%',
@@ -707,15 +707,13 @@ const Printing = () => {
                                 >
                                   <MenuItem value='Okay'>Okay</MenuItem>
                                   <MenuItem value='Not Okay'>Not Okay</MenuItem>
-                                  {question === 'd/m/sFromPlate' && <MenuItem value='N/A'>N/A</MenuItem>}
+                                  {/*{question === 'd/m/sFromPlate' && <MenuItem value='N/A'>N/A</MenuItem>}*/}
                                 </Select>
                               ) : selections[cellKey] === 'Okay' ? (
                                 <DoneIcon sx={{ color: 'green !important' }} />
                               ) : selections[cellKey] === 'Not Okay' ? (
                                 <ClearIcon sx={{ color: 'red !important' }} />
-                              ) : selections[cellKey] === 'N/A' ? (
-                                <DoNotDisturbOnIcon sx={{ color: 'red !important' }} />
-                              ) : (
+                              ) :  (
                                 ''
                               )}
                             </TableCell>
@@ -783,9 +781,9 @@ const Printing = () => {
         <Table aria-label='simple table' sx={{ width: '100%' }}>
           <TableHead sx={{ width: '100%' }}>
             <TableRow sx={{ width: '100%' }}>
-              <TableCell sx={{ width: '100%' }} colSpan={13}>
+              <TableCell sx={{ width: '100%' }} colSpan={14}>
                 <Box
-                  colspan={12}
+                  colspan={14}
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -804,7 +802,7 @@ const Printing = () => {
                       fontWeight: 'bold'
                     }}
                   >
-                    All Printing Data
+                    All Die Cutting Data
                   </Typography>
 
                   <Button
@@ -826,22 +824,23 @@ const Printing = () => {
               <TableCell>#</TableCell>
               <TableCell>Time</TableCell>
               <TableCell>Quantity</TableCell>
-              <TableCell>Text</TableCell>
-              <TableCell>color Variation</TableCell>
-              <TableCell>Doubling</TableCell>
-              <TableCell>Dust</TableCell>
-              <TableCell>Set Off</TableCell>
-              <TableCell>Scumming</TableCell>
+              <TableCell>Position</TableCell>
+              <TableCell>Cutting</TableCell>
+              <TableCell>Creasing</TableCell>
+              <TableCell>Cracking</TableCell>
+              <TableCell>Embossing</TableCell>
+              <TableCell>Perforation</TableCell>
               <TableCell>Side Lay</TableCell>
               <TableCell>Front Lay</TableCell>
-              <TableCell>Registration</TableCell>
-              <TableCell>d/m/sFromPlate</TableCell>
+              <TableCell>MakeReady</TableCell>
+              <TableCell>Locking</TableCell>
+              <TableCell>Foiling</TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ width: '100%' }}>
             {loadingComplete ? (
               <TableRow align='center'>
-                <TableCell colSpan={13} align='center'>
+                <TableCell colSpan={14} align='center'>
                   <CircularProgress />
                 </TableCell>
               </TableRow>
@@ -852,7 +851,7 @@ const Printing = () => {
                     <TableCell>{page * rowsPerPage + index + 1}</TableCell>
 
                     <TableCell>{new Date(data.time).toLocaleTimeString()}</TableCell>
-                    <TableCell colSpan={13} align='center' sx={{ fontWeight: 'bold' }}>
+                    <TableCell colSpan={14} align='center' sx={{ fontWeight: 'bold' }}>
                       {data.makeTimeStatus}
                     </TableCell>
                   </TableRow>
@@ -864,9 +863,9 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.text?.answer} */}
 
-                      {data?.formId?.text?.answer === 'Okay' ? (
+                      {data?.formId?.position?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.text?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.position?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -875,9 +874,9 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.colorVariation?.answer} */}
 
-                      {data?.formId?.colorVariation?.answer === 'Okay' ? (
+                      {data?.formId?.cutting?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.colorVariation?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.cutting?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -886,18 +885,18 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.doubling?.answer} */}
 
-                      {data?.formId?.doubling?.answer === 'Okay' ? (
+                      {data?.formId?.creasing?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.doubling?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.creasing?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
                       )}
                     </TableCell>
                     <TableCell>
-                      {data?.formId?.dust?.answer === 'Okay' ? (
+                      {data?.formId?.cracking?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.dust?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.cracking?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -906,9 +905,9 @@ const Printing = () => {
                       {/* {data?.formId?.dust?.answer} */}
                     </TableCell>
                     <TableCell>
-                      {data?.formId?.setOff?.answer === 'Okay' ? (
+                      {data?.formId?.embossing?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.setOff?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.embossing?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -919,9 +918,9 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.scumming?.answer} */}
 
-                      {data?.formId?.scumming?.answer === 'Okay' ? (
+                      {data?.formId?.perforation?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.scumming?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.perforation?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -952,9 +951,9 @@ const Printing = () => {
                     <TableCell>
                       {/* {data?.formId?.registration?.answer} */}
 
-                      {data?.formId?.registration?.answer === 'Okay' ? (
+                      {data?.formId?.makeReady?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.registration?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.makeReady?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -962,13 +961,21 @@ const Printing = () => {
                     </TableCell>
                     <TableCell>
                       {/* {data?.formId?.dmsFromPlate?.answer} */}
-                      {data?.formId?.dmsFromPlate?.answer === 'Okay' ? (
+                      {data?.formId?.locking?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.formId?.dmsFromPlate?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.locking?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
-                      ) : data?.formId?.dmsFromPlate?.answer === 'N/A' ? (
-                        <DoNotDisturbOnIcon sx={{ color: 'red !important' }} />
-                      ) : (
+                      )  : (
+                        ''
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {/* {data?.formId?.dmsFromPlate?.answer} */}
+                      {data?.formId?.foiling?.answer === 'Okay' ? (
+                        <DoneIcon sx={{ color: 'green' }} />
+                      ) : data?.formId?.foiling?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{ color: 'red' }} />
+                      )  : (
                         ''
                       )}
                     </TableCell>
@@ -977,7 +984,7 @@ const Printing = () => {
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={13} align='center'>
+                <TableCell colSpan={14} align='center'>
                   No Data Found
                 </TableCell>
               </TableRow>
@@ -1009,16 +1016,17 @@ const Printing = () => {
               const form = data?.formId || {}
 
               const fields = {
-                text: 'Text',
-                colorVariation: 'Color Variation',
-                doubling: 'Doubling',
-                dust: 'Dust',
-                setOff: 'Set Off',
-                scumming: 'Scumming',
+                position: 'Position',
+                cutting: 'Cutting',
+                creasing: 'Creasing',
+                cracking: 'Cracking',
+                embossing: 'Embossing',
+                perforation: 'Perforation',
                 sideLay: 'Side Lay',
                 frontLay: 'Front Lay',
-                registration: 'Registration',
-                dmsFromPlate: 'D/M/S from Plate'
+                makeReady: 'MakeReady',
+                locking: 'Locking',
+                foiling: 'Foiling'
               }
 
               for (const key in fields) {
@@ -1121,7 +1129,7 @@ const Printing = () => {
 
         // sx={{ '& .MuiDialog-paper': { backgroundColor: '#FDE5D1' } }}
       >
-        <div id='receipt' className='receipt' style={{ width: '100%', overflowX: 'auto' }}>
+        <div id='receipt-die' className='receipt-die' style={{ width: '100%', overflowX: 'auto' }}>
           <DialogTitle>
             <div style={{ marginBottom: '20px' }}>
               <table style={{ width: '100%', border: '1px solid #999', borderCollapse: 'collapse' }}>
@@ -1155,30 +1163,30 @@ const Printing = () => {
               <div>
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '16px' }}>
                   <tbody>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{shift}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Date:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{formattedDate}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Job Name:</td>
-                      <td colSpan={3} style={{ textAlign: 'center', padding: '6px', border: '1px solid #ccc' }}>
-                        {userData?.jobData?.prodName}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>PRDN. No:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobId?.productionOrderNo}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>S O No:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobData?.OriginNum}</td>
-                    </tr>
+                  <tr>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>{shift}</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>Date:</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>{formattedDate}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>Job Name:</td>
+                    <td colSpan={3} style={{ textAlign: 'center', padding: '6px', border: '1px solid #ccc' }}>
+                      {userData?.jobData?.prodName}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>PRDN. No:</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobId?.productionOrderNo}</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>S O No:</td>
+                    <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobData?.OriginNum}</td>
+                  </tr>
                   </tbody>
                 </table>
 
@@ -1187,117 +1195,119 @@ const Printing = () => {
                   style={{ width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px' }}
                 >
                   <thead style={{ backgroundColor: 'skyblue' }}>
-                    <tr>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '6%' }}>
-                        Sr. No
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Time
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Quantity
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Text
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Color Variation
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Doubling
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Dust
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Set Off
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Scumming
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Side Lay
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
-                        Front Lay
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        registration
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        D/M/S from Plate
-                      </th>
-                    </tr>
+                  <tr>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '6%' }}>
+                      Sr. No
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      Time
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Quantity
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Position
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Cutting
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Creasing
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Cracking
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Embossing
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Perforation
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      Side Lay
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
+                      Front Lay
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      MakeReady
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      Locking
+                    </th>
+                    <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      Foiling
+                    </th>
+                  </tr>
                   </thead>
 
                   <tbody>
-                    {users.map((user, index) => {
-                      if (user.makeTimeStatus) {
-                        return (
-                          <tr key={user._id}>
-                            <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
-                            <td style={{ padding: '6px', border: '1px solid #ccc' }}>
-                              {new Date(user.time).toLocaleTimeString()}
-                            </td>
-                            <td
-                              colSpan={11}
-                              style={{
-                                padding: '6px',
-                                border: '1px solid #ccc',
-                                fontWeight: 'bold',
-
-                                // backgroundColor: '#e6f7ff',
-                                textAlign: 'center'
-                              }}
-                            >
-                              {user.makeTimeStatus}
-                            </td>
-                          </tr>
-                        )
-                      }
-
+                  {users.map((user, index) => {
+                    if (user.makeTimeStatus) {
                       return (
                         <tr key={user._id}>
                           <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
                           <td style={{ padding: '6px', border: '1px solid #ccc' }}>
                             {new Date(user.time).toLocaleTimeString()}
                           </td>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>{user?.quantity}</td>
+                          <td
+                            colSpan={12}
+                            style={{
+                              padding: '6px',
+                              border: '1px solid #ccc',
+                              fontWeight: 'bold',
 
-                          {[
-                            'text',
-                            'colorVariation',
-                            'doubling',
-                            'dust',
-                            'setOff',
-                            'scumming',
-                            'sideLay',
-                            'frontLay',
-                            'registration',
-                            'dmsFromPlate'
-                          ].map(key => {
-                            const answer = user?.formId?.[key]?.answer
-
-                            return (
-                              <td
-                                key={user._id + key}
-                                style={{ padding: '6px', border: '1px solid #ccc', textAlign: 'center' }}
-                              >
-                                {answer === 'Okay' ? (
-                                  <span style={{ color: 'green' }}>✓</span>
-                                ) : answer === 'Not Okay' ? (
-                                  <span style={{ color: 'red' }}>✗</span>
-                                ) : answer === 'N/A' ? (
-                                  <span style={{ color: 'red' }}>-</span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            )
-                          })}
+                              // backgroundColor: '#e6f7ff',
+                              textAlign: 'center'
+                            }}
+                          >
+                            {user.makeTimeStatus}
+                          </td>
                         </tr>
                       )
-                    })}
+                    }
+
+                    return (
+                      <tr key={user._id}>
+                        <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
+                        <td style={{ padding: '6px', border: '1px solid #ccc' }}>
+                          {new Date(user.time).toLocaleTimeString()}
+                        </td>
+                        <td style={{ padding: '6px', border: '1px solid #ccc' }}>{user?.quantity}</td>
+
+                        {[
+                          'position',
+                          'cutting',
+                          'creasing',
+                          'cracking',
+                          'embossing',
+                          'perforation',
+                          'sideLay',
+                          'frontLay',
+                          'makeReady',
+                          'locking',
+                          'foiling'
+                        ].map(key => {
+                          const answer = user?.formId?.[key]?.answer
+
+                          return (
+                            <td
+                              key={user._id + key}
+                              style={{ padding: '6px', border: '1px solid #ccc', textAlign: 'center' }}
+                            >
+                              {answer === 'Okay' ? (
+                                <span style={{ color: 'green' }}>✓</span>
+                              ) : answer === 'Not Okay' ? (
+                                <span style={{ color: 'red' }}>✗</span>
+                              ) : (
+                                ''
+                              )}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
                   </tbody>
                 </table>
                 {/* Remarks Box */}
@@ -1306,16 +1316,17 @@ const Printing = () => {
                   <ul style={{ margin: 0, paddingLeft: '20px' }}>
                     {users.map((user, index) => {
                       const fields = [
-                        'text',
-                        'colorVariation',
-                        'doubling',
-                        'dust',
-                        'setOff',
-                        'scumming',
+                        'position',
+                        'cutting',
+                        'creasing',
+                        'cracking',
+                        'embossing',
+                        'perforation',
                         'sideLay',
                         'frontLay',
-                        'registration',
-                        'dmsFromPlate'
+                        'makeReady',
+                        'locking',
+                        'foiling'
                       ]
 
                       return fields.map(field => {
