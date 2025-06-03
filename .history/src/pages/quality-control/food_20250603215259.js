@@ -1274,54 +1274,32 @@ const Food = () => {
                 >
                   <thead style={{ backgroundColor: 'skyblue', width: '100%' }}>
                     <tr>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
-                        Sr. No
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Sr. No</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
                         Time
                       </th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Quantity</th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Quantity
+                        PrintingSpots
                       </th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Printing
-                        <br />
-                        Spots
+                        CcWrongCutting
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Cc Wrong
-                        <br />
-                        Cutting
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
                         EmbossOut
                       </th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Lamination
-                        <br />
-                        Wrinkle
+                        Lamination Wrinkle
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Bubble
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Files
-                      </th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Bubble</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Files</th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Color
-                        <br />
-                        Variation
+                        ColorVariation
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Foiling
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        OkQty
-                      </th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Foiling</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>OkQty</th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Total
-                        <br />
-                        Waste
+                        Total Waste
                       </th>
                     </tr>
                   </thead>

@@ -1274,55 +1274,21 @@ const Food = () => {
                 >
                   <thead style={{ backgroundColor: 'skyblue', width: '100%' }}>
                     <tr>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
-                        Sr. No
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Sr. No</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Time</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Quantity</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>PrintingSpots</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>CcWrongCutting</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>EmbossOut</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
+                        Lamination Wrinkle
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Time
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Quantity
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Printing
-                        <br />
-                        Spots
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Cc Wrong
-                        <br />
-                        Cutting
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        EmbossOut
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Lamination
-                        <br />
-                        Wrinkle
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Bubble
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Files
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Color
-                        <br />
-                        Variation
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Foiling
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        OkQty
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Total
-                        <br />
-                        Waste
-                      </th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Bubble</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Files</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>ColorVariation</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Foiling</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>OkQty</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Total Waste</th>
                     </tr>
                   </thead>
 
@@ -1331,7 +1297,7 @@ const Food = () => {
                       if (user.makeTimeStatus) {
                         return (
                           <tr key={user._id}>
-                            <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
+                            <td style={{ padding: '10px', border: '1px solid #ccc' }}>{index + 1}</td>
                             <td style={{ padding: '6px', border: '1px solid #ccc' }}>
                               {new Date(user.time).toLocaleTimeString()}
                             </td>

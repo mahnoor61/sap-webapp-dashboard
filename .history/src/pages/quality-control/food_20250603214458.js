@@ -1091,7 +1091,7 @@ const Food = () => {
               if (data.makeTimeStatus) return []
 
               const failedFields = []
-              const form = data || {}
+              const form = data?.formId || {}
 
               const fields = {
                 printingSpots: 'PrintingSpots',
@@ -1272,53 +1272,23 @@ const Food = () => {
                 <table
                   style={{ width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px' }}
                 >
-                  <thead style={{ backgroundColor: 'skyblue', width: '100%' }}>
+                  <thead style={{ backgroundColor: 'skyblue' }}>
                     <tr>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
-                        Sr. No
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Sr. No</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Time</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Quantity</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>PrintingSpots</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>CcWrongCutting</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>EmbossOut</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
+                        Lamination Wrinkle
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Time
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Quantity
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Printing
-                        <br />
-                        Spots
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Cc Wrong
-                        <br />
-                        Cutting
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        EmbossOut
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Lamination
-                        <br />
-                        Wrinkle
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Bubble
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Files
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Color
-                        <br />
-                        Variation
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Foiling
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        OkQty
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Bubble</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Files</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>ColorVariation</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>Foiling</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>OkQty</th>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
                         Total
                         <br />
                         Waste
@@ -1452,8 +1422,8 @@ const Food = () => {
                       ]
 
                       return fields.map(field => {
-                        const answer = user?.[field]?.answer
-                        const reason = user?.[field]?.reason
+                        const answer = user?.formId?.[field]?.answer
+                        const reason = user?.formId?.[field]?.reason
 
                         if (answer === 'Not Okay') {
                           return (

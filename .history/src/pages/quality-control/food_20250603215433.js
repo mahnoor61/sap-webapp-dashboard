@@ -1294,7 +1294,9 @@ const Food = () => {
                         Cutting
                       </th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        EmbossOut
+                        Emboss
+                        <br />
+                        Out
                       </th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
                         Lamination

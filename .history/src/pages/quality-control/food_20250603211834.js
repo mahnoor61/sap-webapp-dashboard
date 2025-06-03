@@ -254,7 +254,6 @@ const Food = () => {
 
     if (isNaN(okQty) || isNaN(totalWaste)) {
       toast.error('OkQty and TotalWaste must be valid numbers.')
-
       return
     }
 
@@ -308,8 +307,6 @@ const Food = () => {
   const filteredUsers = FilterHelper(users, searchQuery, ['userName'])
   const paginatedUsers = PaginationHelper(filteredUsers, page, rowsPerPage)
   const totalCount = filteredUsers.length
-
-  console.log('users', users)
 
   if (jobId) {
     const getAllQCList = async () => {
@@ -635,16 +632,7 @@ const Food = () => {
                         }}
                       >
                         {questions.map((question, questionIndex) => (
-                          <TableCell
-                            key={question}
-                            sx={{
-                              whiteSpace: 'normal',
-                              wordBreak: 'break-word',
-                              maxWidth: 120, // Adjust as needed
-                              fontSize: '0.8rem',
-                              textAlign: 'center'
-                            }}
-                          >
+                          <TableCell key={question}>
                             {question} {/* Or use a more user-friendly label here */}
                           </TableCell>
                         ))}
@@ -912,22 +900,10 @@ const Food = () => {
               <TableCell>#</TableCell>
               <TableCell>Time</TableCell>
               <TableCell>Quantity</TableCell>
-              <TableCell>
-                Printing
-                <br />
-                Spots
-              </TableCell>
-              <TableCell>
-                CcWrong
-                <br />
-                Cutting
-              </TableCell>
+              <TableCell>PrintingSpots</TableCell>
+              <TableCell>CcWrongCutting</TableCell>
               <TableCell>EmbossOut</TableCell>
-              <TableCell>
-                Lamination
-                <br />
-                Wrinkle
-              </TableCell>
+              <TableCell>LaminationWrinkle</TableCell>
               <TableCell>Bubble</TableCell>
               <TableCell>Files</TableCell>
               <TableCell>ColorVariation</TableCell>
@@ -961,9 +937,9 @@ const Food = () => {
                     <TableCell>{data.quantity}</TableCell>
                     <TableCell>
                       {/* {data?.formId?.text?.answer} */}
-                      {data?.printingSpots?.answer === 'Okay' ? (
+                      {data?.formId?.printingSpots?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.printingSpots?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.printingSpots?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -972,9 +948,9 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.colorVariation?.answer} */}
 
-                      {data?.ccWrongCutting?.answer === 'Okay' ? (
+                      {data?.formId?.ccWrongCutting?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.ccWrongCutting?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.ccWrongCutting?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -983,18 +959,18 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.doubling?.answer} */}
 
-                      {data?.embossOut?.answer === 'Okay' ? (
+                      {data?.formId?.embossOut?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.embossOut?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.embossOut?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
                       )}
                     </TableCell>
                     <TableCell>
-                      {data?.laminationWrinkle?.answer === 'Okay' ? (
+                      {data?.formId?.laminationWrinkle?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.laminationWrinkle?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.laminationWrinkle?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -1003,9 +979,9 @@ const Food = () => {
                       {/* {data?.formId?.dust?.answer} */}
                     </TableCell>
                     <TableCell>
-                      {data?.bubble?.answer === 'Okay' ? (
+                      {data?.formId?.bubble?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.bubble?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.bubble?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -1016,9 +992,9 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.scumming?.answer} */}
 
-                      {data?.files?.answer === 'Okay' ? (
+                      {data?.formId?.files?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.files?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.files?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -1028,9 +1004,9 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.sideLay?.answer} */}
 
-                      {data?.colorVariation?.answer === 'Okay' ? (
+                      {data?.formId?.colorVariation?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.colorVariation?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.colorVariation?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -1039,9 +1015,9 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.frontLay?.answer} */}
 
-                      {data?.foiling?.answer === 'Okay' ? (
+                      {data?.formId?.foiling?.answer === 'Okay' ? (
                         <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.foiling?.answer === 'Not Okay' ? (
+                      ) : data?.formId?.foiling?.answer === 'Not Okay' ? (
                         <ClearIcon sx={{ color: 'red' }} />
                       ) : (
                         ''
@@ -1051,11 +1027,11 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.registration?.answer} */}
 
-                      {data?.okQty}
+                      {data?.formId?.okQty}
                     </TableCell>
                     <TableCell>
                       {/* {data?.formId?.dmsFromPlate?.answer} */}
-                      {data?.totalWaste}
+                      {data?.formId?.totalWaste}
                     </TableCell>
                   </TableRow>
                 )
@@ -1091,7 +1067,7 @@ const Food = () => {
               if (data.makeTimeStatus) return []
 
               const failedFields = []
-              const form = data || {}
+              const form = data?.formId || {}
 
               const fields = {
                 printingSpots: 'PrintingSpots',
@@ -1272,53 +1248,47 @@ const Food = () => {
                 <table
                   style={{ width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px' }}
                 >
-                  <thead style={{ backgroundColor: 'skyblue', width: '100%' }}>
+                  <thead style={{ backgroundColor: 'skyblue' }}>
                     <tr>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '6%' }}>
                         Sr. No
                       </th>
                       <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
                         Time
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
                         Quantity
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Printing
-                        <br />
-                        Spots
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
+                        PrintingSpots
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Cc Wrong
-                        <br />
-                        Cutting
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
+                        CcWrongCutting
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold'}}>
                         EmbossOut
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold' }}>
                         Lamination
                         <br />
                         Wrinkle
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
                         Bubble
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
                         Files
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Color
-                        <br />
-                        Variation
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
+                        ColorVariation
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
                         Foiling
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
                         OkQty
                       </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
+                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
                         Total
                         <br />
                         Waste
@@ -1359,6 +1329,7 @@ const Food = () => {
                             {new Date(user.time).toLocaleTimeString()}
                           </td>
                           <td style={{ padding: '6px', border: '1px solid #ccc' }}>{user?.quantity}</td>
+
                           {[
                             'printingSpots',
                             'ccWrongCutting',
@@ -1371,47 +1342,7 @@ const Food = () => {
                             'okQty',
                             'totalWaste'
                           ].map(key => {
-                            const isNumericField = key === 'okQty' || key === 'totalWaste'
-                            const answer = isNumericField ? user?.[key] : user?.[key]?.answer
-
-                            return (
-                              <td
-                                key={user._id + key}
-                                style={{
-                                  padding: '6px',
-                                  border: '1px solid #ccc',
-                                  textAlign: 'center',
-                                  whiteSpace: 'normal',
-                                  wordBreak: 'break-word',
-                                  maxWidth: '80px'
-                                }}
-                              >
-                                {isNumericField ? (
-                                  answer ?? ''
-                                ) : answer === 'Okay' ? (
-                                  <span style={{ color: 'green' }}>✓</span>
-                                ) : answer === 'Not Okay' ? (
-                                  <span style={{ color: 'red' }}>✗</span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            )
-                          })}
-
-                          {/* {[
-                            'printingSpots',
-                            'ccWrongCutting',
-                            'embossOut',
-                            'laminationWrinkle',
-                            'bubble',
-                            'files',
-                            'colorVariation',
-                            'foiling',
-                            'okQty',
-                            'totalWaste'
-                          ].map(key => {
-                            const answer = user?.[key]?.answer
+                            const answer = user?.formId?.[key]?.answer
 
                             return (
                               <td
@@ -1427,7 +1358,7 @@ const Food = () => {
                                 )}
                               </td>
                             )
-                          })} */}
+                          })}
                         </tr>
                       )
                     })}
@@ -1452,8 +1383,8 @@ const Food = () => {
                       ]
 
                       return fields.map(field => {
-                        const answer = user?.[field]?.answer
-                        const reason = user?.[field]?.reason
+                        const answer = user?.formId?.[field]?.answer
+                        const reason = user?.formId?.[field]?.reason
 
                         if (answer === 'Not Okay') {
                           return (

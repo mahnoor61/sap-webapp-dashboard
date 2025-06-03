@@ -1,5 +1,5 @@
-import React, { forwardRef, useContext, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/router'
+import React, {forwardRef, useContext, useEffect, useRef, useState} from 'react'
+import {useRouter} from 'next/router'
 import {
   CardContent,
   Card,
@@ -31,10 +31,10 @@ import {
   IconButton,
   Icon
 } from '@mui/material/'
-import { useTheme } from '@mui/material/styles'
+import {useTheme} from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useSelector } from 'react-redux'
-import { useFormik } from 'formik'
+import {useSelector} from 'react-redux'
+import {useFormik} from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -44,7 +44,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
-import { FilterHelper, PaginationHelper } from '/src/helpers/filter'
+import {FilterHelper, PaginationHelper} from '/src/helpers/filter'
 import SearchIcon from '@mui/icons-material/Search'
 import DoneIcon from '@mui/icons-material/Done'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -76,16 +76,20 @@ const Food = () => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
   const [openDialogue, setOpenDialogue] = useState(false)
 
+
   const [openQtyPopup, setOpenQtyPopup] = useState(false)
   const [activeQtyField, setActiveQtyField] = useState('')
   const [qtyInput, setQtyInput] = useState('')
+  
+
+
 
   // const [open, setOpen] = React.useState(false)
 
   const router = useRouter()
-  const { jobId } = router.query
+  const {jobId} = router.query
   const [userData, setUserData] = useState('')
-  const { id } = router.query
+  const {id} = router.query
   const auth = useSelector(state => state.auth)
   const token = auth?.token
   const userId = auth?.user?._id
@@ -113,7 +117,7 @@ const Food = () => {
   const getData = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/ap/qc/get/data/food/${id}`, {
-        headers: { 'x-access-token': token }
+        headers: {'x-access-token': token}
       })
       setUserData(res.data.data)
     } catch (error) {
@@ -147,6 +151,7 @@ const Food = () => {
     }
   }
 
+
   useEffect(() => {
     getJobData()
   }, [jobId])
@@ -178,14 +183,14 @@ const Food = () => {
     'TotalWaste'
   ]
 
-  const rows = [{ id: 1, serial: 1 }]
+  const rows = [{id: 1, serial: 1}]
 
   const handleCellClick = rowIndex => {
     setEditingCell(rowIndex)
   }
 
   const handleSelectChange = (rowIndex, value) => {
-    setSelections(prev => ({ ...prev, [rowIndex]: value }))
+    setSelections(prev => ({...prev, [rowIndex]: value}))
     setEditingCell(null) // Hide dropdown after selection
   }
   useEffect(() => {
@@ -216,7 +221,7 @@ const Food = () => {
   const formatResponseValue = responseObj => {
     // if (!responseObj) return { answer: '', reason: '', serialNo: '' }
 
-    if (!responseObj) return { answer: '', reason: '' }
+    if (!responseObj) return {answer: '', reason: ''}
 
     return {
       answer: responseObj.answer,
@@ -249,16 +254,8 @@ const Food = () => {
       return
     }
 
-    const okQty = parseInt(responses['OkQty']?.answer)
-    const totalWaste = parseInt(responses['TotalWaste']?.answer)
-
-    if (isNaN(okQty) || isNaN(totalWaste)) {
-      toast.error('OkQty and TotalWaste must be valid numbers.')
-
-      return
-    }
-
     try {
+
       const dataToSend = {
         qcNo: `UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`,
         shift: shift,
@@ -271,12 +268,12 @@ const Food = () => {
         files: formatResponseValue(responses['Files']),
         colorVariation: formatResponseValue(responses['ColorVariation']),
         foiling: formatResponseValue(responses['Foiling']),
-        okQty: parseInt(responses['OkQty']?.answer || '0'),
-        totalWaste: parseInt(responses['TotalWaste']?.answer || '0')
+        okQty: formatResponseValue(responses['OkQty']),
+        TotalWaste: formatResponseValue(responses['TotalWaste'])
       }
 
       const res = await axios.post(`${BASE_URL}/api/ap/qc/food/${id}`, dataToSend, {
-        headers: { 'x-access-token': token }
+        headers: {'x-access-token': token}
       })
 
       toast.success('Reporting For Food form submitted successfully')
@@ -308,8 +305,6 @@ const Food = () => {
   const filteredUsers = FilterHelper(users, searchQuery, ['userName'])
   const paginatedUsers = PaginationHelper(filteredUsers, page, rowsPerPage)
   const totalCount = filteredUsers.length
-
-  console.log('users', users)
 
   if (jobId) {
     const getAllQCList = async () => {
@@ -462,12 +457,12 @@ const Food = () => {
           overflowX: 'auto'
         }}
       >
-        <CardContent sx={{ width: '100%' }}>
-          <Grid container sx={{ mt: 5, width: '100%' }}>
+        <CardContent sx={{width: '100%'}}>
+          <Grid container sx={{mt: 5, width: '100%'}}>
             <Grid item lg={12}>
               {/* <Paper sx={{ padding: 2, width: '100%', overflowX: 'auto' }}> */}
               {/* Top Form Section */}
-              <Grid container spacing={2} mb={2} sx={{ width: '100%', overflowX: 'auto' }}>
+              <Grid container spacing={2} mb={2} sx={{width: '100%', overflowX: 'auto'}}>
                 {/* <Button variant='contained'>Print</Button> */}
                 <Box
                   sx={{
@@ -482,8 +477,8 @@ const Food = () => {
                     borderRadius: '10px'
                   }}
                 >
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Typography variant='subtitle2' sx={{ fontWeight: '900' }}>
+                  <Box sx={{display: 'flex', gap: 2}}>
+                    <Typography variant='subtitle2' sx={{fontWeight: '900'}}>
                       Document Code:
                     </Typography>
                     <Typography>{userData?.jobId?.productionOrderNo}</Typography>
@@ -491,8 +486,8 @@ const Food = () => {
 
                   <Typography variant='subtitle2'>UBC/QC/SOR - {userData?.jobId?.productionOrderNo}</Typography>
 
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Typography variant='subtitle2' sx={{ fontWeight: '900' }}>
+                  <Box sx={{display: 'flex', gap: 2}}>
+                    <Typography variant='subtitle2' sx={{fontWeight: '900'}}>
                       Issue Date:
                     </Typography>
                     <Typography>{formattedDate}</Typography>
@@ -500,11 +495,11 @@ const Food = () => {
                 </Box>
               </Grid>
               {/* <Box sx={{}}> */}
-              <TableContainer component={Paper} sx={{ width: '100%' }}>
-                <Table aria-label='simple table' sx={{ width: '100%' }}>
-                  <TableHead sx={{ width: '100%' }}>
-                    <TableRow sx={{ width: '100%' }}>
-                      <TableCell sx={{ width: '100%', p: '0 !important' }} colSpan={12}>
+              <TableContainer component={Paper} sx={{width: '100%'}}>
+                <Table aria-label='simple table' sx={{width: '100%'}}>
+                  <TableHead sx={{width: '100%'}}>
+                    <TableRow sx={{width: '100%'}}>
+                      <TableCell sx={{width: '100%', p: '0 !important'}} colSpan={12}>
                         <Box
                           sx={{
                             mt: 3,
@@ -523,14 +518,14 @@ const Food = () => {
                               label='Machine'
                               value={userData?.machine?.code}
                               size='small'
-                              InputLabelProps={{ shrink: true }}
+                              InputLabelProps={{shrink: true}}
                             />
                           </Grid>
                           <Grid item xs={12} lg={3}>
                             <TextField
                               fullWidth
                               label='Operator Name'
-                              InputLabelProps={{ shrink: true }}
+                              InputLabelProps={{shrink: true}}
                               value={userData?.userData?.userName}
                               size='small'
                             />
@@ -549,7 +544,7 @@ const Food = () => {
                             </TextField>
                           </Grid>
                           <Grid item xs={6} lg={4}>
-                            <TextField fullWidth label='Date' value={formattedDate} size='small' />
+                            <TextField fullWidth label='Date' value={formattedDate} size='small'/>
                           </Grid>
                         </Box>
                         <Box
@@ -569,7 +564,7 @@ const Food = () => {
                                 <TextField
                                   fullWidth
                                   label='Job Card No'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.docNum}
                                   size='small'
                                 />
@@ -578,7 +573,7 @@ const Food = () => {
                                 <TextField
                                   fullWidth
                                   label='Job Name'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.prodName}
                                   size='small'
                                 />
@@ -587,7 +582,7 @@ const Food = () => {
                                 <TextField
                                   fullWidth
                                   label='Sales Order Nbr'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.OriginNum}
                                   size='small'
                                 />
@@ -596,7 +591,7 @@ const Food = () => {
                                 <TextField
                                   fullWidth
                                   label='Sheet Name'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobData?.ComponentItemName}
                                   size='small'
                                 />
@@ -606,7 +601,7 @@ const Food = () => {
                                 <TextField
                                   fullWidth
                                   label='Received Quantity'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobId?.recievedByOperator}
                                   size='small'
                                 />
@@ -615,7 +610,7 @@ const Food = () => {
                                 <TextField
                                   fullWidth
                                   label='Completed Quantity'
-                                  InputLabelProps={{ shrink: true }}
+                                  InputLabelProps={{shrink: true}}
                                   value={userData?.jobId?.totalCompletedQuantity}
                                   size='small'
                                 />
@@ -635,16 +630,7 @@ const Food = () => {
                         }}
                       >
                         {questions.map((question, questionIndex) => (
-                          <TableCell
-                            key={question}
-                            sx={{
-                              whiteSpace: 'normal',
-                              wordBreak: 'break-word',
-                              maxWidth: 120, // Adjust as needed
-                              fontSize: '0.8rem',
-                              textAlign: 'center'
-                            }}
-                          >
+                          <TableCell key={question}>
                             {question} {/* Or use a more user-friendly label here */}
                           </TableCell>
                         ))}
@@ -660,9 +646,9 @@ const Food = () => {
                     }}
                   >
                     {userData?.time && userData?.makeTimeStatus ? (
-                      <TableRow sx={{ width: '100%' }}>
+                      <TableRow sx={{width: '100%'}}>
                         <TableCell>{new Date(userData.time).toLocaleTimeString()}</TableCell>
-                        <TableCell colSpan={12} sx={{ width: '100%' }}>
+                        <TableCell colSpan={12} sx={{width: '100%'}}>
                           <Box
                             sx={{
                               width: '100%',
@@ -681,76 +667,8 @@ const Food = () => {
                       <TableRow>
                         <TableCell>{new Date(userData.time).toLocaleString()}</TableCell>
                         <TableCell>{userData.quantity}</TableCell>
+
                         {questions.slice(2).map((question, colIndex) => {
-                          const cellKey = `0_${colIndex + 2}`
-                          const isQtyField = question === 'OkQty' || question === 'TotalWaste'
-
-                          return (
-                            <TableCell
-                              key={cellKey}
-                              sx={{
-                                cursor: isSubmitted ? 'not-allowed' : 'pointer',
-                                color: 'black',
-                                opacity: isSubmitted ? 0.6 : 1
-                              }}
-                              onClick={() => {
-                                if (!isSubmitted) {
-                                  if (isQtyField) {
-                                    setActiveQtyField(question)
-                                    setQtyInput(responses[question]?.answer || '')
-                                    setOpenQtyPopup(true)
-                                  } else {
-                                    setEditingCell(cellKey)
-                                  }
-                                }
-                              }}
-                            >
-                              {isQtyField ? (
-                                responses[question]?.answer ? (
-                                  <Typography>{responses[question].answer}</Typography>
-                                ) : (
-                                  <Typography color='text.secondary'></Typography>
-                                )
-                              ) : editingCell === cellKey && !isSubmitted ? (
-                                <Select
-                                  sx={{ width: '100px', maxWidth: '100%' }}
-                                  value={selections[cellKey] || ''}
-                                  onChange={e => {
-                                    const value = e.target.value
-                                    setSelections(prev => ({ ...prev, [cellKey]: value }))
-                                    if (value === 'Not Okay') {
-                                      setActiveCell(cellKey)
-                                      setOpen(true)
-                                    } else {
-                                      setResponses(prev => ({
-                                        ...prev,
-                                        [question]: {
-                                          answer: value,
-                                          reason: ''
-                                        }
-                                      }))
-                                    }
-                                    setEditingCell(null)
-                                  }}
-                                  onBlur={() => setEditingCell(null)}
-                                  autoFocus
-                                  size='small'
-                                >
-                                  <MenuItem value='Okay'>Okay</MenuItem>
-                                  <MenuItem value='Not Okay'>Not Okay</MenuItem>
-                                </Select>
-                              ) : selections[cellKey] === 'Okay' ? (
-                                <DoneIcon sx={{ color: 'green !important' }} />
-                              ) : selections[cellKey] === 'Not Okay' ? (
-                                <ClearIcon sx={{ color: 'red !important' }} />
-                              ) : (
-                                ''
-                              )}
-                            </TableCell>
-                          )
-                        })}
-
-                        {/* {questions.slice(2).map((question, colIndex) => {
                           const cellKey = `0_${colIndex + 2}`
 
                           return (
@@ -769,11 +687,11 @@ const Food = () => {
                             >
                               {editingCell === cellKey && !isSubmitted ? (
                                 <Select
-                                  sx={{ width: '100px', maxWidth: '100%' }}
+                                  sx={{width: '100px', maxWidth: '100%'}}
                                   value={selections[cellKey] || ''}
                                   onChange={e => {
                                     const value = e.target.value
-                                    setSelections(prev => ({ ...prev, [cellKey]: value }))
+                                    setSelections(prev => ({...prev, [cellKey]: value}))
                                     if (value === 'Not Okay') {
                                       setActiveCell(cellKey)
                                       setOpen(true)
@@ -795,18 +713,17 @@ const Food = () => {
                                   <MenuItem value='Okay'>Okay</MenuItem>
                                   <MenuItem value='Not Okay'>Not Okay</MenuItem>
                                   {/*{question === 'd/m/sFromPlate' && <MenuItem value='N/A'>N/A</MenuItem>}*/}
-                        {/* </Select>
+                                </Select>
                               ) : selections[cellKey] === 'Okay' ? (
-                                <DoneIcon sx={{ color: 'green !important' }} />
+                                <DoneIcon sx={{color: 'green !important'}}/>
                               ) : selections[cellKey] === 'Not Okay' ? (
-                                <ClearIcon sx={{ color: 'red !important' }} />
+                                <ClearIcon sx={{color: 'red !important'}}/>
                               ) : (
                                 ''
                               )}
-                              
-                            </TableCell> */}
-                        {/* ) */}
-                        {/* })}  */}
+                            </TableCell>
+                          )
+                        })}
                       </TableRow>
                     ) : null}
                   </TableBody>
@@ -814,7 +731,7 @@ const Food = () => {
               </TableContainer>
 
               {showSubmit && !userData?.makeTimeStatus && (
-                <Grid item xs={12} sx={{ display: jobId ? 'none' : 'flex', justifyContent: 'flex-end', mt: 3, mb: 3 }}>
+                <Grid item xs={12} sx={{display: jobId ? 'none' : 'flex', justifyContent: 'flex-end', mt: 3, mb: 3}}>
                   <Button
                     onClick={() => {
                       // setResponses({})
@@ -827,7 +744,7 @@ const Food = () => {
                     variant='contained'
                     sx={{
                       backgroundColor: '#0563BB',
-                      '&:hover': { backgroundColor: '#0AA4D2 !important' }
+                      '&:hover': {backgroundColor: '#0AA4D2 !important'}
                     }}
                   >
                     Submit
@@ -845,10 +762,10 @@ const Food = () => {
                   // borderRadius='10px'
                   // bgcolor='#f9f9f9' color='black'
                 >
-                  <Typography variant='h6' gutterBottom sx={{ fontWeight: 'bold' }}>
+                  <Typography variant='h6' gutterBottom sx={{fontWeight: 'bold'}}>
                     Issues (Not Okay)
                   </Typography>
-                  <ul style={{ paddingLeft: '20px' }}>
+                  <ul style={{paddingLeft: '20px'}}>
                     {Object.entries(responses)
                       .filter(([_, value]) => value.answer === 'Not Okay')
                       .map(([key, value], index) => (
@@ -865,11 +782,11 @@ const Food = () => {
         </CardContent>
       </Card>
 
-      <TableContainer component={Paper} sx={{ mt: 20 }}>
-        <Table aria-label='simple table' sx={{ width: '100%' }}>
-          <TableHead sx={{ width: '100%' }}>
-            <TableRow sx={{ width: '100%' }}>
-              <TableCell sx={{ width: '100%' }} colSpan={14}>
+      <TableContainer component={Paper} sx={{mt: 20}}>
+        <Table aria-label='simple table' sx={{width: '100%'}}>
+          <TableHead sx={{width: '100%'}}>
+            <TableRow sx={{width: '100%'}}>
+              <TableCell sx={{width: '100%'}} colSpan={14}>
                 <Box
                   colspan={14}
                   sx={{
@@ -886,7 +803,7 @@ const Food = () => {
                     variant='h4'
                     sx={{
                       flex: 1,
-                      textAlign: { md: 'center', xs: 'left' },
+                      textAlign: {md: 'center', xs: 'left'},
                       fontWeight: 'bold'
                     }}
                   >
@@ -900,7 +817,7 @@ const Food = () => {
                       mr: 2,
                       backgroundColor: '#0563BB',
                       color: 'white',
-                      '&:hover': { backgroundColor: '#0AA4D2 !important' }
+                      '&:hover': {backgroundColor: '#0AA4D2 !important'}
                     }}
                   >
                     Print
@@ -908,26 +825,14 @@ const Food = () => {
                 </Box>
               </TableCell>
             </TableRow>
-            <TableRow sx={{ justifyContent: 'space-between', alignItems: 'left', width: '100%' }}>
+            <TableRow sx={{justifyContent: 'space-between', alignItems: 'left', width: '100%'}}>
               <TableCell>#</TableCell>
               <TableCell>Time</TableCell>
               <TableCell>Quantity</TableCell>
-              <TableCell>
-                Printing
-                <br />
-                Spots
-              </TableCell>
-              <TableCell>
-                CcWrong
-                <br />
-                Cutting
-              </TableCell>
+              <TableCell>PrintingSpots</TableCell>
+              <TableCell>CcWrongCutting</TableCell>
               <TableCell>EmbossOut</TableCell>
-              <TableCell>
-                Lamination
-                <br />
-                Wrinkle
-              </TableCell>
+              <TableCell>LaminationWrinkle</TableCell>
               <TableCell>Bubble</TableCell>
               <TableCell>Files</TableCell>
               <TableCell>ColorVariation</TableCell>
@@ -936,11 +841,11 @@ const Food = () => {
               <TableCell>TotalWaste</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ width: '100%' }}>
+          <TableBody sx={{width: '100%'}}>
             {loadingComplete ? (
               <TableRow align='center'>
                 <TableCell colSpan={12} align='center'>
-                  <CircularProgress />
+                  <CircularProgress/>
                 </TableCell>
               </TableRow>
             ) : paginatedUsers && paginatedUsers.length > 0 ? (
@@ -950,7 +855,7 @@ const Food = () => {
                     <TableCell>{page * rowsPerPage + index + 1}</TableCell>
 
                     <TableCell>{new Date(data.time).toLocaleTimeString()}</TableCell>
-                    <TableCell colSpan={12} align='center' sx={{ fontWeight: 'bold' }}>
+                    <TableCell colSpan={12} align='center' sx={{fontWeight: 'bold'}}>
                       {data.makeTimeStatus}
                     </TableCell>
                   </TableRow>
@@ -961,10 +866,10 @@ const Food = () => {
                     <TableCell>{data.quantity}</TableCell>
                     <TableCell>
                       {/* {data?.formId?.text?.answer} */}
-                      {data?.printingSpots?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.printingSpots?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.printingSpots?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.printingSpots?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -972,10 +877,10 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.colorVariation?.answer} */}
 
-                      {data?.ccWrongCutting?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.ccWrongCutting?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.ccWrongCutting?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.ccWrongCutting?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -983,19 +888,19 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.doubling?.answer} */}
 
-                      {data?.embossOut?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.embossOut?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.embossOut?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.embossOut?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
                     </TableCell>
                     <TableCell>
-                      {data?.laminationWrinkle?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.laminationWrinkle?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.laminationWrinkle?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.laminationWrinkle?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -1003,10 +908,10 @@ const Food = () => {
                       {/* {data?.formId?.dust?.answer} */}
                     </TableCell>
                     <TableCell>
-                      {data?.bubble?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.bubble?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.bubble?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.bubble?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -1016,10 +921,10 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.scumming?.answer} */}
 
-                      {data?.files?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.files?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.files?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.files?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -1028,10 +933,10 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.sideLay?.answer} */}
 
-                      {data?.colorVariation?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.colorVariation?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.colorVariation?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.colorVariation?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -1039,10 +944,10 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.frontLay?.answer} */}
 
-                      {data?.foiling?.answer === 'Okay' ? (
-                        <DoneIcon sx={{ color: 'green' }} />
-                      ) : data?.foiling?.answer === 'Not Okay' ? (
-                        <ClearIcon sx={{ color: 'red' }} />
+                      {data?.formId?.foiling?.answer === 'Okay' ? (
+                        <DoneIcon sx={{color: 'green'}}/>
+                      ) : data?.formId?.foiling?.answer === 'Not Okay' ? (
+                        <ClearIcon sx={{color: 'red'}}/>
                       ) : (
                         ''
                       )}
@@ -1051,11 +956,11 @@ const Food = () => {
                     <TableCell>
                       {/* {data?.formId?.registration?.answer} */}
 
-                      {data?.okQty}
+                      {data?.formId?.okQty}
                     </TableCell>
                     <TableCell>
                       {/* {data?.formId?.dmsFromPlate?.answer} */}
-                      {data?.totalWaste}
+                      {data?.formId?.totalWaste}
                     </TableCell>
                   </TableRow>
                 )
@@ -1082,7 +987,7 @@ const Food = () => {
             // backgroundColor: '#f9f9f9'
           }}
         >
-          <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+          <Typography variant='h6' sx={{fontWeight: 'bold', mb: 2}}>
             Not Okay Reasons
           </Typography>
 
@@ -1091,7 +996,7 @@ const Food = () => {
               if (data.makeTimeStatus) return []
 
               const failedFields = []
-              const form = data || {}
+              const form = data?.formId || {}
 
               const fields = {
                 printingSpots: 'PrintingSpots',
@@ -1121,7 +1026,7 @@ const Food = () => {
             })
 
             .map((item, idx) => (
-              <Typography key={idx} sx={{ fontSize: 14, mb: 0.5 }}>
+              <Typography key={idx} sx={{fontSize: 14, mb: 0.5}}>
                 #{item.number} - <strong>{item.field}</strong>: {item.reason}
               </Typography>
             ))}
@@ -1155,7 +1060,7 @@ const Food = () => {
                 id='outlined-basic'
                 label='Add Reason'
                 variant='filled'
-                sx={{ my: 4, width: '100%' }}
+                sx={{my: 4, width: '100%'}}
                 placeholder='Add Reason'
                 name='reason'
                 type='text'
@@ -1207,30 +1112,30 @@ const Food = () => {
 
         // sx={{ '& .MuiDialog-paper': { backgroundColor: '#FDE5D1' } }}
       >
-        <div id='receipt-food' className='receipt-food' style={{ width: '100%', overflowX: 'auto' }}>
+        <div id='receipt-food' className='receipt-food' style={{width: '100%', overflowX: 'auto'}}>
           <DialogTitle>
-            <div style={{ marginBottom: '20px' }}>
-              <table style={{ width: '100%', border: '1px solid #999', borderCollapse: 'collapse' }}>
+            <div style={{marginBottom: '20px'}}>
+              <table style={{width: '100%', border: '1px solid #999', borderCollapse: 'collapse'}}>
                 <tr>
-                  <td colSpan={4} style={{ border: '1px solid #999', fontWeight: 'bold', textAlign: 'center' }}>
+                  <td colSpan={4} style={{border: '1px solid #999', fontWeight: 'bold', textAlign: 'center'}}>
                     QC Report For Printing
                   </td>
-                  <td rowSpan={4} style={{ border: '1px solid #999', textAlign: 'center', width: '200px' }}>
-                    <img src={`${WEB_URL}/white-logo.png`} alt='UBC Logo' width='60' />
-                    <br />
+                  <td rowSpan={4} style={{border: '1px solid #999', textAlign: 'center', width: '200px'}}>
+                    <img src={`${WEB_URL}/white-logo.png`} alt='UBC Logo' width='60'/>
+                    <br/>
 
-                    <div style={{ fontWeight: 'bold', fontSize: '14px' }}>UBC Convertec (Pvt) Ltd.</div>
+                    <div style={{fontWeight: 'bold', fontSize: '14px'}}>UBC Convertec (Pvt) Ltd.</div>
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ border: '1px solid #999', fontWeight: '500' }}>
+                  <td style={{border: '1px solid #999', fontWeight: '500'}}>
                     Document Code : {userData?.jobId?.productionOrderNo}
                   </td>
                   {/* <td style={{ border: '1px solid #999', fontWight: 'bold' }}></td> */}
-                  <td style={{ border: '1px solid #999', fontWeight: '500' }}>
+                  <td style={{border: '1px solid #999', fontWeight: '500'}}>
                     {`UBC/QC/SOR-${userData?.jobId?.productionOrderNo}`}
                   </td>
-                  <td style={{ border: '1px solid #999', fontWeight: 'bold' }}> Issue Date: {formattedDate}</td>
+                  <td style={{border: '1px solid #999', fontWeight: 'bold'}}> Issue Date: {formattedDate}</td>
                 </tr>
               </table>
             </div>
@@ -1239,204 +1144,155 @@ const Food = () => {
           <DialogContent>
             <div>
               <div>
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '16px' }}>
+                <table style={{width: '100%', borderCollapse: 'collapse', marginBottom: '16px'}}>
                   <tbody>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Machine:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.machine?.code}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Operator Name:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.userData?.userName}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Shift:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{shift}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Date:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{formattedDate}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>Job Name:</td>
-                      <td colSpan={3} style={{ textAlign: 'center', padding: '6px', border: '1px solid #ccc' }}>
-                        {userData?.jobData?.prodName}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>PRDN. No:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobId?.productionOrderNo}</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>S O No:</td>
-                      <td style={{ padding: '6px', border: '1px solid #ccc' }}>{userData?.jobData?.OriginNum}</td>
-                    </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Machine:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.machine?.code}</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Operator Name:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.userData?.userName}</td>
+                  </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Shift:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{shift}</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Date:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{formattedDate}</td>
+                  </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>Job Name:</td>
+                    <td colSpan={3} style={{textAlign: 'center', padding: '6px', border: '1px solid #ccc'}}>
+                      {userData?.jobData?.prodName}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>PRDN. No:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.jobId?.productionOrderNo}</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>S O No:</td>
+                    <td style={{padding: '6px', border: '1px solid #ccc'}}>{userData?.jobData?.OriginNum}</td>
+                  </tr>
                   </tbody>
                 </table>
 
                 {/* Bottom Quality Table */}
                 <table
-                  style={{ width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px' }}
+                  style={{width: '100%', border: '1px solid #ccc', borderCollapse: 'collapse', marginBottom: '24px'}}
                 >
-                  <thead style={{ backgroundColor: 'skyblue', width: '100%' }}>
-                    <tr>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%' }}>
-                        Sr. No
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Time
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        Quantity
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Printing
-                        <br />
-                        Spots
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Cc Wrong
-                        <br />
-                        Cutting
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%' }}>
-                        EmbossOut
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Lamination
-                        <br />
-                        Wrinkle
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Bubble
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Files
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Color
-                        <br />
-                        Variation
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        Foiling
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%' }}>
-                        OkQty
-                      </th>
-                      <th style={{ padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '10%' }}>
-                        Total
-                        <br />
-                        Waste
-                      </th>
-                    </tr>
+                  <thead style={{backgroundColor: 'skyblue'}}>
+                  <tr>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '6%'}}>
+                      Sr. No
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '8%'}}>
+                      Time
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '7%'}}>
+                      Quantity
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      PrintingSpots
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      CcWrongCutting
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      EmbossOut
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Lamination<br/>Wrinkle
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Bubble
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Files
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      ColorVariation
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Foiling
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      OkQty
+                    </th>
+                    <th style={{padding: '6px', border: '1px solid #ccc', fontWeight: 'bold', width: '5%'}}>
+                      Total<br/>Waste
+                    </th>
+                  </tr>
                   </thead>
 
                   <tbody>
-                    {users.map((user, index) => {
-                      if (user.makeTimeStatus) {
-                        return (
-                          <tr key={user._id}>
-                            <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
-                            <td style={{ padding: '6px', border: '1px solid #ccc' }}>
-                              {new Date(user.time).toLocaleTimeString()}
-                            </td>
-                            <td
-                              colSpan={12}
-                              style={{
-                                padding: '6px',
-                                border: '1px solid #ccc',
-                                fontWeight: 'bold',
-
-                                // backgroundColor: '#e6f7ff',
-                                textAlign: 'center'
-                              }}
-                            >
-                              {user.makeTimeStatus}
-                            </td>
-                          </tr>
-                        )
-                      }
-
+                  {users.map((user, index) => {
+                    if (user.makeTimeStatus) {
                       return (
                         <tr key={user._id}>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>{index + 1}</td>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>
+                          <td style={{padding: '6px', border: '1px solid #ccc'}}>{index + 1}</td>
+                          <td style={{padding: '6px', border: '1px solid #ccc'}}>
                             {new Date(user.time).toLocaleTimeString()}
                           </td>
-                          <td style={{ padding: '6px', border: '1px solid #ccc' }}>{user?.quantity}</td>
-                          {[
-                            'printingSpots',
-                            'ccWrongCutting',
-                            'embossOut',
-                            'laminationWrinkle',
-                            'bubble',
-                            'files',
-                            'colorVariation',
-                            'foiling',
-                            'okQty',
-                            'totalWaste'
-                          ].map(key => {
-                            const isNumericField = key === 'okQty' || key === 'totalWaste'
-                            const answer = isNumericField ? user?.[key] : user?.[key]?.answer
+                          <td
+                            colSpan={12}
+                            style={{
+                              padding: '6px',
+                              border: '1px solid #ccc',
+                              fontWeight: 'bold',
 
-                            return (
-                              <td
-                                key={user._id + key}
-                                style={{
-                                  padding: '6px',
-                                  border: '1px solid #ccc',
-                                  textAlign: 'center',
-                                  whiteSpace: 'normal',
-                                  wordBreak: 'break-word',
-                                  maxWidth: '80px'
-                                }}
-                              >
-                                {isNumericField ? (
-                                  answer ?? ''
-                                ) : answer === 'Okay' ? (
-                                  <span style={{ color: 'green' }}>✓</span>
-                                ) : answer === 'Not Okay' ? (
-                                  <span style={{ color: 'red' }}>✗</span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            )
-                          })}
-
-                          {/* {[
-                            'printingSpots',
-                            'ccWrongCutting',
-                            'embossOut',
-                            'laminationWrinkle',
-                            'bubble',
-                            'files',
-                            'colorVariation',
-                            'foiling',
-                            'okQty',
-                            'totalWaste'
-                          ].map(key => {
-                            const answer = user?.[key]?.answer
-
-                            return (
-                              <td
-                                key={user._id + key}
-                                style={{ padding: '6px', border: '1px solid #ccc', textAlign: 'center' }}
-                              >
-                                {answer === 'Okay' ? (
-                                  <span style={{ color: 'green' }}>✓</span>
-                                ) : answer === 'Not Okay' ? (
-                                  <span style={{ color: 'red' }}>✗</span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            )
-                          })} */}
+                              // backgroundColor: '#e6f7ff',
+                              textAlign: 'center'
+                            }}
+                          >
+                            {user.makeTimeStatus}
+                          </td>
                         </tr>
                       )
-                    })}
+                    }
+
+                    return (
+                      <tr key={user._id}>
+                        <td style={{padding: '6px', border: '1px solid #ccc'}}>{index + 1}</td>
+                        <td style={{padding: '6px', border: '1px solid #ccc'}}>
+                          {new Date(user.time).toLocaleTimeString()}
+                        </td>
+                        <td style={{padding: '6px', border: '1px solid #ccc'}}>{user?.quantity}</td>
+
+                        {[
+                          'printingSpots',
+                          'ccWrongCutting',
+                          'embossOut',
+                          'laminationWrinkle',
+                          'bubble',
+                          'files',
+                          'colorVariation',
+                          'foiling',
+                          'okQty',
+                          'totalWaste'
+                        ].map(key => {
+                          const answer = user?.formId?.[key]?.answer
+
+                          return (
+                            <td
+                              key={user._id + key}
+                              style={{padding: '6px', border: '1px solid #ccc', textAlign: 'center'}}
+                            >
+                              {answer === 'Okay' ? (
+                                <span style={{color: 'green'}}>✓</span>
+                              ) : answer === 'Not Okay' ? (
+                                <span style={{color: 'red'}}>✗</span>
+                              ) : (
+                                ''
+                              )}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
                   </tbody>
                 </table>
                 {/* Remarks Box */}
-                <div style={{ border: '2px solid #ccc', padding: '10px', marginTop: '20px' }}>
+                <div style={{border: '2px solid #ccc', padding: '10px', marginTop: '20px'}}>
                   <h3>Remarks</h3>
-                  <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <ul style={{margin: 0, paddingLeft: '20px'}}>
                     {users.map((user, index) => {
                       const fields = [
                         'printingSpots',
@@ -1452,8 +1308,8 @@ const Food = () => {
                       ]
 
                       return fields.map(field => {
-                        const answer = user?.[field]?.answer
-                        const reason = user?.[field]?.reason
+                        const answer = user?.formId?.[field]?.answer
+                        const reason = user?.formId?.[field]?.reason
 
                         if (answer === 'Not Okay') {
                           return (
@@ -1481,41 +1337,8 @@ const Food = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Dialog open={openQtyPopup} onClose={() => setOpenQtyPopup(false)}>
-        <DialogTitle>Enter Quantity for {activeQtyField}</DialogTitle>
-        <DialogContent>
-          <TextField
-            sx={{ mt: 3 }}
-            autoFocus
-            fullWidth
-            type='text'
-            label='Quantity'
-            value={qtyInput}
-            onChange={e => setQtyInput(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenQtyPopup(false)}>Cancel</Button>
-          <Button
-            variant='contained'
-            onClick={() => {
-              setResponses(prev => ({
-                ...prev,
-                [activeQtyField]: {
-                  answer: qtyInput,
-                  reason: ''
-                }
-              }))
-              setOpenQtyPopup(false)
-            }}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   )
 }
 
-export default Food
+export default Food;
